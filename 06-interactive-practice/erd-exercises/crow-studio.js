@@ -24,6 +24,11 @@
     const bankRoot = document.getElementById("bank-groups");
     const stage = document.getElementById("diagram-stage");
     const svg = document.getElementById("diagram-lines");
+    const canvas = document.querySelector(".canvas-scroll");
+    const zoomExtent = document.getElementById("diagram-extent");
+    const zoomLevel = document.getElementById("zoom-level");
+    let viewScale = 1;
+    let fitView = Boolean(zoomExtent);
     const rulesRoot = document.getElementById("relationship-rules");
     const studioGrid = document.querySelector(".studio-grid");
     const bankToggle = document.getElementById("bank-toggle-button");
@@ -337,6 +342,16 @@
     }
     function tableGeometry(table) {
         const card = stage.querySelector(`[data-table-id="${cssEscape(table.id)}"]`);
+        if (zoomExtent) {
+            return {
+                left: card.offsetLeft,
+                right: card.offsetLeft + card.offsetWidth,
+                top: card.offsetTop,
+                bottom: card.offsetTop + card.offsetHeight,
+                cx: card.offsetLeft + card.offsetWidth / 2,
+                cy: card.offsetTop + card.offsetHeight / 2
+            };
+        }
         const stageBox = stage.getBoundingClientRect();
         const cardBox = card.getBoundingClientRect();
         return {
@@ -360,6 +375,28 @@
         }
         const from = tableGeometry(config.tables.find((table) => table.id === relationship.from));
         const to = tableGeometry(config.tables.find((table) => table.id === relationship.to));
+        if (relationship.route) {
+            const route = relationship.route;
+            const port = (box, side, fraction) => {
+                if (side === "left") return [box.left, box.top + (box.bottom - box.top) * fraction];
+                if (side === "right") return [box.right, box.top + (box.bottom - box.top) * fraction];
+                if (side === "top") return [box.left + (box.right - box.left) * fraction, box.top];
+                return [box.left + (box.right - box.left) * fraction, box.bottom];
+            };
+            const start = port(from, route.fromSide, route.fromFraction);
+            const end = port(to, route.toSide, route.toFraction);
+            const horizontal = route.fromSide === "left" || route.fromSide === "right";
+            if (horizontal) {
+                const middleX = (start[0] + end[0]) / 2;
+                const points = Math.abs(start[1] - end[1]) < 1 ? [start, end] :
+                    [start, [middleX, start[1]], [middleX, end[1]], end];
+                return { points, slots: [start, [middleX, Math.min(start[1], end[1]) - 48], end] };
+            }
+            const middleY = (start[1] + end[1]) / 2;
+            const points = Math.abs(start[0] - end[0]) < 1 ? [start, end] :
+                [start, [start[0], middleY], [end[0], middleY], end];
+            return { points, slots: [start, [Math.max(start[0], end[0]) + 68, middleY], end] };
+        }
         let start;
         let end;
         let points;
@@ -511,6 +548,37 @@
         if (state.activeSlotId) activateSlot(state.activeSlotId);
     }
 
+    function setViewScale(nextScale, isFit = false) {
+        if (!zoomExtent) return;
+        const oldWidth = stage.offsetWidth * viewScale;
+        const oldHeight = stage.offsetHeight * viewScale;
+        const centerX = oldWidth ? (canvas.scrollLeft + canvas.clientWidth / 2) / oldWidth : .5;
+        const centerY = oldHeight ? (canvas.scrollTop + canvas.clientHeight / 2) / oldHeight : .5;
+        viewScale = Math.max(.25, Math.min(1.6, nextScale));
+        fitView = isFit;
+        stage.style.transform = `scale(${viewScale})`;
+        zoomExtent.style.width = `${stage.offsetWidth * viewScale}px`;
+        zoomExtent.style.height = `${stage.offsetHeight * viewScale}px`;
+        zoomLevel.textContent = `${Math.round(viewScale * 100)}%`;
+        document.getElementById("zoom-out").disabled = viewScale <= .25;
+        document.getElementById("zoom-in").disabled = viewScale >= 1.6;
+        document.getElementById("zoom-fit").setAttribute("aria-pressed", String(isFit));
+        canvas.scrollLeft = centerX * stage.offsetWidth * viewScale - canvas.clientWidth / 2;
+        canvas.scrollTop = centerY * stage.offsetHeight * viewScale - canvas.clientHeight / 2;
+    }
+
+    function fitDiagram() {
+        if (!zoomExtent) return;
+        setViewScale(Math.min(1, (canvas.clientWidth - 4) / stage.offsetWidth), true);
+    }
+
+    if (zoomExtent) {
+        document.getElementById("zoom-out").addEventListener("click", () => setViewScale(Math.round((viewScale - .1) * 100) / 100));
+        document.getElementById("zoom-in").addEventListener("click", () => setViewScale(Math.round((viewScale + .1) * 100) / 100));
+        document.getElementById("zoom-fit").addEventListener("click", fitDiagram);
+        document.getElementById("zoom-reset").addEventListener("click", () => setViewScale(1));
+    }
+
     document.getElementById("clear-selection-button").addEventListener("click", clearSelection);
     document.getElementById("remove-button").addEventListener("click", removeActive);
     document.getElementById("undo-button").addEventListener("click", undo);
@@ -520,7 +588,10 @@
         const hidden = studioGrid.classList.toggle("bank-hidden");
         bankToggle.textContent = hidden ? "Show model bank" : "Hide model bank";
         bankToggle.setAttribute("aria-expanded", String(!hidden));
-        window.requestAnimationFrame(renderConnections);
+        window.requestAnimationFrame(() => {
+            if (fitView) fitDiagram();
+            renderConnections();
+        });
     });
 
     restore();
@@ -529,7 +600,11 @@
     updateProgress();
     clearSelection();
     applyInstructorMode();
+    window.requestAnimationFrame(fitDiagram);
     undoButton.disabled = true;
     removeButton.disabled = true;
-    window.addEventListener("resize", () => window.requestAnimationFrame(renderConnections));
+    window.addEventListener("resize", () => window.requestAnimationFrame(() => {
+        if (fitView) fitDiagram();
+        renderConnections();
+    }));
 })();

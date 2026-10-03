@@ -43,6 +43,11 @@
     const bankRoot = document.getElementById("bank-groups");
     const stage = document.getElementById("diagram-stage");
     const svg = document.getElementById("diagram-lines");
+    const canvas = document.querySelector(".canvas-scroll");
+    const zoomExtent = document.getElementById("diagram-extent");
+    const zoomLevel = document.getElementById("zoom-level");
+    let viewScale = 1;
+    let fitView = Boolean(zoomExtent);
     const selectionStatus = document.getElementById("selection-status");
     const removeButton = document.getElementById("remove-button");
     const undoButton = document.getElementById("undo-button");
@@ -338,10 +343,22 @@
 
             const value = document.createElement("span");
             value.className = "slot-value";
-            value.textContent = placement ? placement.value : typePrompts[slot.type];
+            value.textContent = placement ? placement.value :
+                ((config.slotPrompts && config.slotPrompts[slot.type]) || typePrompts[slot.type]);
             const result = document.createElement("span");
             result.className = "slot-result";
             result.setAttribute("aria-hidden", "true");
+            if (slot.type === "rel") {
+                const outline = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                outline.setAttribute("class", "relationship-outline");
+                outline.setAttribute("viewBox", "0 0 100 100");
+                outline.setAttribute("preserveAspectRatio", "none");
+                outline.setAttribute("aria-hidden", "true");
+                const diamond = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+                diamond.setAttribute("points", "50,2 98,50 50,98 2,50");
+                outline.appendChild(diamond);
+                button.appendChild(outline);
+            }
             button.append(value, result);
 
             button.addEventListener("click", () => {
@@ -420,6 +437,37 @@
         return window.CSS && CSS.escape ? CSS.escape(value) : value.replace(/[^a-zA-Z0-9_-]/g, "\\$&");
     }
 
+    function setViewScale(nextScale, isFit = false) {
+        if (!zoomExtent) return;
+        const oldWidth = stage.offsetWidth * viewScale;
+        const oldHeight = stage.offsetHeight * viewScale;
+        const centerX = oldWidth ? (canvas.scrollLeft + canvas.clientWidth / 2) / oldWidth : .5;
+        const centerY = oldHeight ? (canvas.scrollTop + canvas.clientHeight / 2) / oldHeight : .5;
+        viewScale = Math.max(.25, Math.min(1.6, nextScale));
+        fitView = isFit;
+        stage.style.transform = `scale(${viewScale})`;
+        zoomExtent.style.width = `${stage.offsetWidth * viewScale}px`;
+        zoomExtent.style.height = `${stage.offsetHeight * viewScale}px`;
+        zoomLevel.textContent = `${Math.round(viewScale * 100)}%`;
+        document.getElementById("zoom-out").disabled = viewScale <= .25;
+        document.getElementById("zoom-in").disabled = viewScale >= 1.6;
+        document.getElementById("zoom-fit").setAttribute("aria-pressed", String(isFit));
+        canvas.scrollLeft = centerX * stage.offsetWidth * viewScale - canvas.clientWidth / 2;
+        canvas.scrollTop = centerY * stage.offsetHeight * viewScale - canvas.clientHeight / 2;
+    }
+
+    function fitDiagram() {
+        if (!zoomExtent) return;
+        setViewScale(Math.min(1, (canvas.clientWidth - 32) / stage.offsetWidth), true);
+    }
+
+    if (zoomExtent) {
+        document.getElementById("zoom-out").addEventListener("click", () => setViewScale(Math.round((viewScale - .1) * 100) / 100));
+        document.getElementById("zoom-in").addEventListener("click", () => setViewScale(Math.round((viewScale + .1) * 100) / 100));
+        document.getElementById("zoom-fit").addEventListener("click", fitDiagram);
+        document.getElementById("zoom-reset").addEventListener("click", () => setViewScale(1));
+    }
+
     document.getElementById("clear-selection-button").addEventListener("click", clearSelection);
     document.getElementById("remove-button").addEventListener("click", removeActive);
     document.getElementById("undo-button").addEventListener("click", undo);
@@ -433,6 +481,10 @@
     updateProgress();
     clearSelection();
     applyInstructorMode();
+    window.requestAnimationFrame(fitDiagram);
     undoButton.disabled = true;
     removeButton.disabled = true;
+    window.addEventListener("resize", () => {
+        if (fitView) window.requestAnimationFrame(fitDiagram);
+    });
 })();

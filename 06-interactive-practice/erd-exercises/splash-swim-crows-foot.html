@@ -54,8 +54,8 @@
                 </div>
                 <div class="progress-wrap"><span id="progress-text">0 positions filled</span><div class="progress-track" role="progressbar" aria-label="Model completion" aria-valuemin="0" aria-valuenow="0" aria-valuemax="1"><div class="progress-bar" id="progress-bar"></div></div></div>
                 <div class="workspace">
-                    <h3 class="section-title">Connected Crow's Foot diagram</h3>
-                    <div class="canvas-scroll" tabindex="0" aria-label="Scrollable connected ERD workspace"><div class="diagram-stage" id="diagram-stage"><svg class="diagram-lines" id="diagram-lines" aria-hidden="true"></svg></div></div>
+                    <div class="diagram-toolbar"><h3 class="section-title">Connected Crow's Foot diagram</h3><div class="view-controls" role="group" aria-label="Diagram view"><button class="button" id="zoom-out" type="button" aria-label="Zoom out">−</button><output id="zoom-level" aria-live="polite">100%</output><button class="button" id="zoom-in" type="button" aria-label="Zoom in">+</button><button class="button" id="zoom-fit" type="button">Fit</button><button class="button" id="zoom-reset" type="button">100%</button></div></div>
+                    <div class="canvas-scroll" tabindex="0" aria-label="Scrollable connected ERD workspace"><div class="diagram-extent" id="diagram-extent"><div class="diagram-stage" id="diagram-stage"><svg class="diagram-lines" id="diagram-lines" aria-hidden="true"></svg></div></div></div>
                     <section class="relationship-reference" aria-labelledby="relationship-title"><h3 class="section-title" id="relationship-title">Business-rule reminders</h3><div class="relationship-rules" id="relationship-rules"></div></section>
                 </div>
                 <section class="feedback-panel" id="feedback-panel" aria-live="polite" hidden></section>
@@ -164,6 +164,6 @@
             ]
         };
     </script>
-    <script src="crow-studio.js?v=11"></script>
+    <script src="crow-studio.js?v=12"></script>
 </body>
 </html>

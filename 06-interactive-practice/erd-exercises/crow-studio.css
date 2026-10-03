@@ -107,6 +107,12 @@ button { color: inherit; }
 .progress-bar { width: 0; height: 100%; background: var(--accent); transition: width .2s ease; }
 .workspace { padding: 0 1rem 1rem; }
 .section-title { margin: .5rem 0 .8rem; font-size: 1.05rem; color: var(--accent-dark); }
+.diagram-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem; margin: .35rem 0 .65rem; }
+.diagram-toolbar .section-title { margin: 0; }
+.view-controls { display: inline-flex; align-items: center; flex-wrap: wrap; gap: .35rem; }
+.view-controls .button { min-width: 44px; min-height: 40px; padding: .35rem .6rem; }
+.view-controls output { min-width: 3.4rem; text-align: center; font-weight: 800; font-variant-numeric: tabular-nums; }
+.view-controls [aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-dark); }
 .canvas-scroll {
     overflow: auto;
     border: 1px solid var(--line);
@@ -114,6 +120,7 @@ button { color: inherit; }
     background: #fff;
     scrollbar-gutter: stable;
 }
+.diagram-extent { position: relative; }
 .diagram-stage {
     position: relative;
     min-width: 1320px;
@@ -122,6 +129,11 @@ button { color: inherit; }
     background-image: radial-gradient(#d2dbe5 1px, transparent 1px);
     background-size: 20px 20px;
 }
+body[data-exercise="fini-co"] .diagram-stage { width: 1180px; min-width: 1180px; min-height: 0; transform-origin: top left; }
+body[data-exercise="fini-co"] .diagram-table .slot { min-height: 32px; padding: .28rem .35rem; }
+body[data-exercise="fini-co"] .table-entity { padding: .45rem; }
+body[data-exercise="fini-co"] .field-list { gap: .22rem; padding: .45rem; }
+body[data-exercise="fini-co"] .field-row { padding: .14rem; }
 .diagram-lines {
     position: absolute;
     inset: 0;

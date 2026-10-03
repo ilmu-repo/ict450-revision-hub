@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Official and Registration Chen Diagram Practice</title>
-    <link rel="stylesheet" href="chen-studio.css?v=5">
+    <link rel="stylesheet" href="chen-studio.css?v=9">
 </head>
 <body data-theme="cyan">
     <header class="page-header">
@@ -52,7 +52,8 @@
                     </div>
                 </div>
                 <div class="progress-wrap"><span id="progress-text">0 positions filled</span><div class="progress-track" role="progressbar" aria-label="Diagram completion" aria-valuemin="0" aria-valuenow="0" aria-valuemax="1"><div class="progress-bar" id="progress-bar"></div></div></div>
-                <div class="canvas-scroll" tabindex="0" aria-label="Scrollable Chen diagram workspace"><div class="diagram-stage" id="diagram-stage"><svg class="diagram-lines" id="diagram-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg></div></div>
+                <div class="diagram-toolbar"><h3>Chen diagram</h3><div class="view-controls" role="group" aria-label="Diagram view"><button class="button" id="zoom-out" type="button" aria-label="Zoom out">−</button><output id="zoom-level" aria-live="polite">100%</output><button class="button" id="zoom-in" type="button" aria-label="Zoom in">+</button><button class="button" id="zoom-fit" type="button">Fit</button><button class="button" id="zoom-reset" type="button">100%</button></div></div>
+                <div class="canvas-scroll" tabindex="0" aria-label="Scrollable Chen diagram workspace"><div class="diagram-extent" id="diagram-extent"><div class="diagram-stage" id="diagram-stage"><svg class="diagram-lines" id="diagram-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg></div></div></div>
                 <section class="feedback-panel" id="feedback-panel" aria-live="polite" hidden></section>
             </section>
         </div>
@@ -93,6 +94,6 @@
             ]
         };
     </script>
-    <script src="chen-studio.js?v=5"></script>
+    <script src="chen-studio.js?v=9"></script>
 </body>
 </html>
