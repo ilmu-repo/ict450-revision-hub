@@ -59,7 +59,9 @@ window.ICT450_ERD_CASES = [
       "Each police officer also [[c:can issue]] [[e:summons]] to several [[e:students]]. The [[a:date of summon issuance]] need to be recorded by the police officer.",
       "A summon will be issued if a student violates any rules and regulations.",
       "[[c:Each summon will consist more than one]] [[e:offense]]. [[a:Offense ID, offense name, description, and rate of fees]] need to be recorded in the system."
-    ],taskB:"Identify TWO (2) relevant information that you can get from the ERD in (a). (4 marks)",
+    ],preTasks:"Based on the given information:",
+    taskA:"Construct a complete Entity Relationship Diagram (ERD) with all of the required tables, attributes and relationships using the Crow's Foot notation that reflects all of the given business rules.",
+    taskB:"Identify TWO (2) relevant information that you can get from the ERD you constructed in (a). (4 marks)",
     nodes:[
       ["DUTY","DutyID (PK)*|DutyName*",0,1],["OFFICER_DUTY","PoliceID (PK/FK)|DutyID (PK/FK)|DutyDate (PK)*|DutyTime (PK)*",1,1,"bridge"],
       ["POLICE_OFFICER","PoliceID (PK)|Name|Position|Email",2,1],["SUMMON","SummonID (PK)*|PoliceID (FK)|StudentID (FK)|IssueDate",3,1],
@@ -67,10 +69,10 @@ window.ICT450_ERD_CASES = [
     ],
     edges:[["DUTY","OFFICER_DUTY","scheduled","1","many"],["POLICE_OFFICER","OFFICER_DUTY","assigned","1","many"],["POLICE_OFFICER","SUMMON","issues","1","0many"],["STUDENT","SUMMON","receives","1","0many"],["SUMMON","SUMMON_OFFENSE","contains","1","many"],["OFFENSE","SUMMON_OFFENSE","listed in","1","0many"]],
     direct:["POLICE_OFFICER ↔ DUTY: many-to-many assignment with date and time.","POLICE_OFFICER → SUMMON: one officer may issue multiple summons.","STUDENT → SUMMON: one student may receive multiple summons.","SUMMON ↔ OFFENSE: a summon lists multiple offenses, and an offense type can occur in multiple summons."],
-    keys:["PoliceID and OffenseID are supplied identifiers.","DutyID, SummonID and StudentID are proposed identifiers because the paper does not supply them.","DutyDate and DutyTime are included in the assignment key here to distinguish repeated allocations of the same officer and duty."],
-    cardinality:["‘More than one police officer’ is a minimum of two officers per duty, a stronger business constraint than ordinary 1..many Crow's Foot notation can express.","‘Each police officer ... assigned to five main duties’ can require exactly five duty assignments per officer; Crow's Foot 1..many does not encode exactly five, and the paper does not give the duty names.","A summon contains more than one offense, another minimum-of-two constraint requiring a note beyond the diagram."],
+    keys:["PoliceID and OffenseID are supplied identifiers.","DutyID, SummonID and StudentID are proposed identifiers because the paper does not supply them.","DutyDate and DutyTime are stated in the paper; using them as part of the assignment key is a proposed design choice that distinguishes repeated schedules for the same officer and duty."],
+    cardinality:["‘More than one police officer’ is a minimum of two officers per duty, a stronger business constraint than ordinary 1..many Crow's Foot notation can express.","‘Each police officer ... assigned to five main duties’ calls for five distinct duty types per officer. Because dated OFFICER_DUTY rows may recur, check five distinct DutyID values rather than five schedule rows; Crow's Foot 1..many cannot encode that exact count.","A summon contains more than one offense, another minimum-of-two constraint requiring a note beyond the diagram."],
     structure:["OFFICER_DUTY carries the assignment date and time.","SUMMON_OFFENSE resolves the repeated offense types in summons."],
-    checks:["Keep issue date with SUMMON, not with STUDENT.","Show both the issuing officer and recipient student for each summon.","Document the >1-officer-per-duty and >1-offense-per-summon minimums separately."],
+    checks:["Keep issue date with SUMMON, not with STUDENT.","Show both the issuing officer and recipient student for each summon.","Check five distinct duty types per officer separately from the number of dated schedules.","Document the >1-officer-per-duty and >1-offense-per-summon minimums separately."],
     reports:["Duty allocations by date, time and officer.","Student summons with offenses and associated fee rates."]
   },
   {
@@ -86,7 +88,9 @@ window.ICT450_ERD_CASES = [
       "A tournament [[c:can have multiple fixtures]], but [[c:each fixture belongs to only one tournament]].",
       "A team [[c:can have multiple players]], but [[c:each player belongs to only one team]].",
       "[[c:Each fixture consists of multiple matches]], but [[c:each match is associated with only one fixture]]."
-    ],taskB:"Identify FOUR (4) relevant information that you can get from the ERD in (a). (4 marks)",
+    ],preTasks:"Based on the given information:",
+    taskA:"Construct an Entity Relationship Diagram (ERD) complete with all the required tables, attributes, relationships as well as the cardinalities using the Crow's Foot notation that reflects all the given business rules.",
+    taskB:"Identify FOUR (4) relevant information that you can get from the ERD you constructed in (a). (4 marks)",
     nodes:[
       ["TOURNAMENT","TournamentID (PK)|TournamentName|StartDate|EndDate|Organizer",0,1],["TOURNAMENT_TEAM","TournamentID (PK/FK)|TeamID (PK/FK)",1,1,"bridge"],
       ["TEAM","TeamID (PK)|TeamName|CoachName",2,1],["PLAYER","PlayerID (PK)|PlayerName|DOB|Nationality|Position|TeamID (FK)",3,1],
@@ -96,7 +100,7 @@ window.ICT450_ERD_CASES = [
     edges:[["TOURNAMENT","TOURNAMENT_TEAM","includes","1","0many"],["TEAM","TOURNAMENT_TEAM","participates","1","0many"],["TEAM","PLAYER","has","1","0many"],["TOURNAMENT","FIXTURE","schedules","1","0many"],["FIXTURE","MATCH","contains","1","many"],["VENUE","MATCH","hosts","1","0many"],["TEAM","MATCH","home team","1","0many"],["TEAM","MATCH","away team","1","0many"]],
     direct:["TOURNAMENT ↔ TEAM: teams participate in tournaments; a bridge records each participation.","TEAM → PLAYER: each player belongs to one team.","TOURNAMENT → FIXTURE → MATCH: each match is assigned to one fixture in one tournament.","VENUE → MATCH: each match uses one venue.","TEAM → MATCH has distinct home and away roles."],
     keys:["The question supplies identifiers for Tournament, Team, Player, Fixture, Match and Venue.","TOURNAMENT_TEAM uses both parent keys as its composite identifier."],
-    cardinality:["‘Each player belongs to only one team’ makes TeamID mandatory in PLAYER.","‘Each fixture consists of multiple matches’ requires at least one match per fixture; the diagram's 1..many does not express a minimum greater than one.","No rule says a team may appear as both home and away in the same match; keep those two foreign-key roles distinct."],
+    cardinality:["‘Each player belongs to only one team’ makes TeamID mandatory in PLAYER.","‘Each fixture consists of multiple matches’ requires at least two matches per fixture. The diagram's 1..many endpoint shows only a minimum of one, so state the stronger rule separately.","No rule says a team may appear as both home and away in the same match; keep those two foreign-key roles distinct."],
     structure:["TOURNAMENT_TEAM resolves tournament participation.","MATCH has two separate references to TEAM: HomeTeamID and AwayTeamID. They are not a single merged relationship."],
     checks:["Do not connect PLAYER directly to TOURNAMENT unless a separate registration rule is given.","Do not collapse FIXTURE and MATCH into one table: the paper explicitly distinguishes them.","Record the two team roles on MATCH and one venue for each match."],
     reports:["Match schedule by tournament and fixture.","Players grouped by team.","Match results with home/away teams.","Venues and scheduled matches."]
@@ -197,10 +201,10 @@ window.ICT450_ERD_LESSONS = {
   ],
   jan24:[
     {title:"Resolve officer–duty assignments",lead:"Separate the reusable duty catalogue from a dated assignment of an officer.",rows:[
-      [2,"five main duties","Does this phrase name five tables, and what assignment count might it require?","No. Model one DUTY catalogue. The wording can require exactly five assignments for each officer; show the 1:M structure and record the exact-five constraint separately."],
+      [2,"five main duties","Does this phrase name five tables, and what count must be checked?","No. Model one DUTY catalogue. Check five distinct duty types per officer, not merely five dated OFFICER_DUTY rows; record that constraint separately from the 1:M links."],
       [2,"each duty will be carried out by more than one police officer","Can one duty be assigned to several officers?","Yes, and the stated minimum is two officers per duty. The 1..many symbol cannot express a minimum of two, so record that as an additional business constraint."],
       [2,"date and time of each assigned duty","Does the date belong to OFFICER or DUTY alone?","No. It describes an individual assignment and belongs to OFFICER_DUTY."]
-    ],bridges:[{name:"OFFICER_DUTY",left:"POLICE_OFFICER",right:"DUTY",why:"Officers may carry out multiple duties, and a duty involves multiple officers. OFFICER_DUTY resolves M:N into two 1:M relationships and stores assignment Date and Time. The worked key also includes date and time to distinguish repeated assignments."}],notes:["DutyID is a proposed identifier, not a stated identifier in the paper. Exactly five duty assignments per officer and more than one officer per duty need constraints beyond ordinary Crow’s Foot endpoints."]},
+    ],bridges:[{name:"OFFICER_DUTY",left:"POLICE_OFFICER",right:"DUTY",why:"Officers may carry out multiple duties, and a duty involves multiple officers. OFFICER_DUTY resolves M:N into two 1:M relationships and stores assignment Date and Time. The worked key also includes date and time to distinguish repeated schedules."}],notes:["DutyID is a proposed identifier; DutyDate and DutyTime are source-stated attributes, but their inclusion in the composite key is a design choice. Five distinct duty types per officer and more than one officer per duty need constraints beyond ordinary Crow’s Foot endpoints."]},
     {title:"Resolve offences on a summon",lead:"Distinguish an issued SUMMON from the catalogue of offence types it contains.",rows:[
       [5,"Each summon will consist more than one","How many offence entries are required on a summon?","More than one. Draw the many side, then state the minimum-of-two rule separately because a Crow’s Foot cannot show it precisely."],
       [5,"Offense ID, offense name, description, and rate of fees","Are these attributes of each issued summon?","No. They describe an OFFENSE type that can be referenced by summon entries."],

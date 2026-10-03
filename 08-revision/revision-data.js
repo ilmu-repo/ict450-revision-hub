@@ -1,7 +1,7 @@
 window.ICT450_REVISION_DATA = (() => {
   "use strict";
 
-  const release = "2026.10.04-r52";
+  const release = "2026.10.04-r53";
   const chapters = [
     { number: 1, title: "Database Concepts", summary: "Data, information, DBMS functions, file-system problems and database-system components." },
     { number: 2, title: "Data Models", summary: "Modelling building blocks, business rules, model evolution and levels of abstraction." },
