@@ -220,7 +220,10 @@
   function skeletonFor(item) {
     const feature = item.features;
     const table = feature.tables[0] || "TABLE_NAME";
-    if (feature.operation === "CREATE TABLE") return `CREATE TABLE ${table} (\n    ... fields and data types ...,\n    PRIMARY KEY (...)\n);`;
+    if (feature.operation === "CREATE TABLE") {
+      const createdTable = /^\s*CREATE\s+TABLE\s+(\[[^\]]+\]|[A-Za-z_][A-Za-z0-9_]*)/i.exec(item.modelSql)?.[1] || table;
+      return `CREATE TABLE ${createdTable} (\n    ... fields and data types ...,\n    PRIMARY KEY (...)\n);`;
+    }
     if (feature.operation === "UPDATE") return `UPDATE ${table}\nSET ...\nWHERE ...;`;
     const lines = ["SELECT ...", `FROM ${feature.tables.join(" AS ..., ") || "..."}`];
     if (feature.clauses.includes("WHERE")) lines.push("WHERE ...");

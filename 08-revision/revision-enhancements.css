@@ -72,6 +72,17 @@
 }
 
 @media (max-width: 620px) {
+  .site-header nav {
+    justify-content: space-between;
+    gap: 0;
+    overflow-x: hidden;
+  }
+
+  .site-header .nav-button {
+    padding-inline: 6px;
+    white-space: nowrap;
+  }
+
   .flashcard,
   .flashcard-scene,
   .flashcard-inner {
@@ -84,6 +95,13 @@
 
   .flashcard-complete {
     padding: 20px;
+  }
+}
+
+@media (max-width: 380px) {
+  .site-header nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
