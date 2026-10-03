@@ -143,7 +143,7 @@
                     {id:"R_AA",type:"rel",expected:"CREATES",label:"Artist-Artwork relationship"},
                     {id:"C_AA_R",type:"card",expected:"Zero or many (O<)",label:"Artwork end of Creates",feedback:"The source does not state a minimum number of artworks for an artist."}
                 ]},
-                {from:"STA",to:"STA",left:"STAFF (Manager)",right:"STAFF (Monitored)",loop:{fromFraction:.33,toFraction:.6,rightPadding:68,bottomPadding:78,labelDx:-10,labelDy:36},rule:"A MANAGER monitors one or many staff members; a monitored STAFF member has zero or one manager.",slots:[
+                {from:"STA",to:"STA",left:"STAFF (Manager)",right:"STAFF (Monitored)",loop:{fromFraction:.33,toFraction:.6,rightPadding:68,bottomPadding:78,labelDx:2,labelDy:36},rule:"A MANAGER monitors one or many staff members; a monitored STAFF member has zero or one manager.",slots:[
                     {id:"C_SS_L",type:"card",expected:"Zero or one (O|)",label:"Manager end of Monitors",feedback:"For one monitored staff member, the source sets a maximum of one manager but no minimum."},
                     {id:"R_SS",type:"rel",expected:"MONITORS",label:"Recursive staff relationship"},
                     {id:"C_SS_R",type:"card",expected:"One or many (|<)",label:"Monitored staff end of Monitors",feedback:"Every appointed manager must monitor at least one staff member."}
