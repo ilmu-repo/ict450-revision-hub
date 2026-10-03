@@ -125,6 +125,7 @@ button { color: inherit; }
     position: relative;
     min-width: 1320px;
     min-height: 900px;
+    transform-origin: top left;
     background-color: #fff;
     background-image: radial-gradient(#d2dbe5 1px, transparent 1px);
     background-size: 20px 20px;
