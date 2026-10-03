@@ -67,13 +67,13 @@
     <script>
         window.CROW_EXERCISE = {
             id: "splash-swim",
-            version: "v3",
+            version: "v4",
             stageHeight: 1250,
             successMessage: "The model connects each registration to its swimmer, event, competition and official, while Performance depends only on the registration and round.",
             bank: {
                 entity: ["VENUE", "COMPETITION", "EVENT", "OFFICIAL", "SWIMMER", "REGISTRATION", "PERFORMANCE"],
-                pk: ["VenueID", "CompetitionID", "EventID", "OfficialID", "SwimmerID", "RegistrationID", "RegistrationID + RoundName"],
-                fk: ["VenueID", "CompetitionID", "EventID", "OfficialID", "SwimmerID", "RegistrationID"],
+                pk: ["VenueID", "CompetitionID", "EventID", "OfficialID", "SwimmerID", "RegistrationID", "RoundName"],
+                fk: ["VenueID", "CompetitionID", "EventID", "OfficialID", "SwimmerID"],
                 attr: ["VenueName", "Location", "PoolSize", "EventName", "EventCategory", "OfficialName", "Role", "ContactNumber", "SwimmerName", "Gender", "DateOfBirth", "SchoolOrClubName", "RoundDate", "CompetitionTimeSeconds", "Position"],
                 rel: ["HOSTS", "HAS", "FOR", "SUBMITS", "SUPERVISES", "RECORDS"],
                 card: ["Exactly one (||)", "Zero or one (O|)", "One or many (|<)", "Zero or many (O<)"]
@@ -123,40 +123,40 @@
                 ]},
                 {id:"PER",layout:{x:76,y:38,w:20},slots: [
                     {id:"E_PER",type:"entity",expected:"PERFORMANCE",label:"Performance table"},
-                    {id:"PK_PER",type:"pk",expected:"RegistrationID + RoundName",label:"Performance composite primary key"},
-                    {id:"FK_PER_R",type:"fk",expected:"RegistrationID",label:"Performance registration foreign key"},
+                    {id:"PK_PER_R",type:"pk",kindLabel:"PK/FK1",expected:"RegistrationID",label:"Performance registration key (PK/FK1)"},
+                    {id:"PK_PER_ROUND",type:"pk",expected:"RoundName",label:"Performance round key (PK)"},
                     {id:"A_PER_D",type:"attr",expected:"RoundDate",label:"Performance round date"},
                     {id:"A_PER_T",type:"attr",expected:"CompetitionTimeSeconds",label:"Performance competition time"},
                     {id:"A_PER_P",type:"attr",expected:"Position",label:"Performance position"}
                 ]}
             ],
             relationships: [
-                {from:"VEN",to:"COM",left:"VENUE",right:"COMPETITION",rule:"Each COMPETITION takes place at exactly one VENUE; a VENUE may host zero or many competitions over time.",slots:[
+                {from:"VEN",to:"COM",route:{fromSide:"right",fromFraction:.315,toSide:"left",toFraction:.5},left:"VENUE",right:"COMPETITION",rule:"Each COMPETITION takes place at exactly one VENUE; a VENUE may host zero or many competitions over time.",slots:[
                     {id:"C_VC_L",type:"card",expected:"Exactly one (||)",label:"Venue end of Hosts",feedback:"Each competition has one venue."},
                     {id:"R_VC",type:"rel",expected:"HOSTS",label:"Venue-Competition relationship"},
                     {id:"C_VC_R",type:"card",expected:"Zero or many (O<)",label:"Competition end of Hosts",feedback:"A venue can be stored before it hosts a competition."}
                 ]},
-                {from:"COM",to:"REG",left:"COMPETITION",right:"REGISTRATION",rule:"Each REGISTRATION belongs to exactly one COMPETITION; a COMPETITION may have zero or many registrations.",slots:[
+                {from:"COM",to:"REG",route:{fromSide:"bottom",fromFraction:.5,toSide:"top",toFraction:.5},left:"COMPETITION",right:"REGISTRATION",rule:"Each REGISTRATION belongs to exactly one COMPETITION; a COMPETITION may have zero or many registrations.",slots:[
                     {id:"C_CR_L",type:"card",expected:"Exactly one (||)",label:"Competition end of Has",feedback:"A registration occurs in one competition."},
                     {id:"R_CR",type:"rel",expected:"HAS",label:"Competition-Registration relationship"},
                     {id:"C_CR_R",type:"card",expected:"Zero or many (O<)",label:"Registration end of Has",feedback:"Registration is optional until swimmers enter the competition."}
                 ]},
-                {from:"EVE",to:"REG",left:"EVENT",right:"REGISTRATION",rule:"Each REGISTRATION is for exactly one EVENT; an EVENT may appear in zero or many registrations.",slots:[
+                {from:"EVE",to:"REG",route:{fromSide:"right",fromFraction:.5,toSide:"left",toFraction:.28},label:{dx:0,dy:-56},left:"EVENT",right:"REGISTRATION",rule:"Each REGISTRATION is for exactly one EVENT; an EVENT may appear in zero or many registrations.",slots:[
                     {id:"C_ER_L",type:"card",expected:"Exactly one (||)",label:"Event end of For",feedback:"Each registration selects one event."},
                     {id:"R_ER",type:"rel",expected:"FOR",label:"Event-Registration relationship"},
                     {id:"C_ER_R",type:"card",expected:"Zero or many (O<)",label:"Registration end of For",feedback:"The source says an event can be in multiple registrations."}
                 ]},
-                {from:"SWI",to:"REG",left:"SWIMMER",right:"REGISTRATION",rule:"Each REGISTRATION belongs to exactly one SWIMMER; a SWIMMER may submit zero or many registrations.",slots:[
+                {from:"SWI",to:"REG",route:{fromSide:"right",fromFraction:.5,toSide:"left",toFraction:.78},label:{dx:102,dy:0},left:"SWIMMER",right:"REGISTRATION",rule:"Each REGISTRATION belongs to exactly one SWIMMER; a SWIMMER may submit zero or many registrations.",slots:[
                     {id:"C_SR_L",type:"card",expected:"Exactly one (||)",label:"Swimmer end of Submits",feedback:"Registration must identify the swimmer directly."},
                     {id:"R_SR",type:"rel",expected:"SUBMITS",label:"Swimmer-Registration relationship"},
                     {id:"C_SR_R",type:"card",expected:"Zero or many (O<)",label:"Registration end of Submits",feedback:"A swimmer record may exist before event selection."}
                 ]},
-                {from:"OFF",to:"REG",left:"OFFICIAL",right:"REGISTRATION",rule:"Each REGISTRATION is supervised by exactly one OFFICIAL; an OFFICIAL may supervise zero or many registrations.",slots:[
+                {from:"OFF",to:"REG",route:{fromSide:"top",fromFraction:.5,toSide:"bottom",toFraction:.5},label:{dx:110,dy:0},left:"OFFICIAL",right:"REGISTRATION",rule:"Each REGISTRATION is supervised by exactly one OFFICIAL; an OFFICIAL may supervise zero or many registrations.",slots:[
                     {id:"C_OR_L",type:"card",expected:"Exactly one (||)",label:"Official end of Supervises",feedback:"Each registration process has one official."},
                     {id:"R_OR",type:"rel",expected:"SUPERVISES",label:"Official-Registration relationship"},
                     {id:"C_OR_R",type:"card",expected:"Zero or many (O<)",label:"Registration end of Supervises",feedback:"Part B(a) expresses many; Part B(b) supplies the maximum of 100."}
                 ]},
-                {from:"REG",to:"PER",left:"REGISTRATION",right:"PERFORMANCE",rule:"Every PERFORMANCE row belongs to exactly one REGISTRATION; each registered event has one or many round performance records.",slots:[
+                {from:"REG",to:"PER",route:{fromSide:"right",fromFraction:.5,toSide:"left",toFraction:.5},left:"REGISTRATION",right:"PERFORMANCE",rule:"Every PERFORMANCE row belongs to exactly one REGISTRATION; each registered event has one or many round performance records.",slots:[
                     {id:"C_RP_L",type:"card",expected:"Exactly one (||)",label:"Registration end of Records",feedback:"Performance depends on one registration."},
                     {id:"R_RP",type:"rel",expected:"RECORDS",label:"Registration-Performance relationship"},
                     {id:"C_RP_R",type:"card",expected:"One or many (|<)",label:"Performance end of Records",feedback:"The question requires performance for each registered event and allows named rounds."}
@@ -164,6 +164,6 @@
             ]
         };
     </script>
-    <script src="crow-studio.js?v=12"></script>
+    <script src="crow-studio.js?v=14"></script>
 </body>
 </html>

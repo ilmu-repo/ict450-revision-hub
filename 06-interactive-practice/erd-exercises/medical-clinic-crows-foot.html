@@ -67,13 +67,13 @@
     <script>
         window.CROW_EXERCISE = {
             id: "medical-clinic",
-            version: "v2",
+            version: "v3",
             stageHeight: 1100,
             successMessage: "The model uses APPOINTMENT between Doctor and Patient, resolves Appointment-Treatment through APPOINTMENT_TREATMENT, and stores dosage, instructions and duration on that bridge.",
             bank: {
                 entity: ["DOCTOR", "PATIENT", "APPOINTMENT", "TREATMENT", "APPOINTMENT_TREATMENT"],
-                pk: ["DoctorID", "PatientID", "AppointmentID", "TreatmentID", "AppointmentID + TreatmentID"],
-                fk: ["DoctorID", "PatientID", "AppointmentID", "TreatmentID"],
+                pk: ["DoctorID", "PatientID", "AppointmentID", "TreatmentID"],
+                fk: ["DoctorID", "PatientID"],
                 attr: ["DoctorName", "Specialization", "ContactNumber", "PatientName", "Address", "PhoneNumber", "AppointmentDate", "AppointmentTime", "Status", "TreatmentName", "TreatmentType", "Dosage", "Instructions", "TreatmentDuration"],
                 rel: ["ATTENDS", "BOOKS", "HAS", "USES"],
                 card: ["Exactly one (||)", "Zero or one (O|)", "One or many (|<)", "Zero or many (O<)"]
@@ -93,7 +93,7 @@
                     {id:"A_PAT_A",type:"attr",expected:"Address",label:"Patient address"},
                     {id:"A_PAT_P",type:"attr",expected:"PhoneNumber",label:"Patient phone number"}
                 ]},
-                {id:"APP",layout:{x:37,y:32,w:17},slots: [
+                {id:"APP",layout:{x:39,y:32,w:17},slots: [
                     {id:"E_APP",type:"entity",expected:"APPOINTMENT",label:"Appointment table"},
                     {id:"PK_APP",type:"pk",expected:"AppointmentID",label:"Appointment primary key"},
                     {id:"FK_APP_D",type:"fk",expected:"DoctorID",label:"Appointment doctor foreign key"},
@@ -102,39 +102,38 @@
                     {id:"A_APP_T",type:"attr",expected:"AppointmentTime",label:"Appointment time"},
                     {id:"A_APP_S",type:"attr",expected:"Status",label:"Appointment status"}
                 ]},
-                {id:"TRE",layout:{x:76,y:5,w:16},slots: [
+                {id:"TRE",layout:{x:78,y:5,w:16},slots: [
                     {id:"E_TRE",type:"entity",expected:"TREATMENT",label:"Treatment table"},
                     {id:"PK_TRE",type:"pk",expected:"TreatmentID",label:"Treatment primary key"},
                     {id:"A_TRE_N",type:"attr",expected:"TreatmentName",label:"Treatment name"},
                     {id:"A_TRE_T",type:"attr",expected:"TreatmentType",label:"Treatment type"}
                 ]},
-                {id:"APT",layout:{x:76,y:57,w:18},slots: [
+                {id:"APT",layout:{x:77,y:57,w:18},slots: [
                     {id:"E_AT",type:"entity",expected:"APPOINTMENT_TREATMENT",label:"Appointment treatment associative table"},
-                    {id:"PK_AT",type:"pk",expected:"AppointmentID + TreatmentID",label:"Appointment treatment composite primary key"},
-                    {id:"FK_AT_A",type:"fk",expected:"AppointmentID",label:"Appointment treatment appointment foreign key"},
-                    {id:"FK_AT_T",type:"fk",expected:"TreatmentID",label:"Appointment treatment treatment foreign key"},
+                    {id:"PK_AT_A",type:"pk",kindLabel:"PK/FK1",expected:"AppointmentID",label:"Appointment treatment appointment key (PK/FK1)"},
+                    {id:"PK_AT_T",type:"pk",kindLabel:"PK/FK2",expected:"TreatmentID",label:"Appointment treatment treatment key (PK/FK2)"},
                     {id:"A_AT_D",type:"attr",expected:"Dosage",label:"Appointment treatment dosage"},
                     {id:"A_AT_I",type:"attr",expected:"Instructions",label:"Appointment treatment instructions"},
                     {id:"A_AT_T",type:"attr",expected:"TreatmentDuration",label:"Appointment treatment duration"}
                 ]}
             ],
             relationships: [
-                {from:"DOC",to:"APP",left:"DOCTOR",right:"APPOINTMENT",rule:"Each APPOINTMENT is attended by exactly one DOCTOR; a DOCTOR may attend zero or many appointments.",slots:[
+                {from:"DOC",to:"APP",route:{fromSide:"right",fromFraction:.5,toSide:"left",toFraction:.22},label:{dx:70,dy:0},left:"DOCTOR",right:"APPOINTMENT",rule:"Each APPOINTMENT is attended by exactly one DOCTOR; a DOCTOR may attend zero or many appointments.",slots:[
                     {id:"C_DA_L",type:"card",expected:"Exactly one (||)",label:"Doctor end of Attends",feedback:"An appointment identifies one doctor."},
                     {id:"R_DA",type:"rel",expected:"ATTENDS",label:"Doctor-Appointment relationship"},
                     {id:"C_DA_R",type:"card",expected:"Zero or many (O<)",label:"Appointment end of Attends",feedback:"A doctor can exist before any appointment is booked."}
                 ]},
-                {from:"PAT",to:"APP",left:"PATIENT",right:"APPOINTMENT",rule:"Each APPOINTMENT belongs to exactly one PATIENT; a PATIENT may book zero or many appointments.",slots:[
+                {from:"PAT",to:"APP",route:{fromSide:"right",fromFraction:.5,toSide:"left",toFraction:.78},label:{dx:70,dy:0},left:"PATIENT",right:"APPOINTMENT",rule:"Each APPOINTMENT belongs to exactly one PATIENT; a PATIENT may book zero or many appointments.",slots:[
                     {id:"C_PA_L",type:"card",expected:"Exactly one (||)",label:"Patient end of Books",feedback:"An appointment identifies one patient."},
                     {id:"R_PA",type:"rel",expected:"BOOKS",label:"Patient-Appointment relationship"},
                     {id:"C_PA_R",type:"card",expected:"Zero or many (O<)",label:"Appointment end of Books",feedback:"A patient record can exist before the first appointment."}
                 ]},
-                {from:"APP",to:"APT",left:"APPOINTMENT",right:"APPOINTMENT_TREATMENT",rule:"Each APPOINTMENT_TREATMENT row belongs to exactly one APPOINTMENT; an APPOINTMENT may have zero or many treatment rows.",slots:[
+                {from:"APP",to:"APT",route:{fromSide:"right",fromFraction:.45,toSide:"left",toFraction:.45},label:{dx:70,dy:0},left:"APPOINTMENT",right:"APPOINTMENT_TREATMENT",rule:"Each APPOINTMENT_TREATMENT row belongs to exactly one APPOINTMENT; an APPOINTMENT may have zero or many treatment rows.",slots:[
                     {id:"C_AAT_L",type:"card",expected:"Exactly one (||)",label:"Appointment end of Has",feedback:"Each bridge row belongs to one appointment."},
                     {id:"R_AAT",type:"rel",expected:"HAS",label:"Appointment-Appointment treatment relationship"},
                     {id:"C_AAT_R",type:"card",expected:"Zero or many (O<)",label:"Appointment treatment end of Has",feedback:"The source says an appointment may include multiple treatments."}
                 ]},
-                {from:"TRE",to:"APT",left:"TREATMENT",right:"APPOINTMENT_TREATMENT",rule:"Each APPOINTMENT_TREATMENT row identifies exactly one TREATMENT; a TREATMENT may be used in zero or many appointments.",slots:[
+                {from:"TRE",to:"APT",route:{fromSide:"bottom",fromFraction:.5,toSide:"top",toFraction:.5},label:{dx:72,dy:0},left:"TREATMENT",right:"APPOINTMENT_TREATMENT",rule:"Each APPOINTMENT_TREATMENT row identifies exactly one TREATMENT; a TREATMENT may be used in zero or many appointments.",slots:[
                     {id:"C_TAT_L",type:"card",expected:"Exactly one (||)",label:"Treatment end of Uses",feedback:"Each bridge row refers to one treatment definition."},
                     {id:"R_TAT",type:"rel",expected:"USES",label:"Treatment-Appointment treatment relationship"},
                     {id:"C_TAT_R",type:"card",expected:"Zero or many (O<)",label:"Appointment treatment end of Uses",feedback:"A treatment definition can be reused across appointments."}
@@ -142,6 +141,6 @@
             ]
         };
     </script>
-    <script src="crow-studio.js?v=12"></script>
+    <script src="crow-studio.js?v=14"></script>
 </body>
 </html>

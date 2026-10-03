@@ -528,7 +528,7 @@
                 row.dataset.kind = slot.type;
                 const kind = document.createElement("span");
                 kind.className = "field-kind";
-                kind.textContent = slot.type === "attr" ? "Field" : slot.type.toUpperCase();
+                kind.textContent = slot.kindLabel || (slot.type === "attr" ? "Field" : slot.type.toUpperCase());
                 row.append(kind, createSlot(slot));
                 fields.appendChild(row);
             });

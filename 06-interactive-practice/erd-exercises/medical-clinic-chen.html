@@ -63,7 +63,7 @@
     <script>
         window.CHEN_EXERCISE = {
             id: "medical-clinic",
-            version: "v2",
+            version: "v3",
             successMessage: "The diagram models appointments explicitly and keeps dosage, instructions and duration on the Appointment-Treatment relationship.",
             bank: {
                 entity: ["PATIENT", "APPOINTMENT", "DOCTOR", "TREATMENT"],
@@ -77,7 +77,7 @@
                 [10,28,25,28], [25,28,40,28], [40,28,59,28], [59,28,78,28], [40,28,40,55], [40,55,40,80],
                 [10,28,5,13], [10,28,4,42], [10,28,12,47], [10,28,18,42],
                 [78,28,72,12], [78,28,82,12], [78,28,90,18], [78,28,91,38],
-                [40,28,34,13], [40,28,45,13], [40,28,54,13], [40,28,50,38],
+                [40,28,34,13], [40,28,45,13], [40,28,54,13], {points:[[40,28],[44,33],[44,43],[56,43]]},
                 [40,80,31,91], [40,80,47,92], [40,80,55,84],
                 [40,55,24,55], [40,55,27,68], [40,55,53,59]
             ],
@@ -91,15 +91,15 @@
                 {id:"E_TREAT",type:"entity",x:40,y:80,w:13,h:7,expected:"TREATMENT",label:"Treatment entity"},
 
                 {id:"C_PAT",type:"conn",x:18,y:24,w:3.5,h:4,expected:"1",label:"Patient connectivity to Has"},
-                {id:"K_PAT",type:"card",x:18,y:32,w:6,h:4,expected:"(0,N)",label:"Patient participation in Has"},
-                {id:"C_APPT1",type:"conn",x:33,y:24,w:3.5,h:4,expected:"M",label:"Appointment connectivity to Has"},
+                {id:"K_PAT",type:"card",x:18,y:18,w:6,h:4,expected:"(0,N)",label:"Patient participation in Has"},
+                {id:"C_APPT1",type:"conn",x:32,y:21,w:3.5,h:4,expected:"M",label:"Appointment connectivity to Has"},
                 {id:"K_APPT1",type:"card",x:33,y:37,w:6,h:4,expected:"(1,1)",label:"Appointment participation in Has"},
                 {id:"C_APPT2",type:"conn",x:49,y:24,w:3.5,h:4,expected:"M",label:"Appointment connectivity to Attends"},
-                {id:"K_APPT2",type:"card",x:49,y:32,w:6,h:4,expected:"(1,1)",label:"Appointment participation in Attends"},
+                {id:"K_APPT2",type:"card",x:49,y:36,w:6,h:4,expected:"(1,1)",label:"Appointment participation in Attends"},
                 {id:"C_DOC",type:"conn",x:69,y:24,w:3.5,h:4,expected:"1",label:"Doctor connectivity to Attends"},
                 {id:"K_DOC",type:"card",x:69,y:32,w:6,h:4,expected:"(0,N)",label:"Doctor participation in Attends"},
                 {id:"C_APPT3",type:"conn",x:37,y:42,w:3.5,h:4,expected:"M",label:"Appointment connectivity to Includes"},
-                {id:"K_APPT3",type:"card",x:44,y:42,w:6,h:4,expected:"(0,N)",label:"Appointment participation in Includes"},
+                {id:"K_APPT3",type:"card",x:47,y:46,w:6,h:4,expected:"(0,N)",label:"Appointment participation in Includes"},
                 {id:"C_TREAT",type:"conn",x:37,y:69,w:3.5,h:4,expected:"N",label:"Treatment connectivity to Includes"},
                 {id:"K_TREAT",type:"card",x:44,y:69,w:6,h:4,expected:"(0,N)",label:"Treatment participation in Includes"},
 
@@ -114,7 +114,7 @@
                 {id:"PK_APPT",type:"pk",x:34,y:13,w:11,h:5,expected:"AppointmentID",label:"Appointment key"},
                 {id:"A_APPT_DATE",type:"attr",x:45,y:13,w:8,h:5,expected:"Date",label:"Appointment date"},
                 {id:"A_APPT_TIME",type:"attr",x:54,y:13,w:8,h:5,expected:"Time",label:"Appointment time"},
-                {id:"A_APPT_STATUS",type:"attr",x:50,y:38,w:8,h:5,expected:"Status",label:"Appointment status"},
+                {id:"A_APPT_STATUS",type:"attr",x:56,y:43,w:8,h:5,expected:"Status",label:"Appointment status"},
                 {id:"PK_TREAT",type:"pk",x:31,y:91,w:10,h:5,expected:"TreatmentID",label:"Treatment key"},
                 {id:"A_TREAT_NAME",type:"attr",x:47,y:92,w:8,h:5,expected:"Name",label:"Treatment name"},
                 {id:"A_TREAT_TYPE",type:"attr",x:55,y:84,w:8,h:5,expected:"Type",label:"Treatment type"},
