@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17365d">
+  <meta name="description" content="ICT450 chapter quizzes, flashcards and local revision progress.">
+  <meta name="ict450-release" content="2026.10.03-r44">
+  <title>ICT450 Revision Activities</title>
+  <link rel="stylesheet" href="styles.css?v=2026.10.03-r44">
+  <link rel="stylesheet" href="revision-enhancements.css?v=2026.10.03-r44">
+</head>
+<body>
+  <a class="skip-link" href="#mainContent">Skip to revision content</a>
+  <header class="site-header">
+    <a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">DB</span><span><strong>ICT450</strong><small>Revision Activities</small></span></a>
+    <nav aria-label="Revision sections">
+      <button class="nav-button is-active" type="button" data-view="home">Overview</button>
+      <button class="nav-button" type="button" data-view="activities">Quizzes</button>
+      <button class="nav-button" type="button" data-view="flashcards">Flashcards</button>
+      <button class="nav-button" type="button" data-view="progress">Progress</button>
+    </nav>
+    <a class="hub-link" href="../index.html">← Revision Hub</a>
+  </header>
+
+  <main id="mainContent">
+    <section class="view is-visible" data-view-panel="home">
+      <div class="hero shell">
+        <div>
+          <p class="eyebrow">Chapter-by-chapter recall</p>
+          <h1>ICT450 Revision Activities</h1>
+          <p class="hero-copy">Use a short mixed quiz after each lecture, then reinforce the same chapter with focused flashcards. Progress stays in this browser on this device.</p>
+          <div class="button-row">
+            <button class="primary-button" type="button" data-go="activities">Choose a quiz</button>
+            <button class="secondary-button" type="button" data-go="flashcards">Study flashcards</button>
+          </div>
+        </div>
+        <aside class="privacy-note"><strong>Private by default</strong><p>Nothing is uploaded or submitted. Activity scores are formative and flashcard ratings record confidence, not examination marks.</p></aside>
+      </div>
+      <div class="shell metric-grid" aria-label="Revision collection summary">
+        <article class="metric-card"><span id="metricActivities">96</span><strong>quiz activities</strong><p>Twelve mixed questions for each chapter.</p></article>
+        <article class="metric-card"><span id="metricCards">160</span><strong>flashcards</strong><p>Terms, rules, comparisons, processes and pitfalls.</p></article>
+        <article class="metric-card"><span id="metricMastered">0</span><strong>activities mastered</strong><p>Unique activities completed successfully.</p></article>
+        <article class="metric-card accent"><span id="metricRemembered">0</span><strong>cards remembered</strong><p>Cards whose latest rating is Remembered.</p></article>
+      </div>
+      <section class="shell section-block">
+        <div class="section-heading"><div><p class="eyebrow">How to use this</p><h2>Quiz and flashcard progress</h2></div></div>
+        <div class="route-grid">
+          <button class="route-card" type="button" data-go="activities"><span>01 · QUIZ</span><strong>Activity mastery</strong><p>Answer first. Objective items are marked automatically; written answers use guided self-assessment.</p></button>
+          <button class="route-card" type="button" data-go="flashcards"><span>02 · CARDS</span><strong>Memory confidence</strong><p>Recall before revealing, then rate the card Again, Learning or Remembered.</p></button>
+          <button class="route-card" type="button" data-go="progress"><span>03 · REVIEW</span><strong>Your progress</strong><p>Resume sessions, revisit weak items, export a backup or reset deliberately.</p></button>
+        </div>
+      </section>
+    </section>
+
+    <section class="view shell app-view" data-view-panel="activities" aria-labelledby="activitiesTitle">
+      <div class="section-heading"><div><p class="eyebrow">End-of-lecture activities</p><h1 id="activitiesTitle">Short chapter quizzes</h1></div><button class="secondary-button" id="reviewWeak" type="button">Review weak items</button></div>
+      <div class="chapter-grid" id="activityChapterGrid" aria-label="Choose a chapter quiz"></div>
+      <section class="session-panel is-hidden" id="activitySession" aria-live="polite">
+        <div class="session-toolbar">
+          <button class="text-button" id="closeActivity" type="button">← Chapters</button>
+          <div><strong id="activitySessionTitle"></strong><small id="activityPosition"></small></div>
+          <button class="text-button danger-text" id="restartActivity" type="button">Restart</button>
+        </div>
+        <div class="progress-track" aria-hidden="true"><span id="activityProgressBar"></span></div>
+        <article class="activity-card" id="activityCard"></article>
+      </section>
+    </section>
+
+    <section class="view shell app-view" data-view-panel="flashcards" aria-labelledby="flashcardsTitle">
+      <div id="flashcardSetup">
+        <div class="section-heading"><div><p class="eyebrow">Active recall</p><h1 id="flashcardsTitle">Flashcard setup</h1></div></div>
+        <div class="setup-layout">
+          <section class="setup-card">
+            <label><span>Chapter</span><select id="flashChapter"></select></label>
+            <fieldset><legend>Memory lanes</legend><div class="filter-checks" id="laneFilters"></div></fieldset>
+            <label><span>Order</span><select id="flashOrder"><option value="chapter">Chapter order</option><option value="shuffle">Shuffle once</option></select></label>
+            <label><span>Cards to include</span><select id="flashScope"><option value="all">All matching cards</option><option value="not-remembered">Not yet remembered</option><option value="learning">Again and Learning only</option></select></label>
+            <div class="button-row"><button class="primary-button" id="startFlashcards" type="button">Start or resume deck</button><button class="secondary-button" id="restartFlashcards" type="button">Start deck again</button></div>
+          </section>
+          <aside class="legend-card"><h2>Memory lanes</h2><div id="laneLegend"></div><p>Colour is paired with a label and symbol so the category remains clear without colour.</p></aside>
+        </div>
+      </div>
+      <section class="flash-study is-hidden" id="flashStudy" aria-live="polite">
+        <div class="session-toolbar">
+          <button class="text-button" id="closeFlashcards" type="button">← Deck setup</button>
+          <div><strong id="flashDeckTitle"></strong><small id="flashPosition"></small></div>
+          <button class="text-button" id="skipFlashcard" type="button">Skip</button>
+        </div>
+        <div class="progress-track" aria-hidden="true"><span id="flashProgressBar"></span></div>
+        <article class="flashcard" id="flashcard"></article>
+      </section>
+    </section>
+
+    <section class="view shell app-view" data-view-panel="progress" aria-labelledby="progressTitle">
+      <div class="section-heading"><div><p class="eyebrow">This browser and device</p><h1 id="progressTitle">Revision progress</h1></div><button class="secondary-button" id="exportProgress" type="button">Export progress</button></div>
+      <div class="progress-grid" id="progressMetrics"></div>
+      <section class="definition-card"><h2>What each number means</h2><div class="table-wrap"><table><thead><tr><th>Tracker</th><th>Meaning</th><th>Persistence</th></tr></thead><tbody><tr><td>Activity position</td><td>Your current place in one quiz session.</td><td>Resumes until completed or restarted.</td></tr><tr><td>Activity mastery</td><td>Unique quiz activities completed successfully.</td><td>Shared wherever that activity appears.</td></tr><tr><td>Review list</td><td>Activities answered incorrectly, rated Almost or marked Review.</td><td>Clears after a successful retry or reset.</td></tr><tr><td>Flashcard remembered</td><td>Cards whose latest rating is Remembered.</td><td>Independent from quiz mastery.</td></tr><tr><td>Flashcard learning</td><td>Cards whose latest rating is Again or Learning.</td><td>Independent from quiz mastery.</td></tr></tbody></table></div></section>
+      <section class="chapter-progress" id="chapterProgress"></section>
+      <section class="danger-zone"><div><h2>Reset local progress</h2><p>Resetting affects only this browser. Export a backup first if you may want the record later.</p></div><div class="button-row"><button class="secondary-button" id="resetActivities" type="button">Reset quizzes</button><button class="secondary-button" id="resetCards" type="button">Reset flashcards</button><button class="danger-button" id="resetAll" type="button">Reset everything</button></div></section>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="revision-data.js?v=2026.10.03-r44"></script>
+  <script src="app.js?v=2026.10.03-r44"></script>
+</body>
+</html>

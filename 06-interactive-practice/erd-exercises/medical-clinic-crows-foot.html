@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Clinic Crow's Foot ERD Practice</title>
+    <link rel="stylesheet" href="crow-studio.css?v=15">
+</head>
+<body data-theme="emerald">
+    <header class="page-header">
+        <div class="title-block">
+            <h1>Crow's Foot ERD: Medical Clinic</h1>
+            <p>Resolve doctor-patient appointments and the appointment-treatment M:N relationship without inventing unsupported tables.</p>
+        </div>
+        <nav class="header-actions" aria-label="Exercise actions and navigation">
+            <a class="nav-link" href="../index.html">Practice Studio</a>
+            <a class="nav-link" href="../../index.html">Revision Hub</a>
+            <button class="button" id="reset-button" type="button">Reset</button>
+            <button class="button primary" id="check-button" type="button">Check model</button>
+        </nav>
+    </header>
+
+    <main class="page-main">
+        <details class="context-card" open>
+            <summary>Question context and modelling boundary</summary>
+            <div class="context-body">
+                <div>
+                    <ul class="rule-list">
+                        <li>Doctors and patients are connected through appointments; each appointment stores date, time and status.</li>
+                        <li>A doctor can attend many patients and a patient can be treated by multiple doctors.</li>
+                        <li>An appointment may include multiple treatments.</li>
+                        <li>Dosage, instructions and treatment duration describe a treatment as used in one appointment, not the reusable treatment definition.</li>
+                    </ul>
+                </div>
+                <div class="notation-note"><strong>Modelling note:</strong> APPOINTMENT_TREATMENT resolves the Appointment-Treatment M:N relationship and stores its three detail attributes. The question never mentions billing, so no BILL table or billing relationship belongs in this model.</div>
+            </div>
+        </details>
+
+        <div class="studio-grid">
+            <aside class="bank-panel" aria-labelledby="bank-title">
+                <div class="panel-heading"><h2 id="bank-title">Model bank</h2><p>Select an item and then a matching position. Desktop users may also drag items.</p></div>
+                <div class="selection-status" id="selection-status"></div>
+                <div class="bank-groups" id="bank-groups"></div>
+            </aside>
+            <section class="board-panel" aria-labelledby="board-title">
+                <div class="board-head">
+                    <div class="board-title"><h2 id="board-title">Medical Clinic relational ERD</h2><p>Appointment resolves Doctor-Patient; Appointment Treatment resolves Appointment-Treatment.</p></div>
+                    <div class="board-tools">
+                        <button class="button" id="bank-toggle-button" type="button" aria-expanded="true">Hide model bank</button>
+                        <button class="button" id="clear-selection-button" type="button">Clear selection</button>
+                        <button class="button" id="remove-button" type="button">Remove item</button>
+                        <button class="button" id="undo-button" type="button">Undo</button>
+                    </div>
+                </div>
+                <div class="progress-wrap"><span id="progress-text">0 positions filled</span><div class="progress-track" role="progressbar" aria-label="Model completion" aria-valuemin="0" aria-valuenow="0" aria-valuemax="1"><div class="progress-bar" id="progress-bar"></div></div></div>
+                <div class="workspace">
+                    <h3 class="section-title">Connected Crow's Foot diagram</h3>
+                    <div class="canvas-scroll" tabindex="0" aria-label="Scrollable connected ERD workspace"><div class="diagram-stage" id="diagram-stage"><svg class="diagram-lines" id="diagram-lines" aria-hidden="true"></svg></div></div>
+                    <section class="relationship-reference" aria-labelledby="relationship-title"><h3 class="section-title" id="relationship-title">Business-rule reminders</h3><div class="relationship-rules" id="relationship-rules"></div></section>
+                </div>
+                <section class="feedback-panel" id="feedback-panel" aria-live="polite" hidden></section>
+            </section>
+        </div>
+    </main>
+    <div class="sr-only" id="live-region" aria-live="assertive"></div>
+
+    <script>
+        window.CROW_EXERCISE = {
+            id: "medical-clinic",
+            version: "v2",
+            stageHeight: 1100,
+            successMessage: "The model uses APPOINTMENT between Doctor and Patient, resolves Appointment-Treatment through APPOINTMENT_TREATMENT, and stores dosage, instructions and duration on that bridge.",
+            bank: {
+                entity: ["DOCTOR", "PATIENT", "APPOINTMENT", "TREATMENT", "APPOINTMENT_TREATMENT"],
+                pk: ["DoctorID", "PatientID", "AppointmentID", "TreatmentID", "AppointmentID + TreatmentID"],
+                fk: ["DoctorID", "PatientID", "AppointmentID", "TreatmentID"],
+                attr: ["DoctorName", "Specialization", "ContactNumber", "PatientName", "Address", "PhoneNumber", "AppointmentDate", "AppointmentTime", "Status", "TreatmentName", "TreatmentType", "Dosage", "Instructions", "TreatmentDuration"],
+                rel: ["ATTENDS", "BOOKS", "HAS", "USES"],
+                card: ["Exactly one (||)", "Zero or one (O|)", "One or many (|<)", "Zero or many (O<)"]
+            },
+            tables: [
+                {id:"DOC",layout:{x:2,y:5,w:16},slots: [
+                    {id:"E_DOC",type:"entity",expected:"DOCTOR",label:"Doctor table"},
+                    {id:"PK_DOC",type:"pk",expected:"DoctorID",label:"Doctor primary key"},
+                    {id:"A_DOC_N",type:"attr",expected:"DoctorName",label:"Doctor name"},
+                    {id:"A_DOC_S",type:"attr",expected:"Specialization",label:"Doctor specialization"},
+                    {id:"A_DOC_C",type:"attr",expected:"ContactNumber",label:"Doctor contact number"}
+                ]},
+                {id:"PAT",layout:{x:2,y:60,w:16},slots: [
+                    {id:"E_PAT",type:"entity",expected:"PATIENT",label:"Patient table"},
+                    {id:"PK_PAT",type:"pk",expected:"PatientID",label:"Patient primary key"},
+                    {id:"A_PAT_N",type:"attr",expected:"PatientName",label:"Patient name"},
+                    {id:"A_PAT_A",type:"attr",expected:"Address",label:"Patient address"},
+                    {id:"A_PAT_P",type:"attr",expected:"PhoneNumber",label:"Patient phone number"}
+                ]},
+                {id:"APP",layout:{x:37,y:32,w:17},slots: [
+                    {id:"E_APP",type:"entity",expected:"APPOINTMENT",label:"Appointment table"},
+                    {id:"PK_APP",type:"pk",expected:"AppointmentID",label:"Appointment primary key"},
+                    {id:"FK_APP_D",type:"fk",expected:"DoctorID",label:"Appointment doctor foreign key"},
+                    {id:"FK_APP_P",type:"fk",expected:"PatientID",label:"Appointment patient foreign key"},
+                    {id:"A_APP_D",type:"attr",expected:"AppointmentDate",label:"Appointment date"},
+                    {id:"A_APP_T",type:"attr",expected:"AppointmentTime",label:"Appointment time"},
+                    {id:"A_APP_S",type:"attr",expected:"Status",label:"Appointment status"}
+                ]},
+                {id:"TRE",layout:{x:76,y:5,w:16},slots: [
+                    {id:"E_TRE",type:"entity",expected:"TREATMENT",label:"Treatment table"},
+                    {id:"PK_TRE",type:"pk",expected:"TreatmentID",label:"Treatment primary key"},
+                    {id:"A_TRE_N",type:"attr",expected:"TreatmentName",label:"Treatment name"},
+                    {id:"A_TRE_T",type:"attr",expected:"TreatmentType",label:"Treatment type"}
+                ]},
+                {id:"APT",layout:{x:76,y:57,w:18},slots: [
+                    {id:"E_AT",type:"entity",expected:"APPOINTMENT_TREATMENT",label:"Appointment treatment associative table"},
+                    {id:"PK_AT",type:"pk",expected:"AppointmentID + TreatmentID",label:"Appointment treatment composite primary key"},
+                    {id:"FK_AT_A",type:"fk",expected:"AppointmentID",label:"Appointment treatment appointment foreign key"},
+                    {id:"FK_AT_T",type:"fk",expected:"TreatmentID",label:"Appointment treatment treatment foreign key"},
+                    {id:"A_AT_D",type:"attr",expected:"Dosage",label:"Appointment treatment dosage"},
+                    {id:"A_AT_I",type:"attr",expected:"Instructions",label:"Appointment treatment instructions"},
+                    {id:"A_AT_T",type:"attr",expected:"TreatmentDuration",label:"Appointment treatment duration"}
+                ]}
+            ],
+            relationships: [
+                {from:"DOC",to:"APP",left:"DOCTOR",right:"APPOINTMENT",rule:"Each APPOINTMENT is attended by exactly one DOCTOR; a DOCTOR may attend zero or many appointments.",slots:[
+                    {id:"C_DA_L",type:"card",expected:"Exactly one (||)",label:"Doctor end of Attends",feedback:"An appointment identifies one doctor."},
+                    {id:"R_DA",type:"rel",expected:"ATTENDS",label:"Doctor-Appointment relationship"},
+                    {id:"C_DA_R",type:"card",expected:"Zero or many (O<)",label:"Appointment end of Attends",feedback:"A doctor can exist before any appointment is booked."}
+                ]},
+                {from:"PAT",to:"APP",left:"PATIENT",right:"APPOINTMENT",rule:"Each APPOINTMENT belongs to exactly one PATIENT; a PATIENT may book zero or many appointments.",slots:[
+                    {id:"C_PA_L",type:"card",expected:"Exactly one (||)",label:"Patient end of Books",feedback:"An appointment identifies one patient."},
+                    {id:"R_PA",type:"rel",expected:"BOOKS",label:"Patient-Appointment relationship"},
+                    {id:"C_PA_R",type:"card",expected:"Zero or many (O<)",label:"Appointment end of Books",feedback:"A patient record can exist before the first appointment."}
+                ]},
+                {from:"APP",to:"APT",left:"APPOINTMENT",right:"APPOINTMENT_TREATMENT",rule:"Each APPOINTMENT_TREATMENT row belongs to exactly one APPOINTMENT; an APPOINTMENT may have zero or many treatment rows.",slots:[
+                    {id:"C_AAT_L",type:"card",expected:"Exactly one (||)",label:"Appointment end of Has",feedback:"Each bridge row belongs to one appointment."},
+                    {id:"R_AAT",type:"rel",expected:"HAS",label:"Appointment-Appointment treatment relationship"},
+                    {id:"C_AAT_R",type:"card",expected:"Zero or many (O<)",label:"Appointment treatment end of Has",feedback:"The source says an appointment may include multiple treatments."}
+                ]},
+                {from:"TRE",to:"APT",left:"TREATMENT",right:"APPOINTMENT_TREATMENT",rule:"Each APPOINTMENT_TREATMENT row identifies exactly one TREATMENT; a TREATMENT may be used in zero or many appointments.",slots:[
+                    {id:"C_TAT_L",type:"card",expected:"Exactly one (||)",label:"Treatment end of Uses",feedback:"Each bridge row refers to one treatment definition."},
+                    {id:"R_TAT",type:"rel",expected:"USES",label:"Treatment-Appointment treatment relationship"},
+                    {id:"C_TAT_R",type:"card",expected:"Zero or many (O<)",label:"Appointment treatment end of Uses",feedback:"A treatment definition can be reused across appointments."}
+                ]}
+            ]
+        };
+    </script>
+    <script src="crow-studio.js?v=11"></script>
+</body>
+</html>

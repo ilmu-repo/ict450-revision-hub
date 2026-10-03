@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official and Registration Chen Diagram Practice</title>
+    <link rel="stylesheet" href="chen-studio.css?v=5">
+</head>
+<body data-theme="cyan">
+    <header class="page-header">
+        <div class="title-block">
+            <h1>Chen Notation: Official and Registration</h1>
+            <p>Model the limited Part B(b) relationship with its maximum participation constraint.</p>
+        </div>
+        <nav class="header-actions" aria-label="Exercise actions and navigation">
+            <a class="nav-link" href="../index.html">Practice Studio</a>
+            <a class="nav-link" href="../../index.html">Revision Hub</a>
+            <button class="button" id="reset-button" type="button">Reset</button>
+            <button class="button primary" id="check-button" type="button">Check diagram</button>
+        </nav>
+    </header>
+
+    <main class="page-main">
+        <details class="context-card" open>
+            <summary>Question context and notation used</summary>
+            <div class="context-body">
+                <div>
+                    <ul class="rule-list">
+                        <li>An official may supervise many registration processes.</li>
+                        <li>An official cannot supervise more than 100 registrations.</li>
+                        <li>Every registration is supervised by exactly one official.</li>
+                        <li>The question does not provide a registration date, so this exercise does not invent one.</li>
+                    </ul>
+                </div>
+                <div class="notation-note"><strong>Chen participation:</strong> `(0,100)` already expresses optional participation and the maximum limit. No Crow's Foot circle is added, and the relationship replaces a duplicated foreign-key oval.</div>
+            </div>
+        </details>
+
+        <div class="studio-grid">
+            <aside class="bank-panel" aria-labelledby="bank-title">
+                <div class="panel-heading"><h2 id="bank-title">Shape bank</h2><p>Select an item and then select a highlighted position. Desktop users may also drag items.</p></div>
+                <div class="selection-status" id="selection-status"></div>
+                <div class="bank-groups" id="bank-groups"></div>
+            </aside>
+            <section class="board-panel" aria-labelledby="board-title">
+                <div class="board-head">
+                    <div class="board-title"><h2 id="board-title">Official-Registration subdiagram</h2><p>The minimum-maximum pairs carry the complete participation rule.</p></div>
+                    <div class="board-tools">
+                        <button class="button" id="clear-selection-button" type="button">Clear selection</button>
+                        <button class="button" id="remove-button" type="button">Remove item</button>
+                        <button class="button" id="undo-button" type="button">Undo</button>
+                    </div>
+                </div>
+                <div class="progress-wrap"><span id="progress-text">0 positions filled</span><div class="progress-track" role="progressbar" aria-label="Diagram completion" aria-valuemin="0" aria-valuenow="0" aria-valuemax="1"><div class="progress-bar" id="progress-bar"></div></div></div>
+                <div class="canvas-scroll" tabindex="0" aria-label="Scrollable Chen diagram workspace"><div class="diagram-stage" id="diagram-stage"><svg class="diagram-lines" id="diagram-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg></div></div>
+                <section class="feedback-panel" id="feedback-panel" aria-live="polite" hidden></section>
+            </section>
+        </div>
+    </main>
+    <div class="sr-only" id="live-region" aria-live="assertive"></div>
+
+    <script>
+        window.CHEN_EXERCISE = {
+            id: "official-registration",
+            version: "v3",
+            successMessage: "The subdiagram shows one Official supervising zero to 100 Registrations, with every Registration supervised by exactly one Official.",
+            bank: {
+                entity: ["OFFICIAL", "REGISTRATION"],
+                rel: ["SUPERVISES"],
+                conn: ["1", "M"],
+                card: ["(0,100)", "(1,1)"],
+                pk: ["OfficialID", "RegistrationID"],
+                attr: ["Name", "Role", "ContactNumber"]
+            },
+            lines: [
+                [22,50,50,50], [50,50,78,50],
+                [22,50,12,27], [22,50,8,50], [22,50,13,72], [22,50,28,78],
+                [78,50,84,27]
+            ],
+            slots: [
+                {id:"E_OFF",type:"entity",x:22,y:50,w:15,h:8,expected:"OFFICIAL",label:"Official entity"},
+                {id:"R_SUP",type:"rel",x:50,y:50,w:14,h:17,expected:"SUPERVISES",label:"Supervises relationship"},
+                {id:"E_REG",type:"entity",x:78,y:50,w:17,h:8,expected:"REGISTRATION",label:"Registration entity"},
+                {id:"C_OFF",type:"conn",x:35,y:46,w:4,h:4,expected:"1",label:"Official connectivity"},
+                {id:"K_OFF",type:"card",x:35,y:54,w:8,h:5,expected:"(0,100)",label:"Official participation limit"},
+                {id:"C_REG",type:"conn",x:65,y:46,w:4,h:4,expected:"M",label:"Registration connectivity"},
+                {id:"K_REG",type:"card",x:65,y:54,w:7,h:5,expected:"(1,1)",label:"Registration participation"},
+                {id:"PK_OFF",type:"pk",x:12,y:27,w:13,h:6,expected:"OfficialID",label:"Official key"},
+                {id:"A_OFF_NAME",type:"attr",x:8,y:50,w:12,h:6,expected:"Name",label:"Official name"},
+                {id:"A_OFF_ROLE",type:"attr",x:13,y:72,w:12,h:6,expected:"Role",label:"Official role"},
+                {id:"A_OFF_PHONE",type:"attr",x:28,y:78,w:13,h:6,expected:"ContactNumber",label:"Official contact number"},
+                {id:"PK_REG",type:"pk",x:84,y:27,w:15,h:6,expected:"RegistrationID",label:"Registration key"}
+            ]
+        };
+    </script>
+    <script src="chen-studio.js?v=5"></script>
+</body>
+</html>

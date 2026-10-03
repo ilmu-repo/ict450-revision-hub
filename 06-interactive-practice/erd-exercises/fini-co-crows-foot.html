@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fini&amp;Co Crow's Foot ERD Practice</title>
+    <link rel="stylesheet" href="crow-studio.css?v=15">
+</head>
+<body data-theme="rose">
+    <header class="page-header">
+        <div class="title-block">
+            <h1>Crow's Foot ERD: Fini&amp;Co Desserts</h1>
+            <p>Build the relational structure, resolve Package-Confectionery M:N, and retain only relationships supported by the question.</p>
+        </div>
+        <nav class="header-actions" aria-label="Exercise actions and navigation">
+            <a class="nav-link" href="../index.html">Practice Studio</a>
+            <a class="nav-link" href="../../index.html">Revision Hub</a>
+            <button class="button" id="reset-button" type="button">Reset</button>
+            <button class="button primary" id="check-button" type="button">Check model</button>
+        </nav>
+    </header>
+
+    <main class="page-main">
+        <details class="context-card" open>
+            <summary>Question context and modelling boundary</summary>
+            <div class="context-body">
+                <div>
+                    <ul class="rule-list">
+                        <li>Record customers, staff, orders, packages and Malay confectionery.</li>
+                        <li>Each order is placed by one customer and requests exactly one package.</li>
+                        <li>An order must be placed at least three days before its event date. This is a validation rule, not another ERD relationship.</li>
+                        <li>Each package contains several confectionery items; the examples reuse the same confectionery across packages.</li>
+                        <li>The question records staff but gives no rule connecting staff to an order. <strong>Do not invent that relationship.</strong></li>
+                    </ul>
+                </div>
+                <div class="notation-note"><strong>Modelling note:</strong> ORDER needs a key, while PACKAGE and CONFECTIONERY need identifiers so the M:N relationship can be resolved. These identifiers are necessary design additions; StaffID is not placed in ORDER because the source never states that staff manage orders.</div>
+            </div>
+        </details>
+
+        <div class="studio-grid">
+            <aside class="bank-panel" aria-labelledby="bank-title">
+                <div class="panel-heading"><h2 id="bank-title">Model bank</h2><p>Select an item and then a matching position. Desktop users may also drag items.</p></div>
+                <div class="selection-status" id="selection-status"></div>
+                <div class="bank-groups" id="bank-groups"></div>
+            </aside>
+            <section class="board-panel" aria-labelledby="board-title">
+                <div class="board-head">
+                    <div class="board-title"><h2 id="board-title">Fini&amp;Co relational ERD</h2><p>Complete table structures first, then place the relationship names and endpoint symbols.</p></div>
+                    <div class="board-tools">
+                        <button class="button" id="bank-toggle-button" type="button" aria-expanded="true">Hide model bank</button>
+                        <button class="button" id="clear-selection-button" type="button">Clear selection</button>
+                        <button class="button" id="remove-button" type="button">Remove item</button>
+                        <button class="button" id="undo-button" type="button">Undo</button>
+                    </div>
+                </div>
+                <div class="progress-wrap"><span id="progress-text">0 positions filled</span><div class="progress-track" role="progressbar" aria-label="Model completion" aria-valuemin="0" aria-valuenow="0" aria-valuemax="1"><div class="progress-bar" id="progress-bar"></div></div></div>
+                <div class="workspace">
+                    <h3 class="section-title">Connected Crow's Foot diagram</h3>
+                    <div class="canvas-scroll" tabindex="0" aria-label="Scrollable connected ERD workspace"><div class="diagram-stage" id="diagram-stage"><svg class="diagram-lines" id="diagram-lines" aria-hidden="true"></svg></div></div>
+                    <section class="relationship-reference" aria-labelledby="relationship-title"><h3 class="section-title" id="relationship-title">Business-rule reminders</h3><div class="relationship-rules" id="relationship-rules"></div></section>
+                </div>
+                <section class="feedback-panel" id="feedback-panel" aria-live="polite" hidden></section>
+            </section>
+        </div>
+    </main>
+    <div class="sr-only" id="live-region" aria-live="assertive"></div>
+
+    <script>
+        window.CROW_EXERCISE = {
+            id: "fini-co",
+            version: "v3",
+            stageHeight: 1100,
+            successMessage: "The model follows the supplied rules, resolves Package-Confectionery through PACKAGE_ITEM, and leaves STAFF unconnected because no staff relationship is stated.",
+            bank: {
+                entity: ["CUSTOMER", "STAFF", "ORDER", "PACKAGE", "CONFECTIONERY", "PACKAGE_ITEM"],
+                pk: ["CustomerID", "StaffID", "OrderID", "PackageID", "ConfectioneryID", "PackageID + ConfectioneryID"],
+                fk: ["CustomerID", "PackageID", "ConfectioneryID"],
+                attr: ["FirstName", "LastName", "PhoneNumber", "Email", "Address", "HireDate", "EventDate", "EventTime", "EventLocation", "Price", "ConfectioneryName"],
+                rel: ["PLACES", "REQUESTS", "CONTAINS", "REPRESENTS"],
+                card: ["Exactly one (||)", "Zero or one (O|)", "One or many (|<)", "Zero or many (O<)"]
+            },
+            tables: [
+                {id:"CUS",layout:{x:2,y:38,w:15},slots: [
+                    {id:"E_CUS",type:"entity",expected:"CUSTOMER",label:"Customer table"},
+                    {id:"PK_CUS",type:"pk",expected:"CustomerID",label:"Customer primary key"},
+                    {id:"A_CUS_FN",type:"attr",expected:"FirstName",label:"Customer first name"},
+                    {id:"A_CUS_LN",type:"attr",expected:"LastName",label:"Customer last name"},
+                    {id:"A_CUS_PH",type:"attr",expected:"PhoneNumber",label:"Customer phone number"},
+                    {id:"A_CUS_EM",type:"attr",expected:"Email",label:"Customer email"},
+                    {id:"A_CUS_AD",type:"attr",expected:"Address",label:"Customer address"}
+                ]},
+                {id:"STA",layout:{x:28,y:5,w:15},note:"Standalone in the supplied question: no Staff relationship is stated.",noteLayout:{x:45,y:7,w:18},slots: [
+                    {id:"E_STA",type:"entity",expected:"STAFF",label:"Staff table"},
+                    {id:"PK_STA",type:"pk",expected:"StaffID",label:"Staff primary key"},
+                    {id:"A_STA_FN",type:"attr",expected:"FirstName",label:"Staff first name"},
+                    {id:"A_STA_LN",type:"attr",expected:"LastName",label:"Staff last name"},
+                    {id:"A_STA_HD",type:"attr",expected:"HireDate",label:"Staff hire date"}
+                ]},
+                {id:"ORD",layout:{x:28,y:38,w:15},slots: [
+                    {id:"E_ORD",type:"entity",expected:"ORDER",label:"Order table"},
+                    {id:"PK_ORD",type:"pk",expected:"OrderID",label:"Order primary key"},
+                    {id:"FK_ORD_C",type:"fk",expected:"CustomerID",label:"Order customer foreign key"},
+                    {id:"FK_ORD_P",type:"fk",expected:"PackageID",label:"Order package foreign key"},
+                    {id:"A_ORD_DT",type:"attr",expected:"EventDate",label:"Order event date"},
+                    {id:"A_ORD_TM",type:"attr",expected:"EventTime",label:"Order event time"},
+                    {id:"A_ORD_LC",type:"attr",expected:"EventLocation",label:"Order event location"}
+                ]},
+                {id:"PAC",layout:{x:54,y:38,w:15},slots: [
+                    {id:"E_PAC",type:"entity",expected:"PACKAGE",label:"Package table"},
+                    {id:"PK_PAC",type:"pk",expected:"PackageID",label:"Package primary key"},
+                    {id:"A_PAC_PR",type:"attr",expected:"Price",label:"Package price"}
+                ]},
+                {id:"CON",layout:{x:80,y:68,w:15},slots: [
+                    {id:"E_CON",type:"entity",expected:"CONFECTIONERY",label:"Confectionery table"},
+                    {id:"PK_CON",type:"pk",expected:"ConfectioneryID",label:"Confectionery primary key"},
+                    {id:"A_CON_NM",type:"attr",expected:"ConfectioneryName",label:"Confectionery name"}
+                ]},
+                {id:"PIT",layout:{x:54,y:68,w:15},slots: [
+                    {id:"E_PIT",type:"entity",expected:"PACKAGE_ITEM",label:"Package item associative table"},
+                    {id:"PK_PIT",type:"pk",expected:"PackageID + ConfectioneryID",label:"Package item composite primary key"},
+                    {id:"FK_PIT_P",type:"fk",expected:"PackageID",label:"Package item package foreign key"},
+                    {id:"FK_PIT_C",type:"fk",expected:"ConfectioneryID",label:"Package item confectionery foreign key"}
+                ]}
+            ],
+            relationships: [
+                {from:"CUS",to:"ORD",left:"CUSTOMER",right:"ORDER",rule:"Each ORDER belongs to exactly one CUSTOMER; a CUSTOMER may place zero or many orders.",slots:[
+                    {id:"C_CO_L",type:"card",expected:"Exactly one (||)",label:"Customer end of Places",feedback:"Read the rule from ORDER toward CUSTOMER."},
+                    {id:"R_CO",type:"rel",expected:"PLACES",label:"Customer-Order relationship"},
+                    {id:"C_CO_R",type:"card",expected:"Zero or many (O<)",label:"Order end of Places",feedback:"The source does not require every recorded customer to already have an order."}
+                ]},
+                {from:"PAC",to:"ORD",left:"PACKAGE",right:"ORDER",rule:"Each ORDER requests exactly one PACKAGE; a PACKAGE may be requested by zero or many orders.",slots:[
+                    {id:"C_PO_L",type:"card",expected:"Exactly one (||)",label:"Package end of Selects",feedback:"Each order requests one package."},
+                    {id:"R_PO",type:"rel",expected:"REQUESTS",label:"Package-Order relationship"},
+                    {id:"C_PO_R",type:"card",expected:"Zero or many (O<)",label:"Order end of Selects",feedback:"A package definition can exist before it is ordered."}
+                ]},
+                {from:"PAC",to:"PIT",left:"PACKAGE",right:"PACKAGE_ITEM",rule:"Each PACKAGE contains one or many PACKAGE_ITEM rows; every PACKAGE_ITEM belongs to exactly one PACKAGE.",slots:[
+                    {id:"C_PI_L",type:"card",expected:"Exactly one (||)",label:"Package end of Contains",feedback:"Each bridge row belongs to one package."},
+                    {id:"R_PI",type:"rel",expected:"CONTAINS",label:"Package-Package item relationship"},
+                    {id:"C_PI_R",type:"card",expected:"One or many (|<)",label:"Package item end of Contains",feedback:"The question says a package will have several confectionery items."}
+                ]},
+                {from:"CON",to:"PIT",left:"CONFECTIONERY",right:"PACKAGE_ITEM",rule:"Each PACKAGE_ITEM identifies one CONFECTIONERY; a CONFECTIONERY may appear in zero or many package definitions.",slots:[
+                    {id:"C_CI_L",type:"card",expected:"Exactly one (||)",label:"Confectionery end of Represents",feedback:"A bridge row references one confectionery."},
+                    {id:"R_CI",type:"rel",expected:"REPRESENTS",label:"Confectionery-Package item relationship"},
+                    {id:"C_CI_R",type:"card",expected:"Zero or many (O<)",label:"Package item end of Represents",feedback:"The supplied package examples reuse confectionery across packages."}
+                ]}
+            ]
+        };
+    </script>
+    <script src="crow-studio.js?v=11"></script>
+</body>
+</html>

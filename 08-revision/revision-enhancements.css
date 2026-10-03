@@ -1,0 +1,94 @@
+.model-label {
+  margin-bottom: 7px;
+}
+
+.model-answer {
+  max-height: 520px;
+  border: 1px solid #304a67;
+}
+
+.flashcard {
+  min-height: 440px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.flashcard-scene,
+.flashcard-inner {
+  min-height: 440px;
+}
+
+.flashcard-scene {
+  perspective: 1300px;
+}
+
+.flashcard-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.2, 0.72, 0.28, 1);
+}
+
+.flashcard-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.flashcard-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 34px;
+  overflow: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.flashcard-front {
+  background: linear-gradient(145deg, #fff 0%, #f5f9fd 100%);
+}
+
+.flashcard-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(145deg, #fff 0%, #eef7f4 100%);
+}
+
+.flip-hint {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.flashcard .flash-answer {
+  width: 100%;
+  margin: 18px 0 0;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.flashcard-complete {
+  padding: 34px;
+  text-align: left;
+}
+
+@media (max-width: 620px) {
+  .flashcard,
+  .flashcard-scene,
+  .flashcard-inner {
+    min-height: 520px;
+  }
+
+  .flashcard-face {
+    padding: 20px;
+  }
+
+  .flashcard-complete {
+    padding: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flashcard-inner {
+    transition: none;
+  }
+}

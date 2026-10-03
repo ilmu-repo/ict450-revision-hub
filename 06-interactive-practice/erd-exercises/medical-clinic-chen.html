@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Clinic Chen Diagram Practice</title>
+    <link rel="stylesheet" href="chen-studio.css?v=5">
+</head>
+<body data-theme="sky">
+    <header class="page-header">
+        <div class="title-block">
+            <h1>Chen Notation: Medical Clinic</h1>
+            <p>Model appointments and treatment details using ordinary Chen relationships.</p>
+        </div>
+        <nav class="header-actions" aria-label="Exercise actions and navigation">
+            <a class="nav-link" href="../index.html">Practice Studio</a>
+            <a class="nav-link" href="../../index.html">Revision Hub</a>
+            <button class="button" id="reset-button" type="button">Reset</button>
+            <button class="button primary" id="check-button" type="button">Check diagram</button>
+        </nav>
+    </header>
+
+    <main class="page-main">
+        <details class="context-card" open>
+            <summary>Question context and notation used</summary>
+            <div class="context-body">
+                <div>
+                    <ul class="rule-list">
+                        <li>Doctors and patients meet through appointments. Each appointment identifies one doctor and one patient.</li>
+                        <li>An appointment records its date, time and status.</li>
+                        <li>An appointment may include zero or many treatments; a treatment may be used in zero or many appointments.</li>
+                        <li>Dosage, instructions and treatment duration describe a treatment within a particular appointment.</li>
+                    </ul>
+                </div>
+                <div class="notation-note"><strong>Modelling choice:</strong> the treatment details are attributes of the `INCLUDES` relationship. This keeps the answer in ordinary Chen notation and avoids inventing a `TREATMENT_DETAIL` entity or an unsupported composite key.</div>
+            </div>
+        </details>
+
+        <div class="studio-grid">
+            <aside class="bank-panel" aria-labelledby="bank-title">
+                <div class="panel-heading"><h2 id="bank-title">Shape bank</h2><p>Select an item and then select a highlighted position. Desktop users may also drag items.</p></div>
+                <div class="selection-status" id="selection-status"></div>
+                <div class="bank-groups" id="bank-groups"></div>
+            </aside>
+            <section class="board-panel" aria-labelledby="board-title">
+                <div class="board-head">
+                    <div class="board-title"><h2 id="board-title">Medical Clinic diagram</h2><p>The treatment-detail attributes belong to the Appointment-Treatment relationship.</p></div>
+                    <div class="board-tools">
+                        <button class="button" id="clear-selection-button" type="button">Clear selection</button>
+                        <button class="button" id="remove-button" type="button">Remove item</button>
+                        <button class="button" id="undo-button" type="button">Undo</button>
+                    </div>
+                </div>
+                <div class="progress-wrap"><span id="progress-text">0 positions filled</span><div class="progress-track" role="progressbar" aria-label="Diagram completion" aria-valuemin="0" aria-valuenow="0" aria-valuemax="1"><div class="progress-bar" id="progress-bar"></div></div></div>
+                <div class="canvas-scroll" tabindex="0" aria-label="Scrollable Chen diagram workspace"><div class="diagram-stage" id="diagram-stage"><svg class="diagram-lines" id="diagram-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg></div></div>
+                <section class="feedback-panel" id="feedback-panel" aria-live="polite" hidden></section>
+            </section>
+        </div>
+    </main>
+    <div class="sr-only" id="live-region" aria-live="assertive"></div>
+
+    <script>
+        window.CHEN_EXERCISE = {
+            id: "medical-clinic",
+            version: "v2",
+            successMessage: "The diagram models appointments explicitly and keeps dosage, instructions and duration on the Appointment-Treatment relationship.",
+            bank: {
+                entity: ["PATIENT", "APPOINTMENT", "DOCTOR", "TREATMENT"],
+                rel: ["HAS", "ATTENDS", "INCLUDES"],
+                conn: ["1", "M", "N"],
+                card: ["(1,1)", "(0,N)"],
+                pk: ["PatientID", "AppointmentID", "DoctorID", "TreatmentID"],
+                attr: ["Name", "Address", "PhoneNumber", "Specialization", "ContactNumber", "Date", "Time", "Status", "Type", "Dosage", "Instructions", "TreatmentDuration"]
+            },
+            lines: [
+                [10,28,25,28], [25,28,40,28], [40,28,59,28], [59,28,78,28], [40,28,40,55], [40,55,40,80],
+                [10,28,5,13], [10,28,4,42], [10,28,12,47], [10,28,18,42],
+                [78,28,72,12], [78,28,82,12], [78,28,90,18], [78,28,91,38],
+                [40,28,34,13], [40,28,45,13], [40,28,50,21], [40,28,50,38],
+                [40,80,31,91], [40,80,47,92], [40,80,55,84],
+                [40,55,24,55], [40,55,27,68], [40,55,53,59]
+            ],
+            slots: [
+                {id:"E_PAT",type:"entity",x:10,y:28,w:12,h:7,expected:"PATIENT",label:"Patient entity"},
+                {id:"R_HAS",type:"rel",x:25,y:28,w:10,h:12,expected:"HAS",label:"Patient-Appointment relationship"},
+                {id:"E_APPT",type:"entity",x:40,y:28,w:14,h:7,expected:"APPOINTMENT",label:"Appointment entity"},
+                {id:"R_ATTENDS",type:"rel",x:59,y:28,w:11,h:13,expected:"ATTENDS",label:"Doctor-Appointment relationship"},
+                {id:"E_DOC",type:"entity",x:78,y:28,w:12,h:7,expected:"DOCTOR",label:"Doctor entity"},
+                {id:"R_INCLUDES",type:"rel",x:40,y:55,w:12,h:14,expected:"INCLUDES",label:"Appointment-Treatment relationship"},
+                {id:"E_TREAT",type:"entity",x:40,y:80,w:13,h:7,expected:"TREATMENT",label:"Treatment entity"},
+
+                {id:"C_PAT",type:"conn",x:18,y:24,w:3.5,h:4,expected:"1",label:"Patient connectivity to Has"},
+                {id:"K_PAT",type:"card",x:18,y:32,w:6,h:4,expected:"(0,N)",label:"Patient participation in Has"},
+                {id:"C_APPT1",type:"conn",x:33,y:24,w:3.5,h:4,expected:"M",label:"Appointment connectivity to Has"},
+                {id:"K_APPT1",type:"card",x:33,y:32,w:6,h:4,expected:"(1,1)",label:"Appointment participation in Has"},
+                {id:"C_APPT2",type:"conn",x:49,y:24,w:3.5,h:4,expected:"M",label:"Appointment connectivity to Attends"},
+                {id:"K_APPT2",type:"card",x:49,y:32,w:6,h:4,expected:"(1,1)",label:"Appointment participation in Attends"},
+                {id:"C_DOC",type:"conn",x:69,y:24,w:3.5,h:4,expected:"1",label:"Doctor connectivity to Attends"},
+                {id:"K_DOC",type:"card",x:69,y:32,w:6,h:4,expected:"(0,N)",label:"Doctor participation in Attends"},
+                {id:"C_APPT3",type:"conn",x:37,y:42,w:3.5,h:4,expected:"M",label:"Appointment connectivity to Includes"},
+                {id:"K_APPT3",type:"card",x:44,y:42,w:6,h:4,expected:"(0,N)",label:"Appointment participation in Includes"},
+                {id:"C_TREAT",type:"conn",x:37,y:69,w:3.5,h:4,expected:"N",label:"Treatment connectivity to Includes"},
+                {id:"K_TREAT",type:"card",x:44,y:69,w:6,h:4,expected:"(0,N)",label:"Treatment participation in Includes"},
+
+                {id:"PK_PAT",type:"pk",x:5,y:13,w:9,h:5,expected:"PatientID",label:"Patient key"},
+                {id:"A_PAT_NAME",type:"attr",x:4,y:42,w:8,h:5,expected:"Name",label:"Patient name"},
+                {id:"A_PAT_ADDR",type:"attr",x:12,y:47,w:9,h:5,expected:"Address",label:"Patient address"},
+                {id:"A_PAT_PHONE",type:"attr",x:18,y:42,w:11,h:5,expected:"PhoneNumber",label:"Patient phone number"},
+                {id:"PK_DOC",type:"pk",x:72,y:12,w:9,h:5,expected:"DoctorID",label:"Doctor key"},
+                {id:"A_DOC_NAME",type:"attr",x:82,y:12,w:8,h:5,expected:"Name",label:"Doctor name"},
+                {id:"A_DOC_SPEC",type:"attr",x:90,y:18,w:11,h:5,expected:"Specialization",label:"Doctor specialization"},
+                {id:"A_DOC_PHONE",type:"attr",x:91,y:38,w:11,h:5,expected:"ContactNumber",label:"Doctor contact number"},
+                {id:"PK_APPT",type:"pk",x:34,y:13,w:11,h:5,expected:"AppointmentID",label:"Appointment key"},
+                {id:"A_APPT_DATE",type:"attr",x:45,y:13,w:8,h:5,expected:"Date",label:"Appointment date"},
+                {id:"A_APPT_TIME",type:"attr",x:50,y:21,w:8,h:5,expected:"Time",label:"Appointment time"},
+                {id:"A_APPT_STATUS",type:"attr",x:50,y:38,w:8,h:5,expected:"Status",label:"Appointment status"},
+                {id:"PK_TREAT",type:"pk",x:31,y:91,w:10,h:5,expected:"TreatmentID",label:"Treatment key"},
+                {id:"A_TREAT_NAME",type:"attr",x:47,y:92,w:8,h:5,expected:"Name",label:"Treatment name"},
+                {id:"A_TREAT_TYPE",type:"attr",x:55,y:84,w:8,h:5,expected:"Type",label:"Treatment type"},
+                {id:"A_REL_DOSE",type:"attr",x:24,y:55,w:9,h:5,expected:"Dosage",label:"Dosage relationship attribute"},
+                {id:"A_REL_INST",type:"attr",x:27,y:68,w:10,h:5,expected:"Instructions",label:"Instructions relationship attribute"},
+                {id:"A_REL_DURATION",type:"attr",x:53,y:59,w:12,h:5,expected:"TreatmentDuration",label:"Treatment duration relationship attribute"}
+            ]
+        };
+    </script>
+    <script src="chen-studio.js?v=5"></script>
+</body>
+</html>

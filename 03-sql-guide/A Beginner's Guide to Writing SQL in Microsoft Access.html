@@ -1,0 +1,167 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>A Beginner's Guide to Writing SQL in Microsoft Access</title><style>
+    :root{--blue:#2b6cb0;--dark:#1a365d;--text:#263442;--amber:#b7791f;--red:#c53030;--line:#cbd5e0}
+    *{box-sizing:border-box} body{margin:0;background:#eef2f7;color:var(--text);font:16px/1.55 Arial,sans-serif}
+    main{max-width:980px;margin:24px auto;background:white;padding:40px 48px;box-shadow:0 2px 12px #0002}
+    h1{text-align:center;color:var(--dark);font-size:2rem;margin:0} .subtitle{text-align:center;color:#5d6b78;font-size:1.15rem;margin:6px 0 28px}
+    h2{color:var(--dark);border-bottom:2px solid var(--blue);padding-bottom:4px;margin-top:30px} h3{color:var(--blue)}
+    mark{background:#fff0a8;font-weight:bold;padding:0 2px} code{font-family:Consolas,monospace}
+    pre{white-space:pre-wrap;background:#f2f2f2;border:1px solid #a8a8a8;padding:12px 14px;margin:10px 0 16px;overflow:auto;font:14px/1.4 Consolas,monospace}
+    .kw{color:#c53030;font-weight:bold}.str{color:#2f855a}.note,.warning,.instruction{border:1px solid;padding:12px 14px;margin:10px 0 16px}
+    .note{border-color:var(--amber);background:#fff7d6;font-weight:bold}.warning{border-color:var(--red);background:#fff5f5;font-weight:bold}
+    .instruction{border-color:var(--blue)}.instruction h3{margin:-12px -14px 10px;background:var(--blue);color:white;padding:8px 12px}
+    table{width:100%;border-collapse:collapse;margin:10px 0 18px}th{background:var(--dark);color:white;text-align:left}th,td{border:1px solid var(--line);padding:7px 8px;vertical-align:top}
+    .pagebreak{border:0;border-top:1px dashed #d8dee8;margin:34px 0}@media print{body{background:white}main{box-shadow:none;margin:0;max-width:none}.pagebreak{break-after:page;border:0}}
+    </style></head><body><main><nav><strong>Contents</strong><ol><li><a href='#section-1'>What SQL Does</a></li><li><a href='#section-2'>Clause Order for a SELECT Query</a></li><li><a href='#section-3'>The Practice Database Used in This Guide</a></li><li><a href='#section-4'>Use Explicit Access Data Types</a></li><li><a href='#section-5'>Names and Aliases</a></li><li><a href='#section-6'>DDL: Create the Parent Tables First</a></li><li><a href='#section-7'>DDL: Create Related Tables</a></li><li><a href='#section-8'>ALTER TABLE and Safe DROP Practice</a></li><li><a href='#section-9'>INSERT INTO: Add One Record at a Time</a></li><li><a href='#section-10'>Field Lists Prevent Mistakes</a></li><li><a href='#section-11'>SELECT: Retrieve, Rename and Calculate</a></li><li><a href='#section-12'>WHERE: Filter Rows</a></li><li><a href='#section-13'>BETWEEN and Date Criteria</a></li><li><a href='#section-14'>IN, LIKE, IS NULL and DISTINCT</a></li><li><a href='#section-15'>Aggregate Functions</a></li><li><a href='#section-16'>GROUP BY and HAVING</a></li><li><a href='#section-17'>INNER JOIN: Combine Related Tables</a></li><li><a href='#section-18'>A Four-Table Join</a></li><li><a href='#section-19'>Why Explicit Joins Are Preferred</a></li><li><a href='#section-20'>Subqueries</a></li><li><a href='#section-21'>UPDATE and DELETE Safely</a></li><li><a href='#section-22'>Common Access SQL Errors</a></li><li><a href='#section-23'>Quick Reading Checklist</a></li></ol></nav><h1>A BEGINNER&#x27;S GUIDE TO WRITING SQL IN MICROSOFT ACCESS</h1><p class='subtitle'>Student Course Registration Edition</p><h2 id='section-1'>What SQL Does</h2><p><strong>Data Definition Language (DDL)</strong> creates or changes database objects. <strong>Data Manipulation Language (DML)</strong> inserts, retrieves, updates and deletes records.</p><div class='instruction'><h3>Open SQL View</h3><ul><li>Choose <strong>Create &gt; Query Design</strong> and close the Show Table or Add Tables window.</li><li>Choose <mark>View &gt; SQL View</mark>.</li><li>Run one statement at a time. Clear SQL View before entering the next statement.</li></ul></div><div class='note'>Access action and DDL queries can change the database immediately. Use a working copy of your Lab 9 database, keep a clean backup, and preview affected rows before UPDATE or DELETE.</div><h2 id='section-2'>Clause Order for a SELECT Query</h2><pre><code><span class="kw">SELECT</span> field_list
+<span class="kw">FROM</span> table_expression
+<span class="kw">WHERE</span> row_criteria
+<span class="kw">GROUP</span> <span class="kw">BY</span> grouping_fields
+<span class="kw">HAVING</span> group_criteria
+<span class="kw">ORDER</span> <span class="kw">BY</span> sort_fields;</code></pre><p>Only <code>SELECT</code> and <code>FROM</code> are required in this pattern. Add the other clauses when the task needs them.</p><hr class='pagebreak'><h2 id='section-3'>The Practice Database Used in This Guide</h2><p>The examples use the tables and data that students construct step by step in Lab 9. The compact dataset makes every expected result reproducible.</p><table><thead><tr><th>Table</th><th>Primary key</th><th>Important foreign keys</th><th>Rows</th></tr></thead><tbody><tr><td>Students</td><td>StudentID</td><td>-</td><td>4</td></tr><tr><td>Instructors</td><td>InstructorID</td><td>-</td><td>3</td></tr><tr><td>Courses</td><td>CourseID</td><td>InstructorID, PreReqCourseID</td><td>5</td></tr><tr><td>Registrations</td><td>RegistrationID</td><td>StudentID, CourseID</td><td>7</td></tr></tbody></table><h2 id='section-4'>Use Explicit Access Data Types</h2><table><thead><tr><th>Access SQL type</th><th>Typical use</th><th>Important note</th></tr></thead><tbody><tr><td>COUNTER</td><td>AutoNumber primary key</td><td>Generated by Access</td></tr><tr><td>LONG</td><td>Foreign key to COUNTER</td><td>Compatible with AutoNumber</td></tr><tr><td>TEXT(n)</td><td>Short text</td><td>State a suitable length</td></tr><tr><td>DATETIME</td><td>Dates and times</td><td>Date literals use #...#</td></tr><tr><td>BYTE</td><td>Small whole numbers</td><td>Suitable for course credits</td></tr><tr><td>DOUBLE</td><td>Decimal numbers</td><td>Suitable for GPA</td></tr><tr><td>BIT</td><td>Yes/No</td><td>Use True or False</td></tr></tbody></table><div class='warning'>Avoid vague generic types when teaching Access. In particular, <code>NUMBER</code> can map differently from an intended integer key. Use <code>LONG</code> for foreign keys and <code>DOUBLE</code> for decimal values.</div><div class='note'>This guide does not place <code>CHECK</code> or <code>DEFAULT</code> clauses inside <code>CREATE TABLE</code> statements. Apply the required Validation Rule and Default Value through Access Table Design, following Lab 7.</div><h2 id='section-5'>Names and Aliases</h2><ul><li>Use stable object names without spaces where practical.</li><li>Place square brackets around an output alias containing spaces, for example <code>[Weekly Study Hours]</code>.</li><li>SQL keywords are not case-sensitive, but uppercase keywords make code easier to scan.</li></ul><hr class='pagebreak'><h2 id='section-6'>DDL: Create the Parent Tables First</h2><p>Create tables in dependency order. <code>Instructors</code> and <code>Students</code> do not depend on another table.</p><pre><code><span class="kw">CREATE</span> <span class="kw">TABLE</span> Instructors (
+    InstructorID <span class="kw">COUNTER</span> <span class="kw">CONSTRAINT</span> PK_Instructors <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,
+    FirstName <span class="kw">TEXT</span>(50) <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    LastName <span class="kw">TEXT</span>(50) <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    Department <span class="kw">TEXT</span>(50) <span class="kw">NOT</span> <span class="kw">NULL</span>
+);</code></pre><pre><code><span class="kw">CREATE</span> <span class="kw">TABLE</span> Students (
+    StudentID <span class="kw">COUNTER</span> <span class="kw">CONSTRAINT</span> PK_Students <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,
+    FirstName <span class="kw">TEXT</span>(50) <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    LastName <span class="kw">TEXT</span>(50) <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    Email <span class="kw">TEXT</span>(100) <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    DateOfBirth <span class="kw">DATETIME</span>,
+    Gender <span class="kw">TEXT</span>(20),
+    IsActive <span class="kw">BIT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    GPA <span class="kw">DOUBLE</span>,
+    <span class="kw">CONSTRAINT</span> UQ_Students_Email <span class="kw">UNIQUE</span> (Email)
+);</code></pre><div class='note'><code>PRIMARY KEY</code> provides uniqueness and disallows Null. The named <code>UNIQUE</code> constraint prevents two students from sharing the same email address.</div><hr class='pagebreak'><h2 id='section-7'>DDL: Create Related Tables</h2><p>A foreign key may be <strong>required</strong> (<code>NOT NULL</code>) or <strong>optional</strong> (nullable). Being a foreign key does not automatically make a field nullable.</p><pre><code><span class="kw">CREATE</span> <span class="kw">TABLE</span> Courses (
+    CourseID <span class="kw">COUNTER</span> <span class="kw">CONSTRAINT</span> PK_Courses <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,
+    CourseCode <span class="kw">TEXT</span>(10) <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    CourseName <span class="kw">TEXT</span>(100) <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    Credits <span class="kw">BYTE</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    Department <span class="kw">TEXT</span>(50) <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    IsElective <span class="kw">BIT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    InstructorID <span class="kw">LONG</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    PreReqCourseID <span class="kw">LONG</span>,
+    <span class="kw">CONSTRAINT</span> UQ_Courses_Code <span class="kw">UNIQUE</span> (CourseCode),
+    <span class="kw">CONSTRAINT</span> FK_Courses_Instructors <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (InstructorID)
+        <span class="kw">REFERENCES</span> Instructors (InstructorID)
+);</code></pre><pre><code><span class="kw">CREATE</span> <span class="kw">TABLE</span> Registrations (
+    RegistrationID <span class="kw">COUNTER</span> <span class="kw">CONSTRAINT</span> PK_Registrations <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,
+    StudentID <span class="kw">LONG</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    CourseID <span class="kw">LONG</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    RegistrationDate <span class="kw">DATETIME</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    Semester <span class="kw">TEXT</span>(20) <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    Grade <span class="kw">TEXT</span>(2),
+    <span class="kw">CONSTRAINT</span> FK_Registrations_Students <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (StudentID)
+        <span class="kw">REFERENCES</span> Students (StudentID),
+    <span class="kw">CONSTRAINT</span> FK_Registrations_Courses <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (CourseID)
+        <span class="kw">REFERENCES</span> Courses (CourseID),
+    <span class="kw">CONSTRAINT</span> UQ_Registrations <span class="kw">UNIQUE</span> (StudentID, CourseID, Semester)
+);</code></pre><div class='note'>The three-field unique constraint prevents the same student from registering for the same course twice in one semester.</div><hr class='pagebreak'><h2 id='section-8'>ALTER TABLE and Safe DROP Practice</h2><p>Use a disposable table when practising structural changes. Never substitute a teaching table into the final <code>DROP TABLE</code> statement.</p><pre><code><span class="kw">CREATE</span> <span class="kw">TABLE</span> DDLPractice (
+    PracticeID <span class="kw">COUNTER</span> <span class="kw">CONSTRAINT</span> PK_DDLPractice <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,
+    PracticeName <span class="kw">TEXT</span>(50) <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    PracticeDate <span class="kw">DATETIME</span>,
+    IsComplete <span class="kw">BIT</span>,
+    Score <span class="kw">DOUBLE</span>
+);</code></pre><h3>Add, modify and remove a field</h3><pre><code><span class="kw">ALTER</span> <span class="kw">TABLE</span> DDLPractice
+<span class="kw">ADD</span> <span class="kw">COLUMN</span> Notes <span class="kw">TEXT</span>(100);</code></pre><pre><code><span class="kw">ALTER</span> <span class="kw">TABLE</span> DDLPractice
+<span class="kw">ALTER</span> <span class="kw">COLUMN</span> Notes <span class="kw">TEXT</span>(150);</code></pre><pre><code><span class="kw">ALTER</span> <span class="kw">TABLE</span> DDLPractice
+<span class="kw">ADD</span> <span class="kw">COLUMN</span> TemporaryFlag <span class="kw">BIT</span>;</code></pre><pre><code><span class="kw">ALTER</span> <span class="kw">TABLE</span> DDLPractice
+<span class="kw">DROP</span> <span class="kw">COLUMN</span> TemporaryFlag;</code></pre><h3>Add a named unique constraint</h3><pre><code><span class="kw">ALTER</span> <span class="kw">TABLE</span> DDLPractice
+<span class="kw">ADD</span> <span class="kw">CONSTRAINT</span> UQ_DDLPractice_Name <span class="kw">UNIQUE</span> (PracticeName);</code></pre><div class='warning'><code>DROP TABLE</code> removes both the data and the table definition. Use <code>DROP TABLE DDLPractice;</code> only after completing the disposable exercise.</div><hr class='pagebreak'><h2 id='section-9'>INSERT INTO: Add One Record at a Time</h2><p>In Access, a <code>VALUES</code> append query adds one record. Use another <code>INSERT INTO</code> statement for each additional record, or use <code>INSERT INTO ... SELECT</code> to append a result set.</p><pre><code><span class="kw">INSERT</span> <span class="kw">INTO</span> DDLPractice
+    (PracticeName, Notes, PracticeDate, IsComplete, Score)
+<span class="kw">VALUES</span>
+    (<span class="str">&#x27;First row&#x27;</span>, <span class="str">&#x27;Created with Access SQL&#x27;</span>, <span class="str">#2026-10-01#</span>, <span class="kw">True</span>, 3.5);</code></pre><p>For tables with an AutoNumber key, omit the AutoNumber field when Access should generate the next identifier.</p><div class='note'>Text values use single quotes. Access date literals use hash marks. Yes/No values use <code>True</code> or <code>False</code>.</div><h2 id='section-10'>Field Lists Prevent Mistakes</h2><ul><li>Name the destination fields explicitly.</li><li>Keep the field order aligned with the value order.</li><li>Do not supply an AutoNumber value unless retaining a known identifier is intentional.</li><li>Check required fields, unique constraints and foreign keys before running the append query.</li></ul><hr class='pagebreak'><h2 id='section-11'>SELECT: Retrieve, Rename and Calculate</h2><h3>Retrieve selected fields</h3><pre><code><span class="kw">SELECT</span> CourseCode, CourseName, Credits
+<span class="kw">FROM</span> Courses
+<span class="kw">ORDER</span> <span class="kw">BY</span> CourseCode;</code></pre><div class='note'>Expected result: 5 rows.</div><h3>Retrieve every field</h3><pre><code><span class="kw">SELECT</span> *
+<span class="kw">FROM</span> Courses;</code></pre><p>Use <code>*</code> for quick exploration. Name the fields explicitly in saved teaching and reporting queries so the output remains predictable.</p><h3>Aliases and computed columns</h3><pre><code><span class="kw">SELECT</span> CourseCode, CourseName,
+       Credits * 3 <span class="kw">AS</span> [Weekly Study Hours]
+<span class="kw">FROM</span> Courses
+<span class="kw">ORDER</span> <span class="kw">BY</span> CourseCode;</code></pre><div class='note'>Expected result: 5 rows. ICT550 produces 12 weekly study hours; each 3-credit course produces 9.</div><hr class='pagebreak'><h2 id='section-12'>WHERE: Filter Rows</h2><p><code>WHERE</code> filters individual rows before grouping. Combine conditions with <code>AND</code>, <code>OR</code> and <code>NOT</code>; use parentheses when mixing operators.</p><pre><code><span class="kw">SELECT</span> StudentID, FirstName, LastName, GPA
+<span class="kw">FROM</span> Students
+<span class="kw">WHERE</span> IsActive = <span class="kw">True</span> <span class="kw">AND</span> GPA &gt;= 3.5
+<span class="kw">ORDER</span> <span class="kw">BY</span> GPA <span class="kw">DESC</span>;</code></pre><div class='note'>Expected result: 2 rows - Chen Mei and Aina.</div><pre><code><span class="kw">SELECT</span> StudentID, FirstName, LastName, IsActive, GPA
+<span class="kw">FROM</span> Students
+<span class="kw">WHERE</span> IsActive = <span class="kw">False</span> <span class="kw">OR</span> <span class="kw">NOT</span> (GPA &gt;= 3.5)
+<span class="kw">ORDER</span> <span class="kw">BY</span> StudentID;</code></pre><div class='note'>Expected result: 2 rows - Bala and Daniel. Parentheses make the condition controlled by <code>NOT</code> explicit.</div><h2 id='section-13'>BETWEEN and Date Criteria</h2><pre><code><span class="kw">SELECT</span> StudentID, FirstName, LastName, GPA
+<span class="kw">FROM</span> Students
+<span class="kw">WHERE</span> GPA <span class="kw">BETWEEN</span> 3.5 <span class="kw">AND</span> 4
+<span class="kw">ORDER</span> <span class="kw">BY</span> GPA <span class="kw">DESC</span>;</code></pre><div class='note'>Expected result: 2 rows. <code>BETWEEN</code> includes both endpoints.</div><pre><code><span class="kw">SELECT</span> RegistrationID, StudentID, RegistrationDate
+<span class="kw">FROM</span> Registrations
+<span class="kw">WHERE</span> RegistrationDate &gt;= <span class="str">#2026-10-01#</span>
+  <span class="kw">AND</span> RegistrationDate &lt; <span class="str">#2026-11-01#</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> RegistrationDate;</code></pre><div class='note'>Expected result: 7 rows. A start-inclusive/end-exclusive range works reliably for a whole month, including values that contain a time.</div><hr class='pagebreak'><h2 id='section-14'>IN, LIKE, IS NULL and DISTINCT</h2><h3>IN replaces repeated OR comparisons</h3><pre><code><span class="kw">SELECT</span> InstructorID, FirstName, LastName, Department
+<span class="kw">FROM</span> Instructors
+<span class="kw">WHERE</span> Department <span class="kw">IN</span> (<span class="str">&#x27;Information Systems&#x27;</span>, <span class="str">&#x27;Data Science&#x27;</span>)
+<span class="kw">ORDER</span> <span class="kw">BY</span> Department, LastName;</code></pre><div class='note'>Expected result: 2 rows.</div><h3>LIKE uses the database&#x27;s wildcard mode</h3><p>A normal <code>.accdb</code> uses <mark>ANSI-89</mark> by default: <code>*</code> means zero or more characters and <code>?</code> means one character. If the database is explicitly set to ANSI-92, use <code>%</code> and <code>_</code> instead.</p><pre><code><span class="kw">SELECT</span> CourseCode, CourseName
+<span class="kw">FROM</span> Courses
+<span class="kw">WHERE</span> CourseName <span class="kw">LIKE</span> <span class="str">&#x27;*Data*&#x27;</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> CourseCode;</code></pre><div class='note'>Expected result: 4 rows.</div><pre><code><span class="kw">SELECT</span> CourseCode, CourseName
+<span class="kw">FROM</span> Courses
+<span class="kw">WHERE</span> CourseCode <span class="kw">LIKE</span> <span class="str">&#x27;ICT4?0&#x27;</span>;</code></pre><div class='note'>Expected result: 1 row - ICT450.</div><h3>IS NULL and DISTINCT</h3><pre><code><span class="kw">SELECT</span> CourseCode, CourseName
+<span class="kw">FROM</span> Courses
+<span class="kw">WHERE</span> PreReqCourseID <span class="kw">IS</span> <span class="kw">NULL</span>;</code></pre><pre><code><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> Department
+<span class="kw">FROM</span> Courses
+<span class="kw">ORDER</span> <span class="kw">BY</span> Department;</code></pre><div class='note'>Expected results: 1 course without a prerequisite and 3 distinct departments.</div><hr class='pagebreak'><h2 id='section-15'>Aggregate Functions</h2><p>Aggregate functions summarise several rows. <code>COUNT(field)</code> ignores Null values in that field; <code>COUNT(*)</code> counts rows.</p><pre><code><span class="kw">SELECT</span> <span class="kw">COUNT</span>(StudentID) <span class="kw">AS</span> StudentCount,
+       <span class="kw">AVG</span>(GPA) <span class="kw">AS</span> AverageGPA,
+       <span class="kw">MAX</span>(GPA) <span class="kw">AS</span> HighestGPA,
+       <span class="kw">MIN</span>(GPA) <span class="kw">AS</span> LowestGPA
+<span class="kw">FROM</span> Students;</code></pre><table><thead><tr><th>Result</th><th>Expected value</th></tr></thead><tbody><tr><td>StudentCount</td><td>4</td></tr><tr><td>AverageGPA</td><td>3.4475</td></tr><tr><td>HighestGPA</td><td>3.88</td></tr><tr><td>LowestGPA</td><td>2.94</td></tr></tbody></table><h3>SUM</h3><pre><code><span class="kw">SELECT</span> SUM(Credits) <span class="kw">AS</span> TotalCredits
+<span class="kw">FROM</span> Courses;</code></pre><div class='note'>Expected result: 16 total credits.</div><hr class='pagebreak'><h2 id='section-16'>GROUP BY and HAVING</h2><p><code>GROUP BY</code> forms groups. <code>WHERE</code> filters rows before grouping; <code>HAVING</code> filters the completed groups.</p><pre><code><span class="kw">SELECT</span> StudentID,
+       <span class="kw">COUNT</span>(RegistrationID) <span class="kw">AS</span> RegistrationCount
+<span class="kw">FROM</span> Registrations
+<span class="kw">GROUP</span> <span class="kw">BY</span> StudentID
+<span class="kw">ORDER</span> <span class="kw">BY</span> StudentID;</code></pre><div class='note'>Expected result: 4 groups. StudentID 4 has one registration; the others have two.</div><pre><code><span class="kw">SELECT</span> StudentID,
+       <span class="kw">COUNT</span>(RegistrationID) <span class="kw">AS</span> RegistrationCount
+<span class="kw">FROM</span> Registrations
+<span class="kw">GROUP</span> <span class="kw">BY</span> StudentID
+<span class="kw">HAVING</span> <span class="kw">COUNT</span>(RegistrationID) &gt; 1
+<span class="kw">ORDER</span> <span class="kw">BY</span> StudentID;</code></pre><div class='note'>Expected result: 3 groups - StudentID 1, 2 and 3.</div><div class='warning'>Every selected field that is not inside an aggregate function must appear in the <code>GROUP BY</code> clause.</div><hr class='pagebreak'><h2 id='section-17'>INNER JOIN: Combine Related Tables</h2><p>Use explicit <code>INNER JOIN ... ON</code> syntax so the relationship path is visible. Joined numeric fields must use compatible types; a COUNTER primary key is paired with a LONG foreign key.</p><h3>Join two tables</h3><pre><code><span class="kw">SELECT</span> R.RegistrationID, R.StudentID,
+       C.CourseCode, C.CourseName
+<span class="kw">FROM</span> Registrations <span class="kw">AS</span> R
+<span class="kw">INNER</span> <span class="kw">JOIN</span> Courses <span class="kw">AS</span> C
+    <span class="kw">ON</span> R.CourseID = C.CourseID
+<span class="kw">ORDER</span> <span class="kw">BY</span> R.RegistrationID;</code></pre><div class='note'>Expected result: 7 rows.</div><h3>Join three tables</h3><pre><code><span class="kw">SELECT</span> S.StudentID,
+       S.FirstName &amp; <span class="str">&#x27; &#x27;</span> &amp; S.LastName <span class="kw">AS</span> StudentName,
+       C.CourseCode, C.CourseName, R.Semester, R.Grade
+<span class="kw">FROM</span> (Students <span class="kw">AS</span> S
+<span class="kw">INNER</span> <span class="kw">JOIN</span> Registrations <span class="kw">AS</span> R
+    <span class="kw">ON</span> S.StudentID = R.StudentID)
+<span class="kw">INNER</span> <span class="kw">JOIN</span> Courses <span class="kw">AS</span> C
+    <span class="kw">ON</span> R.CourseID = C.CourseID
+<span class="kw">ORDER</span> <span class="kw">BY</span> S.StudentID, C.CourseCode;</code></pre><div class='note'>Expected result: 7 rows. Access requires parentheses around this nested join path.</div><hr class='pagebreak'><h2 id='section-18'>A Four-Table Join</h2><pre><code><span class="kw">SELECT</span> S.FirstName &amp; <span class="str">&#x27; &#x27;</span> &amp; S.LastName <span class="kw">AS</span> StudentName,
+       C.CourseCode, C.CourseName,
+       I.FirstName &amp; <span class="str">&#x27; &#x27;</span> &amp; I.LastName <span class="kw">AS</span> InstructorName,
+       R.Semester, R.Grade
+<span class="kw">FROM</span> ((Students <span class="kw">AS</span> S
+<span class="kw">INNER</span> <span class="kw">JOIN</span> Registrations <span class="kw">AS</span> R
+    <span class="kw">ON</span> S.StudentID = R.StudentID)
+<span class="kw">INNER</span> <span class="kw">JOIN</span> Courses <span class="kw">AS</span> C
+    <span class="kw">ON</span> R.CourseID = C.CourseID)
+<span class="kw">INNER</span> <span class="kw">JOIN</span> Instructors <span class="kw">AS</span> I
+    <span class="kw">ON</span> C.InstructorID = I.InstructorID
+<span class="kw">ORDER</span> <span class="kw">BY</span> S.StudentID, C.CourseCode;</code></pre><div class='note'>Expected result: 7 rows, one for each registration.</div><h2 id='section-19'>Why Explicit Joins Are Preferred</h2><ul><li>The key relationship is kept in the <code>ON</code> clause.</li><li>Filtering criteria remain in the <code>WHERE</code> clause.</li><li>A missing join condition cannot silently become a Cartesian product as easily.</li><li>The query matches the relationship structure taught in the ERD and Access Relationships window.</li></ul><hr class='pagebreak'><h2 id='section-20'>Subqueries</h2><p>A subquery is a <code>SELECT</code> statement inside another statement. The inner query supplies a value or set used by the outer query. An empty subquery result is an empty set, not automatically an error.</p><h3>Use IN when the inner query can return several values</h3><pre><code><span class="kw">SELECT</span> StudentID, FirstName, LastName
+<span class="kw">FROM</span> Students
+<span class="kw">WHERE</span> StudentID <span class="kw">IN</span> (
+    <span class="kw">SELECT</span> StudentID
+    <span class="kw">FROM</span> Registrations
+    <span class="kw">WHERE</span> CourseID = (
+        <span class="kw">SELECT</span> CourseID
+        <span class="kw">FROM</span> Courses
+        <span class="kw">WHERE</span> CourseCode = <span class="str">&#x27;ICT450&#x27;</span>
+    )
+)
+<span class="kw">ORDER</span> <span class="kw">BY</span> StudentID;</code></pre><div class='note'>Expected result: 3 students - StudentID 1, 2 and 3.</div><h3>Use = only when one value is guaranteed</h3><pre><code><span class="kw">SELECT</span> StudentID, FirstName, LastName, GPA
+<span class="kw">FROM</span> Students
+<span class="kw">WHERE</span> GPA &gt;= (
+    <span class="kw">SELECT</span> <span class="kw">AVG</span>(GPA)
+    <span class="kw">FROM</span> Students
+)
+<span class="kw">ORDER</span> <span class="kw">BY</span> GPA <span class="kw">DESC</span>;</code></pre><div class='note'>Expected result: 2 rows. The inner aggregate returns one value: 3.4475.</div><div class='warning'>Do not use <code>=</code> with a subquery that can return several rows. Use <code>IN</code>, or rewrite the query so one value is guaranteed.</div><hr class='pagebreak'><h2 id='section-21'>UPDATE and DELETE Safely</h2><p>Before an action query, run a <code>SELECT</code> with the same <code>WHERE</code> criteria. Continue only when the preview returns exactly the intended rows.</p><h3>Preview and perform a reversible UPDATE</h3><pre><code><span class="kw">SELECT</span> StudentID, FirstName, LastName, GPA
+<span class="kw">FROM</span> Students
+<span class="kw">WHERE</span> StudentID = 4 <span class="kw">AND</span> GPA = 2.94;</code></pre><pre><code><span class="kw">UPDATE</span> Students
+<span class="kw">SET</span> GPA = 3.04
+<span class="kw">WHERE</span> StudentID = 4 <span class="kw">AND</span> GPA = 2.94;</code></pre><pre><code><span class="kw">UPDATE</span> Students
+<span class="kw">SET</span> GPA = 2.94
+<span class="kw">WHERE</span> StudentID = 4 <span class="kw">AND</span> GPA = 3.04;</code></pre><div class='note'>Each UPDATE affects one row. The final statement restores the original practice value.</div><h3>Preview DELETE on a disposable table</h3><pre><code><span class="kw">SELECT</span> *
+<span class="kw">FROM</span> DDLPractice
+<span class="kw">WHERE</span> PracticeName = <span class="str">&#x27;First row&#x27;</span>;</code></pre><pre><code><span class="kw">DELETE</span> <span class="kw">FROM</span> DDLPractice
+<span class="kw">WHERE</span> PracticeName = <span class="str">&#x27;First row&#x27;</span>;</code></pre><div class='warning'>An UPDATE or DELETE without a suitable <code>WHERE</code> clause can affect every row. A delete query is not undoable; keep a backup.</div><hr class='pagebreak'><h2 id='section-22'>Common Access SQL Errors</h2><table><thead><tr><th>Incorrect or unsafe idea</th><th>Correct Access practice</th></tr></thead><tbody><tr><td>A foreign key cannot be NOT NULL</td><td>Optionality is separate; a required FK may be NOT NULL</td></tr><tr><td>Use _ for one unknown character</td><td>ANSI-89 Access uses ?; ANSI-92 uses _</td></tr><tr><td>Put dates in quotes</td><td>Use #date# literals</td></tr><tr><td>Use LIKE on a date</td><td>Use an inclusive/exclusive date range</td></tr><tr><td>Join tables with commas</td><td>Use explicit INNER JOIN ... ON</td></tr><tr><td>A no-row subquery is a NULL</td><td>It returns an empty result set</td></tr><tr><td>Paste comments with the SQL</td><td>Run only the executable statement in SQL View</td></tr></tbody></table><h2 id='section-23'>Quick Reading Checklist</h2><ul><li>Which table supplies each selected field?</li><li>Which rows are filtered by <code>WHERE</code>?</li><li>Are groups filtered by <code>HAVING</code> only after <code>GROUP BY</code>?</li><li>Does each join connect a primary key to the correct foreign key?</li><li>Can a subquery return one value or several values?</li><li>Does an action query include a preview, backup or reversal?</li></ul></main></body></html>

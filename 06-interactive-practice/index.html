@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17365d">
+  <meta name="description" content="Offline ICT450 question practice, Microsoft Access SQL feedback, and guided ERD self-checking.">
+  <meta name="ict450-release" content="2026.10.03-r44">
+  <title>ICT450 Practice Studio</title>
+  <link rel="stylesheet" href="styles.css?v=2026.10.03-r44">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to practice content</a>
+
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">DB</span>
+      <span><strong>ICT450</strong><small>Practice Studio</small></span>
+    </div>
+    <a class="hub-home-link" href="../index.html">← Revision Hub</a>
+    <nav class="main-nav" aria-label="Practice sections">
+      <button class="nav-button is-active" data-view="home">Overview</button>
+      <button class="nav-button" data-view="library">Practice bank</button>
+      <button class="nav-button" data-view="sql">SQL workshop</button>
+      <button class="nav-button" data-view="erd">ERD studio</button>
+    </nav>
+    <button class="progress-button" id="progressButton" type="button" aria-label="Show saved progress">
+      <span id="headerProgress">0%</span>
+      <small>local progress</small>
+    </button>
+  </header>
+
+  <main id="main-content">
+    <section class="view is-visible" id="view-home" data-view-panel="home">
+      <div class="hero shell">
+        <div>
+          <p class="eyebrow">ICT450 practice</p>
+          <h1>ICT450 Practice Studio</h1>
+          <p class="hero-copy">Work through past-paper concepts, build Microsoft Access SQL, and audit your own Crow's Foot diagrams. Everything runs locally without an internet connection.</p>
+          <div class="hero-actions">
+            <button class="primary-button" data-go="sql">Start SQL practice</button>
+            <button class="secondary-button" data-go="erd">Open ERD studio</button>
+          </div>
+        </div>
+        <aside class="hero-note" aria-label="How feedback works">
+          <strong>Feedback boundary</strong>
+          <p>The SQL checker examines statement structure, tables, clauses, functions and date bounds. It does not execute the query or replace lecturer marking.</p>
+        </aside>
+      </div>
+
+      <div class="shell dashboard-grid" aria-label="Practice collection summary">
+        <article class="metric-card"><span id="metricPractice">122</span><strong>question parts</strong><p>Filter by session, chapter or activity type.</p></article>
+        <article class="metric-card"><span id="metricSql">33</span><strong>SQL exercises</strong><p>DDL, joins, grouping, subqueries and action queries.</p></article>
+        <article class="metric-card"><span id="metricErd">8</span><strong>interactive ERD builders</strong><p>Four supplied scenarios in Chen and Crow's Foot formats.</p></article>
+        <article class="metric-card accent-card"><span id="metricDone">0</span><strong>items reviewed</strong><p>Progress stays only in this browser on this device.</p></article>
+      </div>
+
+      <section class="shell section-block">
+        <div class="section-heading"><div><p class="eyebrow">Recommended route</p><h2>Practice options</h2></div></div>
+        <div class="route-grid">
+          <button class="route-card" data-go="library"><span>01</span><strong>Recall</strong><p>Attempt a question before comparing your response.</p></button>
+          <button class="route-card" data-go="sql"><span>02</span><strong>Construct</strong><p>Write complete Access SQL and inspect missing structural features.</p></button>
+          <button class="route-card" data-go="erd"><span>03</span><strong>Design</strong><p>Draw independently, then self-check every entity and business rule.</p></button>
+        </div>
+      </section>
+    </section>
+
+    <section class="view shell app-view" id="view-library" data-view-panel="library" aria-labelledby="libraryTitle">
+      <div class="section-heading">
+        <div><p class="eyebrow">Structured practice</p><h1 id="libraryTitle">ICT450 Question Bank</h1></div>
+        <p id="libraryCount" class="result-count"></p>
+      </div>
+      <div class="filter-bar" role="search">
+        <label class="search-field"><span>Search</span><input id="librarySearch" type="search" placeholder="Topic, wording or item ID"></label>
+        <label><span>Activity</span><select id="libraryType"><option value="all">All activities</option></select></label>
+        <label><span>Session</span><select id="librarySession"><option value="all">All sessions</option></select></label>
+        <label><span>Chapter</span><select id="libraryChapter"><option value="all">All chapters</option></select></label>
+      </div>
+      <div class="library-layout">
+        <div class="question-list" id="libraryList" aria-label="Filtered practice questions"></div>
+        <article class="detail-card" id="libraryDetail" aria-live="polite"></article>
+      </div>
+    </section>
+
+    <section class="view shell app-view" id="view-sql" data-view-panel="sql" aria-labelledby="sqlTitle">
+      <div class="section-heading">
+        <div><p class="eyebrow">Microsoft Access SQL</p><h1 id="sqlTitle">SQL workshop</h1></div>
+        <div class="pager"><button id="sqlPrev" type="button">Previous</button><span id="sqlPosition"></span><button id="sqlNext" type="button">Next</button></div>
+      </div>
+      <div class="workshop-layout">
+        <aside class="workshop-menu">
+          <label><span>Choose session</span><select id="sqlSession"></select></label>
+          <div id="sqlQuestionList" class="compact-list"></div>
+        </aside>
+        <article class="work-card">
+          <div class="item-heading"><div><span class="item-id" id="sqlId"></span><h2 id="sqlPrompt"></h2></div><span class="mark-badge" id="sqlMarks"></span></div>
+          <a class="source-paper-link" id="sqlPaperLink" href="#" target="_blank" rel="noopener">Open the source examination paper</a>
+          <div class="instruction-callout"><strong>Before checking:</strong> complete the statement and keep every condition required by the question.</div>
+          <label class="editor-label" for="sqlEditor">Your Microsoft Access SQL</label>
+          <textarea id="sqlEditor" class="code-editor" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="Write your SQL here..."></textarea>
+          <div class="button-row">
+            <button class="primary-button" id="checkSql" type="button">Check structure</button>
+            <button class="secondary-button" id="insertSkeleton" type="button">Insert skeleton</button>
+            <button class="secondary-button" id="revealSql" type="button" aria-expanded="false">Reveal model</button>
+            <button class="text-button danger-text" id="clearSql" type="button">Clear</button>
+          </div>
+          <section class="feedback-panel" id="sqlFeedback" aria-live="polite">
+            <strong>Ready when you are.</strong><p>The checker will examine the structure of your attempt.</p>
+          </section>
+          <section class="model-panel is-hidden" id="sqlModel" aria-live="polite">
+            <div class="model-heading"><strong>Model SQL</strong><button class="copy-button" id="copySql" type="button">Copy</button></div>
+            <pre><code id="sqlModelCode"></code></pre>
+          </section>
+        </article>
+      </div>
+    </section>
+
+    <section class="view shell app-view" id="view-erd" data-view-panel="erd" aria-labelledby="erdTitle">
+      <div class="section-heading">
+        <div><p class="eyebrow">Interactive diagram practice</p><h1 id="erdTitle">ERD exercise library</h1></div>
+      </div>
+      <div class="erd-exercise-grid">
+        <article class="erd-exercise-card"><span>Chen notation</span><h2>Fini&amp;Co Desserts</h2><p>Source-aligned entities, relationships, keys, attributes and cardinalities.</p><a href="erd-exercises/fini-co-chen.html">Open exercise</a></article>
+        <article class="erd-exercise-card"><span>Crow's Foot</span><h2>Fini&amp;Co Desserts</h2><p>Resolve Package-Confectionery without inventing a staff-order relationship.</p><a href="erd-exercises/fini-co-crows-foot.html">Open exercise</a></article>
+        <article class="erd-exercise-card"><span>Chen notation</span><h2>Tarpack Gallery</h2><p>Build the sales model, including the recursive staff roles.</p><a href="erd-exercises/tarpack-gallery-chen.html">Open exercise</a></article>
+        <article class="erd-exercise-card"><span>Crow's Foot</span><h2>Tarpack Gallery</h2><p>Model unique artwork sales and role-labelled staff monitoring.</p><a href="erd-exercises/tarpack-gallery-crows-foot.html">Open exercise</a></article>
+        <article class="erd-exercise-card"><span>Chen notation</span><h2>Official and Registration</h2><p>Model the Part B(b) subdiagram and its zero-to-100 limit.</p><a href="erd-exercises/official-registration-chen.html">Open exercise</a></article>
+        <article class="erd-exercise-card"><span>Crow's Foot</span><h2>Splash &amp; Swim Club</h2><p>Connect registration directly to swimmer and keep round performance dependent on registration.</p><a href="erd-exercises/splash-swim-crows-foot.html">Open exercise</a></article>
+        <article class="erd-exercise-card"><span>Chen notation</span><h2>Medical Clinic</h2><p>Model appointments and treatment details with relationship attributes.</p><a href="erd-exercises/medical-clinic-chen.html">Open exercise</a></article>
+        <article class="erd-exercise-card"><span>Crow's Foot</span><h2>Medical Clinic</h2><p>Resolve Appointment-Treatment and keep dosage, instructions and duration on the bridge.</p><a href="erd-exercises/medical-clinic-crows-foot.html">Open exercise</a></article>
+      </div>
+      <details class="legacy-erd-panel">
+        <summary>Open the existing past-paper self-check</summary>
+        <div class="legacy-erd-heading"><div><p class="eyebrow">Secondary activity</p><h2>Past-paper ERD checklist</h2></div><label class="case-picker"><span>Case</span><select id="erdSelect"></select></label></div>
+        <article class="erd-case-card">
+          <div class="item-heading"><div><span class="item-id" id="erdId"></span><h2 id="erdPrompt"></h2></div><span class="mark-badge" id="erdMarks"></span></div>
+          <details class="case-details"><summary>Read the full case and business rules</summary><div id="erdCasePrompt" class="case-copy"></div></details>
+          <div class="workflow-strip" aria-label="Recommended ERD workflow"><span><b>1</b> Find nouns</span><span><b>2</b> choose keys</span><span><b>3</b> resolve M:N</span><span><b>4</b> set min/max</span></div>
+          <div class="instruction-callout amber"><strong>Draw first.</strong> Complete your ERD on paper or in your preferred diagram tool before opening the checklist.</div>
+          <button class="primary-button" id="startErdCheck" type="button">Open self-check checklist</button>
+        </article>
+        <section class="erd-check-area is-hidden" id="erdCheckArea">
+          <div class="self-score"><span id="erdScore">0 / 16</span><small>self-reported design marks</small></div>
+          <div class="check-grid">
+            <article class="check-card"><h3>Entities and keys</h3><div id="erdEntities"></div></article>
+            <article class="check-card"><h3>Relationships and cardinalities</h3><div id="erdRelationships"></div></article>
+          </div>
+          <aside class="concept-note" id="erdNote"></aside>
+          <article class="report-card"><div><h3 id="erdReportPrompt"></h3><p>Write your proposed outputs first, then compare them with the examples.</p></div><button class="secondary-button" id="revealReports" type="button" aria-expanded="false">Reveal examples</button><div class="report-list is-hidden" id="erdReports"></div></article>
+        </section>
+      </details>
+    </section>
+  </main>
+
+  <dialog id="progressDialog" class="progress-dialog">
+    <form method="dialog">
+      <div class="dialog-heading"><div><p class="eyebrow">This device only</p><h2>Your saved progress</h2></div><button class="close-button" aria-label="Close">×</button></div>
+      <div class="progress-summary" id="progressSummary"></div>
+      <p class="muted">Progress is stored locally. It is not submitted and does not affect assessment marks.</p>
+      <button class="text-button danger-text" id="resetProgress" type="button">Reset all local progress</button>
+    </form>
+  </dialog>
+
+  <script src="practice-data.js?v=2026.10.03-r44"></script>
+  <script src="app.js?v=2026.10.03-r44"></script>
+</body>
+</html>

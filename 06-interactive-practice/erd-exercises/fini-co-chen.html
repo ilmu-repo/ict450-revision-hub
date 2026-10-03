@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fini&amp;Co Chen Diagram Practice</title>
+    <link rel="stylesheet" href="chen-studio.css?v=5">
+</head>
+<body data-theme="rose">
+    <header class="page-header">
+        <div class="title-block">
+            <h1>Chen Notation: Fini&amp;Co Desserts</h1>
+            <p>Build the entities, relationships, key attributes and minimum-maximum cardinalities.</p>
+        </div>
+        <nav class="header-actions" aria-label="Exercise actions and navigation">
+            <a class="nav-link" href="../index.html">Practice Studio</a>
+            <a class="nav-link" href="../../index.html">Revision Hub</a>
+            <button class="button" id="reset-button" type="button">Reset</button>
+            <button class="button primary" id="check-button" type="button">Check diagram</button>
+        </nav>
+    </header>
+
+    <main class="page-main">
+        <details class="context-card" open>
+            <summary>Question context and notation used</summary>
+            <div class="context-body">
+                <div>
+                    <ul class="rule-list">
+                        <li>Customers place orders for events; each order requests exactly one package.</li>
+                        <li>An order must be placed at least three days before its event date. This is a validation rule, not another ERD relationship.</li>
+                        <li>Every package contains one or more confectioneries, and a confectionery may appear in many packages.</li>
+                        <li>Order details are the event date, event time and event location.</li>
+                        <li>The question records staff details but gives no Staff-Order business rule. This practice does not invent one.</li>
+                    </ul>
+                </div>
+                <div class="notation-note"><strong>ICT450 convention:</strong> rectangles are entities, diamonds are relationships, ovals are attributes, and underlined ovals are key attributes. The relationship already represents the link, so separate foreign-key ovals are not used.</div>
+            </div>
+        </details>
+
+        <div class="studio-grid">
+            <aside class="bank-panel" aria-labelledby="bank-title">
+                <div class="panel-heading">
+                    <h2 id="bank-title">Shape bank</h2>
+                    <p>Select an item and then select a highlighted position. Desktop users may also drag items.</p>
+                </div>
+                <div class="selection-status" id="selection-status"></div>
+                <div class="bank-groups" id="bank-groups"></div>
+            </aside>
+
+            <section class="board-panel" aria-labelledby="board-title">
+                <div class="board-head">
+                    <div class="board-title">
+                        <h2 id="board-title">Fini&amp;Co diagram</h2>
+                        <p>Select a filled position to make it active. Delete/Backspace or Remove item clears it.</p>
+                    </div>
+                    <div class="board-tools">
+                        <button class="button" id="clear-selection-button" type="button">Clear selection</button>
+                        <button class="button" id="remove-button" type="button">Remove item</button>
+                        <button class="button" id="undo-button" type="button">Undo</button>
+                    </div>
+                </div>
+                <div class="progress-wrap">
+                    <span id="progress-text">0 positions filled</span>
+                    <div class="progress-track" role="progressbar" aria-label="Diagram completion" aria-valuemin="0" aria-valuenow="0" aria-valuemax="1"><div class="progress-bar" id="progress-bar"></div></div>
+                </div>
+                <div class="canvas-scroll" tabindex="0" aria-label="Scrollable Chen diagram workspace">
+                    <div class="diagram-stage" id="diagram-stage">
+                        <svg class="diagram-lines" id="diagram-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
+                    </div>
+                </div>
+                <section class="feedback-panel" id="feedback-panel" aria-live="polite" hidden></section>
+            </section>
+        </div>
+    </main>
+    <div class="sr-only" id="live-region" aria-live="assertive"></div>
+
+    <script>
+        window.CHEN_EXERCISE = {
+            id: "fini-co",
+            version: "v3",
+            successMessage: "The diagram follows the stated Fini&Co rules without inventing a Staff-Order relationship.",
+            bank: {
+                entity: ["CUSTOMER", "STAFF", "ORDER", "PACKAGE", "CONFECTIONERY"],
+                rel: ["PLACES", "REQUESTS"],
+                assoc: ["PACKAGE_ITEM"],
+                conn: ["1", "M"],
+                card: ["(1,1)", "(0,N)", "(1,N)"],
+                pk: ["CustomerID", "StaffID", "OrderID", "PackageID", "ConfectioneryID"],
+                attr: ["FirstName", "LastName", "PhoneNumber", "Email", "Address", "HireDate", "EventDate", "EventTime", "EventLocation", "Price", "ConfectioneryName"]
+            },
+            lines: [
+                [12,42,27,42], [27,42,42,42], [42,42,57,42], [57,42,72,42], [72,42,72,66], [72,66,72,88],
+                [12,42,6,27], [12,42,5,55], [12,42,7,67], [12,42,14,70], [12,42,20,65], [12,42,21,54],
+                [42,12,34,5], [42,12,43,4], [42,12,51,7], [42,12,51,18],
+                [42,42,34,30], [42,42,45,28], [42,42,51,34], [42,42,46,55],
+                [72,42,66,30], [72,42,83,34], [72,66,59,65], [72,66,85,65],
+                [72,88,62,94], [72,88,84,94]
+            ],
+            annotations: [
+                {x:84,y:12,w:20,text:"STAFF is intentionally standalone: the source question gives no relationship rule."}
+            ],
+            slots: [
+                {id:"E_CUST",type:"entity",x:12,y:42,w:12,h:7,expected:"CUSTOMER",label:"Customer entity"},
+                {id:"R_PLACES",type:"rel",x:27,y:42,w:10,h:12,expected:"PLACES",label:"Customer-Order relationship"},
+                {id:"E_ORDER",type:"entity",x:42,y:42,w:12,h:7,expected:"ORDER",label:"Order entity"},
+                {id:"R_REQUESTS",type:"rel",x:57,y:42,w:10,h:12,expected:"REQUESTS",label:"Order-Package relationship"},
+                {id:"E_PACKAGE",type:"entity",x:72,y:42,w:12,h:7,expected:"PACKAGE",label:"Package entity"},
+                {id:"A_ITEM",type:"assoc",x:72,y:66,w:13,h:9,expected:"PACKAGE_ITEM",label:"Package Item associative entity"},
+                {id:"E_CONF",type:"entity",x:72,y:88,w:14,h:7,expected:"CONFECTIONERY",label:"Confectionery entity"},
+                {id:"E_STAFF",type:"entity",x:42,y:12,w:12,h:7,expected:"STAFF",label:"Staff entity"},
+                {id:"C_CUST",type:"conn",x:20,y:39,w:3.5,h:4,expected:"1",label:"Customer connectivity to Places"},
+                {id:"K_CUST",type:"card",x:20,y:45,w:6,h:4,expected:"(0,N)",label:"Customer participation in Places"},
+                {id:"C_ORDER1",type:"conn",x:35,y:39,w:3.5,h:4,expected:"M",label:"Order connectivity to Places"},
+                {id:"K_ORDER1",type:"card",x:35,y:45,w:6,h:4,expected:"(1,1)",label:"Order participation in Places"},
+                {id:"C_ORDER2",type:"conn",x:49,y:39,w:3.5,h:4,expected:"M",label:"Order connectivity to Requests"},
+                {id:"K_ORDER2",type:"card",x:49,y:45,w:6,h:4,expected:"(1,1)",label:"Order participation in Requests"},
+                {id:"C_PACKAGE1",type:"conn",x:65,y:39,w:3.5,h:4,expected:"1",label:"Package connectivity to Requests"},
+                {id:"K_PACKAGE1",type:"card",x:65,y:45,w:6,h:4,expected:"(0,N)",label:"Package participation in Orders"},
+                {id:"C_PACKAGE2",type:"conn",x:69,y:52,w:3.5,h:4,expected:"1",label:"Package connectivity to Package Item"},
+                {id:"K_PACKAGE2",type:"card",x:75,y:52,w:6,h:4,expected:"(1,N)",label:"Package participation in Package Item"},
+                {id:"C_ITEM1",type:"conn",x:69,y:59,w:3.5,h:4,expected:"M",label:"Package Item connectivity to Package"},
+                {id:"K_ITEM1",type:"card",x:75,y:59,w:6,h:4,expected:"(1,1)",label:"Package Item participation in Package"},
+                {id:"C_ITEM2",type:"conn",x:69,y:75,w:3.5,h:4,expected:"M",label:"Package Item connectivity to Confectionery"},
+                {id:"K_ITEM2",type:"card",x:75,y:75,w:6,h:4,expected:"(1,1)",label:"Package Item participation in Confectionery"},
+                {id:"C_CONF",type:"conn",x:69,y:82,w:3.5,h:4,expected:"1",label:"Confectionery connectivity to Package Item"},
+                {id:"K_CONF",type:"card",x:75,y:82,w:6,h:4,expected:"(0,N)",label:"Confectionery participation in Package Item"},
+                {id:"PK_CUST",type:"pk",x:6,y:27,w:10,h:5,expected:"CustomerID",label:"Customer key"},
+                {id:"A_C_FN",type:"attr",x:5,y:55,w:9,h:5,expected:"FirstName",label:"Customer first name"},
+                {id:"A_C_LN",type:"attr",x:7,y:67,w:9,h:5,expected:"LastName",label:"Customer last name"},
+                {id:"A_C_PHONE",type:"attr",x:14,y:70,w:9,h:5,expected:"PhoneNumber",label:"Customer phone number"},
+                {id:"A_C_EMAIL",type:"attr",x:20,y:65,w:9,h:5,expected:"Email",label:"Customer email"},
+                {id:"A_C_ADDR",type:"attr",x:21,y:54,w:9,h:5,expected:"Address",label:"Customer address"},
+                {id:"PK_STAFF",type:"pk",x:34,y:5,w:9,h:5,expected:"StaffID",label:"Staff key"},
+                {id:"A_S_FN",type:"attr",x:43,y:4,w:9,h:5,expected:"FirstName",label:"Staff first name"},
+                {id:"A_S_LN",type:"attr",x:51,y:7,w:9,h:5,expected:"LastName",label:"Staff last name"},
+                {id:"A_S_HIRE",type:"attr",x:51,y:18,w:9,h:5,expected:"HireDate",label:"Staff hire date"},
+                {id:"PK_ORDER",type:"pk",x:34,y:30,w:9,h:5,expected:"OrderID",label:"Order key"},
+                {id:"A_O_DATE",type:"attr",x:45,y:28,w:9,h:5,expected:"EventDate",label:"Order event date"},
+                {id:"A_O_TIME",type:"attr",x:51,y:34,w:9,h:5,expected:"EventTime",label:"Order event time"},
+                {id:"A_O_LOC",type:"attr",x:46,y:55,w:10,h:5,expected:"EventLocation",label:"Order event location"},
+                {id:"PK_PACKAGE",type:"pk",x:66,y:30,w:9,h:5,expected:"PackageID",label:"Package key"},
+                {id:"A_P_PRICE",type:"attr",x:83,y:34,w:9,h:5,expected:"Price",label:"Package price"},
+                {id:"PK_ITEM_P",type:"pk",x:59,y:65,w:10,h:5,expected:"PackageID",label:"Package Item package key component"},
+                {id:"PK_ITEM_C",type:"pk",x:85,y:65,w:10,h:5,expected:"ConfectioneryID",label:"Package Item confectionery key component"},
+                {id:"PK_CONF",type:"pk",x:62,y:94,w:9,h:5,expected:"ConfectioneryID",label:"Confectionery key"},
+                {id:"A_CONF_NAME",type:"attr",x:84,y:94,w:10,h:5,expected:"ConfectioneryName",label:"Confectionery name"}
+            ]
+        };
+    </script>
+    <script src="chen-studio.js?v=5"></script>
+</body>
+</html>
