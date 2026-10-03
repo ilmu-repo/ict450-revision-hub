@@ -365,6 +365,18 @@
     }
 
     function connectorGeometry(relationship) {
+        if (relationship.loop) {
+            const box = tableGeometry(config.tables.find((table) => table.id === relationship.from));
+            const loop = relationship.loop;
+            const start = [box.right, box.top + (box.bottom - box.top) * loop.fromFraction];
+            const end = [box.left + (box.right - box.left) * loop.toFraction, box.bottom];
+            const outerX = box.right + loop.rightPadding;
+            const lowerY = box.bottom + loop.bottomPadding;
+            return {
+                points: [start, [outerX, start[1]], [outerX, lowerY], [end[0], lowerY], end],
+                slots: [start, [box.right + loop.labelDx, box.bottom + loop.labelDy], end]
+            };
+        }
         if (relationship.geometry) {
             const width = stage.clientWidth;
             const height = stage.clientHeight;
@@ -443,6 +455,14 @@
         stage.querySelectorAll(".relation-slot").forEach((element) => element.remove());
         config.relationships.forEach((relationship) => {
             const geometry = connectorGeometry(relationship);
+            if (relationship.label) {
+                const start = geometry.points[0];
+                const end = geometry.points[geometry.points.length - 1];
+                geometry.slots[1] = [
+                    (start[0] + end[0]) / 2 + relationship.label.dx,
+                    (start[1] + end[1]) / 2 + relationship.label.dy
+                ];
+            }
             const endpointPoint = (atStart) => {
                 const points = geometry.points;
                 const origin = atStart ? points[0] : points[points.length - 1];

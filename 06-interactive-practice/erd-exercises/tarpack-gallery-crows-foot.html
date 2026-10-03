@@ -68,7 +68,7 @@
         window.CROW_EXERCISE = {
             id: "tarpack-gallery",
             version: "v3",
-            stageHeight: 1150,
+            stageHeight: 1250,
             successMessage: "The model records each unique artwork, connects sales to customers and staff, and implements staff monitoring as a role-labelled recursive relationship.",
             bank: {
                 entity: ["CUSTOMER", "STAFF", "SALES_TRANSACTION", "ARTWORK", "ARTIST"],
@@ -79,7 +79,7 @@
                 card: ["Exactly one (||)", "Zero or one (O|)", "One or many (|<)", "Zero or many (O<)"]
             },
             tables: [
-                {id:"CUS",layout:{x:2,y:60,w:16},slots: [
+                {id:"CUS",layout:{x:2,y:57,w:16},slots: [
                     {id:"E_CUS",type:"entity",expected:"CUSTOMER",label:"Customer table"},
                     {id:"PK_CUS",type:"pk",expected:"CustomerID",label:"Customer primary key"},
                     {id:"A_CUS_N",type:"attr",expected:"Name",label:"Customer name"},
@@ -87,7 +87,7 @@
                     {id:"A_CUS_T",type:"attr",expected:"TelephoneNumber",label:"Customer telephone number"},
                     {id:"A_CUS_E",type:"attr",expected:"Email",label:"Customer email"}
                 ]},
-                {id:"STA",layout:{x:76,y:60,w:16},slots: [
+                {id:"STA",layout:{x:76,y:57,w:16},slots: [
                     {id:"E_STA",type:"entity",expected:"STAFF",label:"Staff table"},
                     {id:"PK_STA",type:"pk",expected:"StaffID",label:"Staff primary key"},
                     {id:"FK_STA_M",type:"fk",expected:"ManagerID",label:"Staff manager foreign key"},
@@ -95,7 +95,7 @@
                     {id:"A_STA_P",type:"attr",expected:"PhoneNumber",label:"Staff phone number"},
                     {id:"A_STA_E",type:"attr",expected:"Email",label:"Staff email"}
                 ]},
-                {id:"TRA",layout:{x:38,y:60,w:16},slots: [
+                {id:"TRA",layout:{x:38,y:57,w:16},slots: [
                     {id:"E_TRA",type:"entity",expected:"SALES_TRANSACTION",label:"Sales transaction table"},
                     {id:"PK_TRA",type:"pk",expected:"TransactionID",label:"Sales transaction primary key"},
                     {id:"FK_TRA_C",type:"fk",expected:"CustomerID",label:"Transaction customer foreign key"},
@@ -123,27 +123,27 @@
                 ]}
             ],
             relationships: [
-                {from:"CUS",to:"TRA",left:"CUSTOMER",right:"SALES_TRANSACTION",rule:"Each SALES_TRANSACTION belongs to exactly one CUSTOMER; a CUSTOMER may make zero or many transactions.",slots:[
+                {from:"CUS",to:"TRA",label:{dx:0,dy:-66},left:"CUSTOMER",right:"SALES_TRANSACTION",rule:"Each SALES_TRANSACTION belongs to exactly one CUSTOMER; a CUSTOMER may make zero or many transactions.",slots:[
                     {id:"C_CT_L",type:"card",expected:"Exactly one (||)",label:"Customer end of Makes",feedback:"Read the rule from a transaction toward its customer."},
                     {id:"R_CT",type:"rel",expected:"MAKES",label:"Customer-Transaction relationship"},
                     {id:"C_CT_R",type:"card",expected:"Zero or many (O<)",label:"Transaction end of Makes",feedback:"A customer record can exist before the first purchase."}
                 ]},
-                {from:"STA",to:"TRA",left:"STAFF",right:"SALES_TRANSACTION",rule:"Every SALES_TRANSACTION is managed by exactly one STAFF member; each STAFF member manages one or many transactions.",slots:[
+                {from:"STA",to:"TRA",label:{dx:0,dy:-66},left:"STAFF",right:"SALES_TRANSACTION",rule:"Every SALES_TRANSACTION is managed by exactly one STAFF member; each STAFF member manages one or many transactions.",slots:[
                     {id:"C_ST_L",type:"card",expected:"Exactly one (||)",label:"Staff end of Manages",feedback:"A transaction can only be managed by one staff member."},
                     {id:"R_ST",type:"rel",expected:"MANAGES",label:"Staff-Transaction relationship"},
                     {id:"C_ST_R",type:"card",expected:"One or many (|<)",label:"Transaction end of Manages",feedback:"The source explicitly says each staff member manages at least one sale transaction."}
                 ]},
-                {from:"TRA",to:"ARTW",left:"SALES_TRANSACTION",right:"ARTWORK",rule:"A SALES_TRANSACTION contains one or many ARTWORK records; an unsold ARTWORK has no transaction and a sold ARTWORK has exactly one.",slots:[
+                {from:"TRA",to:"ARTW",label:{dx:80,dy:0},left:"SALES_TRANSACTION",right:"ARTWORK",rule:"A SALES_TRANSACTION contains one or many ARTWORK records; an unsold ARTWORK has no transaction and a sold ARTWORK has exactly one.",slots:[
                     {id:"C_TA_L",type:"card",expected:"Zero or one (O|)",label:"Transaction end of Includes",feedback:"An artwork is either unsold or belongs to one sale transaction."},
                     {id:"R_TA",type:"rel",expected:"INCLUDES",label:"Transaction-Artwork relationship"},
                     {id:"C_TA_R",type:"card",expected:"One or many (|<)",label:"Artwork end of Includes",feedback:"A sale transaction must contain at least one artwork."}
                 ]},
-                {from:"ARTI",to:"ARTW",left:"ARTIST",right:"ARTWORK",rule:"Each ARTWORK identifies exactly one ARTIST; an ARTIST may have zero or many artworks recorded.",slots:[
+                {from:"ARTI",to:"ARTW",label:{dx:0,dy:-66},left:"ARTIST",right:"ARTWORK",rule:"Each ARTWORK identifies exactly one ARTIST; an ARTIST may have zero or many artworks recorded.",slots:[
                     {id:"C_AA_L",type:"card",expected:"Exactly one (||)",label:"Artist end of Creates",feedback:"The artwork details include an artist identifier."},
                     {id:"R_AA",type:"rel",expected:"CREATES",label:"Artist-Artwork relationship"},
                     {id:"C_AA_R",type:"card",expected:"Zero or many (O<)",label:"Artwork end of Creates",feedback:"The source does not state a minimum number of artworks for an artist."}
                 ]},
-                {from:"STA",to:"STA",left:"STAFF (Manager)",right:"STAFF (Monitored)",geometry:{points:[[92,70],[97,70],[97,97],[84,97],[84,94]],slots:[[94,70],[92,83.5],[90,97]]},rule:"A MANAGER monitors one or many staff members; a monitored STAFF member has zero or one manager.",slots:[
+                {from:"STA",to:"STA",left:"STAFF (Manager)",right:"STAFF (Monitored)",loop:{fromFraction:.33,toFraction:.6,rightPadding:68,bottomPadding:78,labelDx:-10,labelDy:36},rule:"A MANAGER monitors one or many staff members; a monitored STAFF member has zero or one manager.",slots:[
                     {id:"C_SS_L",type:"card",expected:"Zero or one (O|)",label:"Manager end of Monitors",feedback:"For one monitored staff member, the source sets a maximum of one manager but no minimum."},
                     {id:"R_SS",type:"rel",expected:"MONITORS",label:"Recursive staff relationship"},
                     {id:"C_SS_R",type:"card",expected:"One or many (|<)",label:"Monitored staff end of Monitors",feedback:"Every appointed manager must monitor at least one staff member."}
@@ -151,6 +151,6 @@
             ]
         };
     </script>
-    <script src="crow-studio.js?v=12"></script>
+    <script src="crow-studio.js?v=13"></script>
 </body>
 </html>
