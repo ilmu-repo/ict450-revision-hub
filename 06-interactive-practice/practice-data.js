@@ -1847,7 +1847,8 @@ window.ICT450_PRACTICE_DATA = {
       "topic": "Write DDL and aggregate/join SQL for package delivery",
       "marks": 4,
       "prompt": "Create table DELIVERY.",
-      "modelSql": "CREATE TABLE DELIVERY (\nPackageID TEXT(20) CONSTRAINT PK_DELIVERY PRIMARY KEY,\nDateDeliver DATETIME NOT NULL,\nRiderID TEXT(20) NOT NULL,\nICNum TEXT(20) NOT NULL,\nStatus TEXT(15) NOT NULL,\nCONSTRAINT FK_DELIVERY_RIDER FOREIGN KEY (RiderID)\nREFERENCES RIDER (RiderID),\nCONSTRAINT FK_DELIVERY_CUSTOMER FOREIGN KEY (ICNum)\nREFERENCES CUSTOMER (ICNum)\n);\n-- In Access table design, set Status Validation Rule to:\n-- In ('delivered','unsuccessful')",
+      "modelSql": "CREATE TABLE DELIVERY (\nPackageID TEXT(20) CONSTRAINT PK_DELIVERY PRIMARY KEY,\nDateDeliver DATETIME NOT NULL,\nRiderID TEXT(20) NOT NULL,\nICNum TEXT(20) NOT NULL,\nStatus TEXT(15) NOT NULL,\nCONSTRAINT FK_DELIVERY_RIDER FOREIGN KEY (RiderID)\nREFERENCES RIDER (RiderID),\nCONSTRAINT FK_DELIVERY_CUSTOMER FOREIGN KEY (ICNum)\nREFERENCES CUSTOMER (ICNum)\n);",
+      "modelNote": "The paper does not specify data types or field lengths; these are compatible examples and the foreign-key types must match their parent keys. The SQL creates the table but does not restrict Status to the two stated values. In Access table Design View, set the Status field Validation Rule to In ('delivered','unsuccessful'). This is a separate step, not part of the SQL to copy.",
       "features": {
         "operation": "CREATE TABLE",
         "tables": [
@@ -1966,6 +1967,7 @@ window.ICT450_PRACTICE_DATA = {
       "marks": 4,
       "prompt": "Create the APPLYLOAN table.",
       "modelSql": "CREATE TABLE APPLYLOAN (\nClientNum TEXT(20) NOT NULL,\nLoanID TEXT(20) NOT NULL,\nLoanTotal CURRENCY NOT NULL,\nLoanRemainder CURRENCY,\nLoanDate DATETIME NOT NULL,\nCONSTRAINT PK_APPLYLOAN PRIMARY KEY (ClientNum, LoanID),\nCONSTRAINT FK_APPLYLOAN_CLIENT FOREIGN KEY (ClientNum)\nREFERENCES CLIENT (ClientNum),\nCONSTRAINT FK_APPLYLOAN_LOAN FOREIGN KEY (LoanID)\nREFERENCES LOAN (LoanID)\n);",
+      "modelNote": "The paper does not specify data types or field lengths. These are example choices; each foreign key must use a type compatible with its parent primary key.",
       "features": {
         "operation": "CREATE TABLE",
         "tables": [
@@ -2040,7 +2042,8 @@ window.ICT450_PRACTICE_DATA = {
         "operation": "SELECT",
         "tables": [
           "DEPARTMENT",
-          "LOAN"
+          "LOAN",
+          "OFFICER"
         ],
         "clauses": [
           "WHERE",
@@ -2177,6 +2180,7 @@ window.ICT450_PRACTICE_DATA = {
       "marks": 4,
       "prompt": "Display the movie that received the most reviews.",
       "modelSql": "SELECT TOP 1 M.MovieID, M.MovieName, Count(R.ReviewID) AS [Total Reviews]\nFROM MOVIE AS M INNER JOIN REVIEW AS R ON M.MovieID = R.MovieID\nGROUP BY M.MovieID, M.MovieName\nORDER BY Count(R.ReviewID) DESC;",
+      "modelNote": "In Access, TOP 1 can return more than one movie if the highest review counts are tied. The question does not specify how to break a tie.",
       "features": {
         "operation": "SELECT",
         "tables": [
@@ -2206,6 +2210,7 @@ window.ICT450_PRACTICE_DATA = {
         "operation": "SELECT",
         "tables": [
           "CANDIDATE",
+          "FACULTY",
           "STUDENT"
         ],
         "clauses": [
@@ -2226,6 +2231,7 @@ window.ICT450_PRACTICE_DATA = {
       "marks": 4,
       "prompt": "Display students who did not vote for any candidate.",
       "modelSql": "SELECT S.*\nFROM STUDENT AS S\nLEFT JOIN VOTING AS V ON S.StudentID = V.StudID\nWHERE V.VotingID IS NULL;",
+      "modelNote": "This answer treats a VOTING row as evidence that a student voted. If a VOTING row can exist without a VOTING_DETAILS row, check the details table to find students who selected no candidate.",
       "features": {
         "operation": "SELECT",
         "tables": [
@@ -2249,9 +2255,11 @@ window.ICT450_PRACTICE_DATA = {
       "marks": 4,
       "prompt": "Identify the total voters for each faculty.",
       "modelSql": "SELECT F.FacultyID, F.FacultyName,\nCount(V.VotingID) AS [Total Voters]\nFROM (FACULTY AS F\nINNER JOIN STUDENT AS S ON F.FacultyID = S.FacultyID)\nINNER JOIN VOTING AS V ON S.StudentID = V.StudID\nGROUP BY F.FacultyID, F.FacultyName;",
+      "modelNote": "Counting VOTING rows equals counting distinct students only if each student has at most one VOTING row. The paper does not state that uniqueness rule; with repeat voting records, group by student before counting voters.",
       "features": {
         "operation": "SELECT",
         "tables": [
+          "FACULTY",
           "STUDENT",
           "VOTING"
         ],
@@ -2276,6 +2284,7 @@ window.ICT450_PRACTICE_DATA = {
       "features": {
         "operation": "SELECT",
         "tables": [
+          "CANDIDATE",
           "STUDENT",
           "VOTING_DETAILS"
         ],
@@ -2345,6 +2354,7 @@ window.ICT450_PRACTICE_DATA = {
       "marks": 4,
       "prompt": "Display the customer with the highest number of bookings.",
       "modelSql": "SELECT TOP 1 C.CustomerID, C.FirstName, C.LastName, C.PhoneNumber,\n       Count(B.BookingID) AS [Total Bookings]\nFROM CUSTOMERS AS C INNER JOIN BOOKING AS B ON C.CustomerID = B.CustomerID\nGROUP BY C.CustomerID, C.FirstName, C.LastName, C.PhoneNumber\nORDER BY Count(B.BookingID) DESC;",
+      "modelNote": "In Access, TOP 1 can return multiple customers when their booking counts tie for first. The question does not specify a tie-break rule.",
       "features": {
         "operation": "SELECT",
         "tables": [
@@ -2475,6 +2485,7 @@ window.ICT450_PRACTICE_DATA = {
         "operation": "SELECT",
         "tables": [
           "ASSIGN",
+          "EMPLOYEE",
           "JOB"
         ],
         "clauses": [
@@ -2545,6 +2556,7 @@ window.ICT450_PRACTICE_DATA = {
       "marks": 4,
       "prompt": "Create ENROLLMENT with a composite primary key and the required foreign keys.",
       "modelSql": "CREATE TABLE ENROLLMENT (\nMember_ID INTEGER NOT NULL,\nClass_ID INTEGER NOT NULL,\nEnrollDate DATE,\nCONSTRAINT ENROLLMENT_PK\nPRIMARY KEY (Member_ID, Class_ID),\nCONSTRAINT ENROLLMENT_MEMBER_FK\nFOREIGN KEY (Member_ID) REFERENCES [MEMBER] (Member_ID),\nCONSTRAINT ENROLLMENT_CLASS_FK\nFOREIGN KEY (Class_ID) REFERENCES [CLASS] (Class_ID)\n);",
+      "modelNote": "The paper does not specify data types. INTEGER and DATE are example Access types; Member_ID and Class_ID must match the corresponding parent-key types.",
       "features": {
         "operation": "CREATE TABLE",
         "tables": [
@@ -2567,7 +2579,8 @@ window.ICT450_PRACTICE_DATA = {
       "topic": "Write composite-key DDL, filtering, grouping and subquery SQL for a fitness centre",
       "marks": 5,
       "prompt": "Display trainers earning more than RM4,500, specializing in Yoga or Pilates, with\nnames beginning A; sort alphabetically.",
-      "modelSql": "SELECT Name\nFROM TRAINER\nWHERE Salary > 4500\nAND Specialization IN ('Yoga', 'Pilates')\nAND Name LIKE 'A*'\nORDER BY Name;\nMicrosoft Access uses * as the multi-character wildcard. In standard SQL, the equivalent pattern is A%.",
+      "modelSql": "SELECT Name\nFROM TRAINER\nWHERE Salary > 4500\nAND Specialization IN ('Yoga', 'Pilates')\nAND Name LIKE 'A*'\nORDER BY Name;",
+      "modelNote": "For the usual ANSI-89 setting in an Access .accdb, * matches any sequence of characters in a LIKE pattern. An ANSI-92 database uses % instead.",
       "features": {
         "operation": "SELECT",
         "tables": [
@@ -2620,6 +2633,7 @@ window.ICT450_PRACTICE_DATA = {
       "features": {
         "operation": "SELECT",
         "tables": [
+          "CLASS",
           "ENROLLMENT",
           "MEMBER",
           "TRAINER"

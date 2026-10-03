@@ -156,14 +156,32 @@
   }
 
   function stripSqlComments(text) {
-    return text.replace(/--[^\n]*/g, " ");
+    let result = "";
+    let inString = false;
+    for (let i = 0; i < text.length; i += 1) {
+      if (text[i] === "'") {
+        if (inString && text[i + 1] === "'") {
+          result += "''";
+          i += 1;
+          continue;
+        }
+        inString = !inString;
+      } else if (!inString && text[i] === "-" && text[i + 1] === "-") {
+        while (i < text.length && text[i] !== "\n") i += 1;
+        result += "\n";
+        continue;
+      }
+      result += text[i];
+    }
+    return result;
   }
 
   function analyseSql(text) {
     const raw = stripSqlComments(text);
-    const normalized = raw.replace(/\s+/g, " ").trim().toUpperCase();
-    const operation = normalized.match(/\b(CREATE\s+TABLE|SELECT|UPDATE|INSERT\s+INTO|DELETE)\b/)?.[1] || "";
-    const tables = unique([...normalized.matchAll(/\b(?:FROM|JOIN|UPDATE|INTO|REFERENCES|CREATE\s+TABLE)\s+\[?([A-Z][A-Z0-9_]*)\]?/g)].map((match) => match[1])).sort();
+    const normalized = raw.replace(/'(?:''|[^'])*'/g, "''").replace(/\s+/g, " ").trim().toUpperCase();
+    const operation = normalized.match(/^(CREATE\s+TABLE|SELECT|UPDATE|INSERT\s+INTO|DELETE)\b/)?.[1] || "";
+    const tables = unique([...normalized.matchAll(/\b(?:FROM|JOIN|UPDATE|INTO|REFERENCES|CREATE\s+TABLE)\s*(?:\(\s*)*\[?([A-Z][A-Z0-9_]*)\]?/g)]
+      .map((match) => match[1]).filter((name) => name !== "SELECT")).sort();
     const clauses = [];
     [
       ["WHERE", /\bWHERE\b/], ["JOIN", /\b(?:INNER|LEFT|RIGHT)?\s*JOIN\b/], ["LEFT JOIN", /\bLEFT\s+JOIN\b/],
@@ -173,10 +191,11 @@
     const functions = ["COUNT", "SUM", "AVG", "IIF"].filter((name) => new RegExp(`\\b${name}\\s*\\(`).test(normalized));
     const selectCount = (normalized.match(/\bSELECT\b/g) || []).length;
     const minimumSubqueries = Math.max(0, selectCount - (operation === "SELECT" ? 1 : 0));
-    const dateBounds = [...normalized.matchAll(/#(\d{4}-\d{2}-\d{2})#/g)].map((match) => match[1]);
+    const dateBounds = [...raw.matchAll(/#(\d{4}-\d{2}-\d{2})#/g)].map((match) => match[1]);
     let depth = 0;
     let balanced = true;
     let inString = false;
+    let statementEnd = -1;
     for (let i = 0; i < raw.length; i += 1) {
       if (raw[i] === "'") {
         if (inString && raw[i + 1] === "'") i += 1;
@@ -185,15 +204,17 @@
       else if (!inString && raw[i] === ")") {
         depth -= 1;
         if (depth < 0) balanced = false;
-      }
+      } else if (!inString && raw[i] === ";" && statementEnd < 0) statementEnd = i;
     }
     if (depth !== 0 || inString) balanced = false;
-    return { operation, tables, clauses, functions, minimumSubqueries, dateBounds, balanced, normalized };
+    const singleStatement = statementEnd < 0 || !raw.slice(statementEnd + 1).trim();
+    return { operation, tables, clauses, functions, minimumSubqueries, dateBounds, balanced, singleStatement };
   }
 
   function sqlRequirements(expected, actual) {
     const requirements = [];
-    requirements.push({ ok: actual.operation === expected.operation, label: `Statement begins with ${expected.operation || "the required operation"}` });
+    requirements.push({ ok: actual.operation === expected.operation, label: `Starts with ${expected.operation || "the required operation"}` });
+    requirements.push({ ok: actual.singleStatement, label: actual.singleStatement ? "One SQL statement only" : "Remove text or additional statements after the first semicolon" });
     if (expected.tables.length) {
       const missing = expected.tables.filter((table) => !actual.tables.includes(table));
       requirements.push({ ok: missing.length === 0, label: missing.length ? `Required table references missing: ${missing.join(", ")}` : `Required tables referenced: ${expected.tables.join(", ")}` });
@@ -264,6 +285,8 @@
     $("revealSql").textContent = "Reveal model";
     $("revealSql").setAttribute("aria-expanded", "false");
     $("sqlModelCode").textContent = item.modelSql;
+    $("sqlModelNote").textContent = item.modelNote || "";
+    $("sqlModelNote").classList.toggle("is-hidden", !item.modelNote);
     $("sqlPrev").disabled = sqlIndex === 0;
     $("sqlNext").disabled = sqlIndex === DATA.sql.length - 1;
   }
@@ -280,10 +303,10 @@
     const requirements = sqlRequirements(item.features, analyseSql(text));
     const passed = requirements.filter((entry) => entry.ok).length;
     const complete = passed === requirements.length;
-    $("sqlFeedback").className = `feedback-panel ${complete ? "is-good" : "is-warning"}`;
+    $("sqlFeedback").className = `feedback-panel ${complete ? "is-review" : "is-warning"}`;
     $("sqlFeedback").innerHTML = `
-      <strong>${complete ? "The major structural features are present." : `${passed} of ${requirements.length} structural checks passed.`}</strong>
-      <p>This is formative structure feedback. Check field logic and expected results against the model.</p>
+      <strong>${complete ? "Structural cues found — answer not verified." : `${passed} of ${requirements.length} structural cues found — review your SQL.`}</strong>
+      <p>This checker does not run Access or verify field names, join conditions, filters, thresholds, calculations, or results. Compare your answer with the model and source paper.</p>
       <ul class="feedback-list">${requirements.map((entry) => `<li><span class="status-icon ${entry.ok ? "yes" : "no"}">${entry.ok ? "✓" : "×"}</span><span>${escapeHtml(entry.label)}</span></li>`).join("")}</ul>`;
   }
 

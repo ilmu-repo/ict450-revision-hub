@@ -201,6 +201,7 @@ input, select, textarea {
 .button-row { margin-top: 12px; }
 .feedback-panel, .model-panel { margin-top: 18px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; }
 .feedback-panel.is-good { border-color: #84c6b2; background: var(--green-soft); }
+.feedback-panel.is-review { border-color: #86abd0; background: #f2f7fb; }
 .feedback-panel.is-warning { border-color: #e2bf65; background: #fff9e8; }
 .feedback-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 7px; }
 .feedback-list li { display: grid; grid-template-columns: 23px 1fr; gap: 8px; align-items: start; }
@@ -208,6 +209,7 @@ input, select, textarea {
 .status-icon.yes { background: var(--green); }
 .status-icon.no { background: var(--red); }
 .model-panel { border-color: #86abd0; background: #f2f7fb; }
+.model-note { margin: 14px 0 0; padding: 12px 14px; border-left: 4px solid var(--blue); border-radius: 4px; background: #fff; color: var(--ink); line-height: 1.5; }
 .model-heading { display: flex; justify-content: space-between; align-items: center; }
 .copy-button { padding: 6px 10px; border: 1px solid var(--line); color: var(--navy); background: #fff; }
 .source-paper-link {
