@@ -1,6 +1,6 @@
 (() => {
   "use strict";
-  const RELEASE = "2026.10.03-r44";
+  const RELEASE = "2026.10.03-r45";
   const $ = (id) => document.getElementById(id);
   const escapeHtml = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 
@@ -27,8 +27,8 @@
   ];
 
   const interactiveTools = [
-    {id:"GUIDE-PRACTICE",title:"ICT450 Practice Studio",meta:"122 question parts",description:"Search the question bank, write SQL, use eight interactive ERD builders and review seven past-paper checklist cases.",href:"06-interactive-practice/index.html",format:"Offline app"},
-    {id:"GUIDE-RECALL",title:"Chapter Quizzes and Flashcards",meta:"96 activities · 160 cards",description:"Complete formal chapter quizzes, study focused memory cards and keep separate local progress signals.",href:"08-revision/index.html",format:"Offline app"},
+    {id:"GUIDE-PRACTICE",title:"ICT450 Practice Studio",meta:"122 question parts",description:"Search the question bank, write SQL, use eight interactive ERD builders and review seven past-paper checklist cases.",href:"06-interactive-practice/index.html",format:"Interactive tool"},
+    {id:"GUIDE-RECALL",title:"Chapter Quizzes and Flashcards",meta:"96 activities · 160 cards",description:"Complete formal chapter quizzes, study focused memory cards and keep separate local progress signals.",href:"08-revision/index.html",format:"Interactive tool"},
   ];
   const studyMaterials = [...mainReferences, ...additionalNotes, ...interactiveTools];
 
@@ -115,8 +115,9 @@
   renderResources(); renderStartingPoint(); bind();
   const initial=location.hash.slice(1); if(initial&&(initial === "guides"||document.querySelector(`[data-view="${initial}"]`))) show(initial);
   if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
-    navigator.serviceWorker.register(`sw.js?v=${RELEASE}`).catch(() => {
-      // The downloaded-folder version remains fully usable without a worker.
-    });
+    navigator.serviceWorker.getRegistration("./").then((registration) => registration?.unregister()).catch(() => {});
+  }
+  if ("caches" in window) {
+    caches.keys().then((keys) => Promise.all(keys.filter((key) => key.startsWith("ict450-revision-hub-")).map((key) => caches.delete(key)))).catch(() => {});
   }
 })();
