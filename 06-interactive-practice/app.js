@@ -24,9 +24,11 @@
   function loadState() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      const practiceIds = new Set(DATA.practice.map((item) => item.id));
+      const sqlIds = new Set(DATA.sql.map((item) => item.id));
       return {
-        reviewed: Array.isArray(saved.reviewed) ? saved.reviewed : [],
-        sqlAttempted: Array.isArray(saved.sqlAttempted) ? saved.sqlAttempted : [],
+        reviewed: Array.isArray(saved.reviewed) ? saved.reviewed.filter((id) => practiceIds.has(id)) : [],
+        sqlAttempted: Array.isArray(saved.sqlAttempted) ? saved.sqlAttempted.filter((id) => sqlIds.has(id)) : [],
       };
     } catch {
       return { reviewed: [], sqlAttempted: [] };
@@ -86,7 +88,6 @@
       theory_and_applied_interpretation: "Theory and application",
       normalization_problem: "Normalization",
       sql_construction: "SQL construction",
-      erd_design: "ERD design",
     };
     return labels[type] || type.replaceAll("_", " ");
   }
@@ -140,6 +141,7 @@
       <span class="detail-meta">${escapeHtml(item.id)}</span>
       <h2>${escapeHtml(item.topic)}</h2>
       <p class="topic-line">${escapeHtml(item.session)} · Chapter ${item.chapters.join(", ")} · ${item.marks} marks</p>
+      ${item.context ? `<details class="case-context" open><summary>Case information</summary><pre>${escapeHtml(item.context)}</pre></details>` : ""}
       <div class="prompt-box">${escapeHtml(item.prompt)}</div>
       <button class="primary-button" id="revealLibraryAnswer" type="button" aria-expanded="false">Reveal model response</button>
       <div class="answer-panel is-hidden" id="libraryAnswer"><strong>Model response or marking checklist</strong><pre>${escapeHtml(item.answer)}</pre></div>`;
@@ -274,6 +276,9 @@
     $("sqlMarks").textContent = `${item.marks} marks`;
     $("sqlPaperLink").href = EXAM_PAPERS[item.session] || "#";
     $("sqlPaperLink").classList.toggle("is-hidden", !EXAM_PAPERS[item.session]);
+    $("sqlContextText").textContent = item.context || "";
+    $("sqlContext").classList.toggle("is-hidden", !item.context);
+    $("sqlContext").open = true;
     $("sqlEditor").value = "";
     $("sqlFeedback").className = "feedback-panel";
     $("sqlFeedback").innerHTML = `<strong>Ready when you are.</strong><p>The checker will examine the structure of your attempt.</p>`;

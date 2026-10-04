@@ -2,7 +2,7 @@ window.ICT450_PRACTICE_DATA = {
   "meta": {
     "subject": "ICT450",
     "title": "Database Design and Development",
-    "practiceCount": 122,
+    "practiceCount": 108,
     "sqlCount": 33
   },
   "practice": [
@@ -67,8 +67,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "theory_and_applied_interpretation",
       "difficulty": "intermediate",
       "marks": 6,
-      "prompt": "Identify FOUR candidate keys and choose ONE primary key from the CUSTOMER spreadsheet.",
-      "answer": "Candidate keys: CustomerNo, CustomerIC, Email, and the composite (FirstName, LastName),\nassuming each is unique and non-null in the business rules.\nPrimary key: CustomerNo.\nReason: it is a single, short, stable, non-null identifier created specifically to identify each\ncustomer; names can repeat/change and IC/email may be sensitive or mutable.\nTip: A candidate key must be minimal: it uniquely identifies a row and contains no unnecessary\nattribute. The selected primary key should be stable, simple, unique, and never null."
+      "prompt": "Using the customer spreadsheet, identify FOUR candidate keys. Select ONE as the primary key and justify your choice.",
+      "answer": "Candidate keys: CustomerNo, CustomerIC, Email, and the composite (FirstName, LastName),\nassuming each is unique and non-null in the business rules.\nPrimary key: CustomerNo.\nReason: it is a single, short, stable, non-null identifier created specifically to identify each\ncustomer; names can repeat/change and IC/email may be sensitive or mutable.\nTip: A candidate key must be minimal: it uniquely identifies a row and contains no unnecessary\nattribute. The selected primary key should be stable, simple, unique, and never null.",
+      "context": "Customer spreadsheet columns: Customer No, Customer IC, First Name, Last Name and Email. Evaluate the displayed sample as a customer relation; state any uniqueness assumption used for a proposed candidate key."
     },
     {
       "id": "FEB23-Q2-A",
@@ -115,8 +116,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "theory_and_applied_interpretation",
       "difficulty": "intermediate",
       "marks": 4,
-      "prompt": "Identify rows that fail the STAFF table rules.",
-      "answer": "StaffID 3033: Salary 11000 violates the permitted salary range of 3000-10000.\nStaffID 3034: Salary “150a” violates the numeric data type/domain for Salary.\nTip: Domain integrity checks both type and allowed range. A value may be numeric but still invalid\nbecause it falls outside the permitted range."
+      "prompt": "Identify the STAFF rows that cannot be inserted under the stated field types and salary rule. Explain the violated property for each row.",
+      "answer": "StaffID 3033: Salary 11000 violates the permitted salary range of 3000-10000.\nStaffID 3034: Salary “150a” violates the numeric data type/domain for Salary.\nTip: Domain integrity checks both type and allowed range. A value may be numeric but still invalid\nbecause it falls outside the permitted range.",
+      "context": "Qish Boutique STAFF fields: StaffID (number), StaffName (text), Salary (number, allowed range 3000-10000), DepartmentID (number).\nStaffID | StaffName | Salary | DepartmentID\n3033 | Siti Ziana | 11000 | 10\n3035 | Fazurah | 3000 | 20\n3036 | Haqim Ahmad | 6000 | 20\n3034 | Ahmad Daniel | 150a | 10"
     },
     {
       "id": "FEB23-Q3-A",
@@ -130,7 +132,8 @@ window.ICT450_PRACTICE_DATA = {
       "difficulty": "advanced",
       "marks": 3,
       "prompt": "Define normalization and explain its importance.",
-      "answer": "Normalization is the process of evaluating and correcting table structures to minimize data\nredundancy and eliminate data anomalies.\nIt improves integrity and consistency by ensuring that each fact is stored in the correct table and\nupdated in one place.\nIt reduces insertion, update, and deletion anomalies and normally produces well-structured\ntables up to 3NF for business databases."
+      "answer": "Normalization is the process of evaluating and correcting table structures to minimize data\nredundancy and eliminate data anomalies.\nIt improves integrity and consistency by ensuring that each fact is stored in the correct table and\nupdated in one place.\nIt reduces insertion, update, and deletion anomalies and normally produces well-structured\ntables up to 3NF for business databases.",
+      "context": "BOARDING (CustIC, CustFirstName, CustLastName, {FlightID, PlaneType, Capacity, DestinationID, DestinationName}, DateDepart, DateArrive, TimeDepart, TimeArrive, Seat)\nThe braces show a repeating flight group. One customer may visit many destinations, and a destination may be visited by many customers."
     },
     {
       "id": "FEB23-Q3-B",
@@ -144,7 +147,8 @@ window.ICT450_PRACTICE_DATA = {
       "difficulty": "advanced",
       "marks": 6,
       "prompt": "Describe THREE requirements for a good normalized set of tables with examples.",
-      "answer": "1NF: no repeating groups and each cell contains one atomic value. Example: store one FlightID\nper boarding row, not a list of flights in one cell.\n2NF: every non-key attribute depends on the whole composite key. Example: CustFirstName\ndepends only on CustIC and must be moved to CUSTOMER.\n3NF: no transitive dependency between non-key attributes. Example: DestinationID determines\nDestinationName, so destination details belong in DESTINATION."
+      "answer": "1NF: no repeating groups and each cell contains one atomic value. Example: store one FlightID\nper boarding row, not a list of flights in one cell.\n2NF: every non-key attribute depends on the whole composite key. Example: CustFirstName\ndepends only on CustIC and must be moved to CUSTOMER.\n3NF: no transitive dependency between non-key attributes. Example: DestinationID determines\nDestinationName, so destination details belong in DESTINATION.",
+      "context": "BOARDING (CustIC, CustFirstName, CustLastName, {FlightID, PlaneType, Capacity, DestinationID, DestinationName}, DateDepart, DateArrive, TimeDepart, TimeArrive, Seat)\nThe braces show a repeating flight group. One customer may visit many destinations, and a destination may be visited by many customers."
     },
     {
       "id": "FEB23-Q3-C",
@@ -157,8 +161,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "normalization_problem",
       "difficulty": "advanced",
       "marks": 11,
-      "prompt": "Normalize BOARDING to 3NF and identify keys and dependencies.",
-      "answer": "Keys and dependencies\nNotation: underlined attribute = primary key; italic attribute with * = foreign key.\n1NF schema: BOARDING_1NF (CustIC, FlightID, CustFirstName, CustLastName, PlaneType, Capacity, DestinationID,\nDestinationName, DateDepart, DateArrive, TimeDepart, TimeArrive, Seat)\nPrimary key(s)\n• CustIC + FlightID (composite primary key).\nFull dependency\n• (CustIC, FlightID) -> Seat\nPartial dependencies\n• CustIC -> CustFirstName, CustLastName\n• FlightID -> PlaneType, DestinationID, DateDepart, DateArrive, TimeDepart, TimeArrive\nTransitive dependencies\n• PlaneType -> Capacity\n• DestinationID -> DestinationName\nNormalization steps\n1NF (First Normal Form)\nEliminate repeating groups, make every attribute atomic, and identify the primary key.\nBOARDING_1NF (CustIC, FlightID, CustFirstName, CustLastName, PlaneType, Capacity, DestinationID, DestinationName,\nDateDepart, DateArrive, TimeDepart, TimeArrive, Seat) - One atomic customer-flight row; composite PK resolves the repeating\nflight group.\n2NF (Second Normal Form)\nThe relation must be in 1NF. Remove partial dependencies so every non-key attribute depends on the whole composite key.\nCUSTOMER (CustIC, CustFirstName, CustLastName) - Removes the CustIC partial dependency.\nFLIGHT_2NF (FlightID, PlaneType, Capacity, DestinationID, DestinationName, DateDepart, DateArrive, TimeDepart,\nTimeArrive) - Removes the FlightID partial dependency.\nBOARDING (CustIC*, FlightID*, Seat) - Seat depends on the whole composite key.\n3NF (Third Normal Form)\nThe relations must be in 2NF. Remove transitive dependencies so non-key attributes depend on nothing but the key.\nCUSTOMER (CustIC, CustFirstName, CustLastName) - Already in 3NF.\nPLANE (PlaneType, Capacity) - Removes PlaneType -> Capacity.\nDESTINATION (DestinationID, DestinationName) - Removes DestinationID -> DestinationName.\nFLIGHT (FlightID, PlaneType*, DestinationID*, DateDepart, DateArrive, TimeDepart, TimeArrive) - References PLANE and\nDESTINATION.\nBOARDING (CustIC*, FlightID*, Seat) - Final associative relation.\nTip: Look for “identifier -> description” pairs. DestinationID -> DestinationName and PlaneType ->\nCapacity are classic transitive dependencies that require separate tables."
+      "prompt": "Normalize the BOARDING structure to third normal form (3NF). Show the 1NF, 2NF and 3NF stages and identify the primary key, partial dependencies and transitive dependencies.",
+      "answer": "Keys and dependencies\nNotation: underlined attribute = primary key; italic attribute with * = foreign key.\n1NF schema: BOARDING_1NF (CustIC, FlightID, CustFirstName, CustLastName, PlaneType, Capacity, DestinationID,\nDestinationName, DateDepart, DateArrive, TimeDepart, TimeArrive, Seat)\nPrimary key(s)\n• CustIC + FlightID (composite primary key).\nFull dependency\n• (CustIC, FlightID) -> Seat\nPartial dependencies\n• CustIC -> CustFirstName, CustLastName\n• FlightID -> PlaneType, DestinationID, DateDepart, DateArrive, TimeDepart, TimeArrive\nTransitive dependencies\n• PlaneType -> Capacity\n• DestinationID -> DestinationName\nNormalization steps\n1NF (First Normal Form)\nEliminate repeating groups, make every attribute atomic, and identify the primary key.\nBOARDING_1NF (CustIC, FlightID, CustFirstName, CustLastName, PlaneType, Capacity, DestinationID, DestinationName,\nDateDepart, DateArrive, TimeDepart, TimeArrive, Seat) - One atomic customer-flight row; composite PK resolves the repeating\nflight group.\n2NF (Second Normal Form)\nThe relation must be in 1NF. Remove partial dependencies so every non-key attribute depends on the whole composite key.\nCUSTOMER (CustIC, CustFirstName, CustLastName) - Removes the CustIC partial dependency.\nFLIGHT_2NF (FlightID, PlaneType, Capacity, DestinationID, DestinationName, DateDepart, DateArrive, TimeDepart,\nTimeArrive) - Removes the FlightID partial dependency.\nBOARDING (CustIC*, FlightID*, Seat) - Seat depends on the whole composite key.\n3NF (Third Normal Form)\nThe relations must be in 2NF. Remove transitive dependencies so non-key attributes depend on nothing but the key.\nCUSTOMER (CustIC, CustFirstName, CustLastName) - Already in 3NF.\nPLANE (PlaneType, Capacity) - Removes PlaneType -> Capacity.\nDESTINATION (DestinationID, DestinationName) - Removes DestinationID -> DestinationName.\nFLIGHT (FlightID, PlaneType*, DestinationID*, DateDepart, DateArrive, TimeDepart, TimeArrive) - References PLANE and\nDESTINATION.\nBOARDING (CustIC*, FlightID*, Seat) - Final associative relation.\nTip: Look for “identifier -> description” pairs. DestinationID -> DestinationName and PlaneType ->\nCapacity are classic transitive dependencies that require separate tables.",
+      "context": "BOARDING (CustIC, CustFirstName, CustLastName, {FlightID, PlaneType, Capacity, DestinationID, DestinationName}, DateDepart, DateArrive, TimeDepart, TimeArrive, Seat)\nThe braces show a repeating flight group. One customer may visit many destinations, and a destination may be visited by many customers."
     },
     {
       "id": "FEB23-Q4-A",
@@ -171,8 +176,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Create table DELIVERY.",
-      "answer": "Access SQL using explicit JOIN\nCREATE TABLE DELIVERY (\nPackageID TEXT(20) CONSTRAINT PK_DELIVERY PRIMARY KEY,\nDateDeliver DATETIME NOT NULL,\nRiderID TEXT(20) NOT NULL,\nICNum TEXT(20) NOT NULL,\nStatus TEXT(15) NOT NULL,\nCONSTRAINT FK_DELIVERY_RIDER FOREIGN KEY (RiderID)\nREFERENCES RIDER (RiderID),\nCONSTRAINT FK_DELIVERY_CUSTOMER FOREIGN KEY (ICNum)\nREFERENCES CUSTOMER (ICNum)\n);\n-- In Access table design, set Status Validation Rule to:\n-- In ('delivered','unsuccessful')\nAlternative Access SQL\nCREATE TABLE DELIVERY (\nPackageID TEXT(20) PRIMARY KEY,\nDateDeliver DATETIME NOT NULL,\nRiderID TEXT(20) NOT NULL,\nICNum TEXT(20) NOT NULL,\nStatus TEXT(15) NOT NULL,\nFOREIGN KEY (RiderID) REFERENCES RIDER (RiderID),\nFOREIGN KEY (ICNum) REFERENCES CUSTOMER (ICNum)\n);\n-- In Access Table Design, set the Status Validation Rule to:\n-- In ('delivered','unsuccessful')"
+      "prompt": "Write a Microsoft Access SQL statement to create the DELIVERY table in the given relational schema.",
+      "answer": "Access SQL using explicit JOIN\nCREATE TABLE DELIVERY (\nPackageID TEXT(20) CONSTRAINT PK_DELIVERY PRIMARY KEY,\nDateDeliver DATETIME NOT NULL,\nRiderID TEXT(20) NOT NULL,\nICNum TEXT(20) NOT NULL,\nStatus TEXT(15) NOT NULL,\nCONSTRAINT FK_DELIVERY_RIDER FOREIGN KEY (RiderID)\nREFERENCES RIDER (RiderID),\nCONSTRAINT FK_DELIVERY_CUSTOMER FOREIGN KEY (ICNum)\nREFERENCES CUSTOMER (ICNum)\n);\n-- In Access table design, set Status Validation Rule to:\n-- In ('delivered','unsuccessful')\nAlternative Access SQL\nCREATE TABLE DELIVERY (\nPackageID TEXT(20) PRIMARY KEY,\nDateDeliver DATETIME NOT NULL,\nRiderID TEXT(20) NOT NULL,\nICNum TEXT(20) NOT NULL,\nStatus TEXT(15) NOT NULL,\nFOREIGN KEY (RiderID) REFERENCES RIDER (RiderID),\nFOREIGN KEY (ICNum) REFERENCES CUSTOMER (ICNum)\n);\n-- In Access Table Design, set the Status Validation Rule to:\n-- In ('delivered','unsuccessful')",
+      "context": "Ninja Package relational schema:\nRIDER (RiderID, RiderName, StartDate, HpNum)\nCUSTOMER (ICNum, CustName, CustPhone, CustAddress)\nDELIVERY (PackageID, DateDeliver, RiderID, ICNum, Status)\nStatus is either delivered or unsuccessful."
     },
     {
       "id": "FEB23-Q4-B",
@@ -185,8 +191,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Find the total number of distinct customers who successfully received packages in November 2022.",
-      "answer": "Access SQL using explicit JOIN\nSELECT Count(*) AS [Total Customers]\nFROM (\nSELECT DISTINCT ICNum\nFROM DELIVERY\nWHERE Status = 'delivered'\nAND DateDeliver >= #2022-11-01#\nAND DateDeliver < #2022-12-01#\n) AS X;\nAlternative Access SQL\n-- Query 1: list each delivered customer once.\nSELECT DISTINCT ICNum\nFROM DELIVERY\nWHERE Status = 'delivered'\nAND DateDeliver >= #2022-11-01# AND DateDeliver < #2022-12-01#;\n-- Save Query 1 as Q_DeliveredCustomersNov2022.\n-- Query 2: count the rows in the saved query.\nSELECT Count(ICNum) AS [Total Customers]\nFROM Q_DeliveredCustomersNov2022;\nAccess note: Use the complete Access SQL answer shown above; a saved-query sequence is acceptable when it returns the same result."
+      "prompt": "Write a Microsoft Access SQL query to count customers who successfully received at least one package in November 2022.",
+      "answer": "Access SQL using explicit JOIN\nSELECT Count(*) AS [Total Customers]\nFROM (\nSELECT DISTINCT ICNum\nFROM DELIVERY\nWHERE Status = 'delivered'\nAND DateDeliver >= #2022-11-01#\nAND DateDeliver < #2022-12-01#\n) AS X;\nAlternative Access SQL\n-- Query 1: list each delivered customer once.\nSELECT DISTINCT ICNum\nFROM DELIVERY\nWHERE Status = 'delivered'\nAND DateDeliver >= #2022-11-01# AND DateDeliver < #2022-12-01#;\n-- Save Query 1 as Q_DeliveredCustomersNov2022.\n-- Query 2: count the rows in the saved query.\nSELECT Count(ICNum) AS [Total Customers]\nFROM Q_DeliveredCustomersNov2022;\nAccess note: Use the complete Access SQL answer shown above; a saved-query sequence is acceptable when it returns the same result.",
+      "context": "Ninja Package relational schema:\nRIDER (RiderID, RiderName, StartDate, HpNum)\nCUSTOMER (ICNum, CustName, CustPhone, CustAddress)\nDELIVERY (PackageID, DateDeliver, RiderID, ICNum, Status)\nStatus is either delivered or unsuccessful."
     },
     {
       "id": "FEB23-Q4-C",
@@ -199,8 +206,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Find the total unsuccessful deliveries for each rider.",
-      "answer": "Access SQL - complete model answer\nSELECT R.RiderID, R.RiderName,\n       Sum(IIf(D.Status='unsuccessful',1,0)) AS [Total Unsuccessful]\nFROM RIDER AS R LEFT JOIN DELIVERY AS D ON R.RiderID = D.RiderID\nGROUP BY R.RiderID, R.RiderName;\nLEFT JOIN retains riders whose count is zero."
+      "prompt": "Write a Microsoft Access SQL query to show the number of unsuccessful deliveries for each rider.",
+      "answer": "Access SQL - complete model answer\nSELECT R.RiderID, R.RiderName,\n       Sum(IIf(D.Status='unsuccessful',1,0)) AS [Total Unsuccessful]\nFROM RIDER AS R LEFT JOIN DELIVERY AS D ON R.RiderID = D.RiderID\nGROUP BY R.RiderID, R.RiderName;\nLEFT JOIN retains riders whose count is zero.",
+      "context": "Ninja Package relational schema:\nRIDER (RiderID, RiderName, StartDate, HpNum)\nCUSTOMER (ICNum, CustName, CustPhone, CustAddress)\nDELIVERY (PackageID, DateDeliver, RiderID, ICNum, Status)\nStatus is either delivered or unsuccessful."
     },
     {
       "id": "FEB23-Q4-D",
@@ -213,8 +221,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "List rider names that have made at least one delivery.",
-      "answer": "Access SQL using explicit JOIN\nSELECT DISTINCT R.RiderName\nFROM RIDER AS R\nINNER JOIN DELIVERY AS D ON R.RiderID = D.RiderID;\nAlternative Access SQL\nSELECT DISTINCT R.RiderName\nFROM RIDER R, DELIVERY D\nWHERE R.RiderID = D.RiderID;"
+      "prompt": "Write a Microsoft Access SQL query to list the names of riders who have made at least one delivery.",
+      "answer": "Access SQL using explicit JOIN\nSELECT DISTINCT R.RiderName\nFROM RIDER AS R\nINNER JOIN DELIVERY AS D ON R.RiderID = D.RiderID;\nAlternative Access SQL\nSELECT DISTINCT R.RiderName\nFROM RIDER R, DELIVERY D\nWHERE R.RiderID = D.RiderID;",
+      "context": "Ninja Package relational schema:\nRIDER (RiderID, RiderName, StartDate, HpNum)\nCUSTOMER (ICNum, CustName, CustPhone, CustAddress)\nDELIVERY (PackageID, DateDeliver, RiderID, ICNum, Status)\nStatus is either delivered or unsuccessful."
     },
     {
       "id": "FEB23-Q4-E",
@@ -227,36 +236,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Produce Package ID, Customer Name, and Status.",
-      "answer": "Access SQL using explicit JOIN\nSELECT D.PackageID AS [Package ID],\nC.CustName AS [Customer Name],\nD.Status\nFROM CUSTOMER AS C\nINNER JOIN DELIVERY AS D ON C.ICNum = D.ICNum;\nAlternative Access SQL\nSELECT D.PackageID AS [Package ID],\nC.CustName AS [Customer Name],\nD.Status\nFROM CUSTOMER C, DELIVERY D\nWHERE C.ICNum = D.ICNum;\nTip: SQL answers are marked line by line. Even when you are unsure, write at least one correct line.\nStart with SELECT (or CREATE/UPDATE), then add FROM, WHERE or JOIN, GROUP BY, HAVING, and\nORDER BY as far as you can. Each correct line may earn a mark, so do not leave the SQL answer blank.\nTechnical reminder: Count customers and deliveries carefully. 'Number of customers' normally requires\nunique customer IDs; 'number of deliveries' counts package/delivery rows."
-    },
-    {
-      "id": "FEB23-Q5-A",
-      "parentId": "FEB23-Q5",
-      "session": "February 2023",
-      "chapters": [
-        4
-      ],
-      "topic": "Construct a boutique-distribution ERD and propose reports",
-      "type": "erd_design",
-      "difficulty": "advanced",
-      "marks": 16,
-      "prompt": "Construct the Chanteq Boutique Crow's Foot ERD.",
-      "answer": "The ERD below uses direct Crow's Foot symbols at every relationship end: a circle means optional (minimum 0), a bar means\none, and the crow's foot means many. Read the two ends together to determine connectivity and cardinality.\nEntity and key checklist\nEntity / required key structure\nPRODUCT(ProductID PK, ProductName), SKU(SKUNumber PK, SKUDescription, ProductID FK,\nColorID FK), COLOR(ColorID PK, ColorDescription).\nRETAILER(RetailerID PK, RetailerName, PhoneNumber) and STORE with composite PK\n(RetailerID, StoreID) plus Address.\nRETAILER_PRODUCT associative entity with composite PK/FKs.\nRelationship and cardinality checklist\nRequired relationship\nPRODUCT 1 : 1 SKU; each product has one distinct SKU and each SKU belongs to one product.\nCOLOR 1 : 0..M SKU; every SKU has one color, while a color may be unused.\nRETAILER M:N PRODUCT through RETAILER_PRODUCT; retailer has one or more products and a\nproduct has more than one retailer.\nRETAILER 1 : 1..M STORE; STORE is existence-dependent on RETAILER.\nSKU.ProductID is unique and non-null. Requiring every PRODUCT to have a SKU also needs a creation/workflow rule."
-    },
-    {
-      "id": "FEB23-Q5-B",
-      "parentId": "FEB23-Q5",
-      "session": "February 2023",
-      "chapters": [
-        4
-      ],
-      "topic": "Construct a boutique-distribution ERD and propose reports",
-      "type": "erd_design",
-      "difficulty": "advanced",
-      "marks": 4,
-      "prompt": "Explain TWO reports generated from the ERD.",
-      "answer": "Product/SKU catalogue report: product, SKU description, and assigned color.\nRetailer distribution and shipping report: retailer, contracted products, store IDs, and store\naddresses.\nTip: When a child is identified using its parent key plus a local identifier, model it as an existence-\ndependent/weak entity with a composite primary key—for example, (RetailerID, StoreID)."
+      "prompt": "Write a Microsoft Access SQL query to display Package ID, Customer Name and delivery Status.",
+      "answer": "Access SQL using explicit JOIN\nSELECT D.PackageID AS [Package ID],\nC.CustName AS [Customer Name],\nD.Status\nFROM CUSTOMER AS C\nINNER JOIN DELIVERY AS D ON C.ICNum = D.ICNum;\nAlternative Access SQL\nSELECT D.PackageID AS [Package ID],\nC.CustName AS [Customer Name],\nD.Status\nFROM CUSTOMER C, DELIVERY D\nWHERE C.ICNum = D.ICNum;\nTip: SQL answers are marked line by line. Even when you are unsure, write at least one correct line.\nStart with SELECT (or CREATE/UPDATE), then add FROM, WHERE or JOIN, GROUP BY, HAVING, and\nORDER BY as far as you can. Each correct line may earn a mark, so do not leave the SQL answer blank.\nTechnical reminder: Count customers and deliveries carefully. 'Number of customers' normally requires\nunique customer IDs; 'number of deliveries' counts package/delivery rows.",
+      "context": "Ninja Package relational schema:\nRIDER (RiderID, RiderName, StartDate, HpNum)\nCUSTOMER (ICNum, CustName, CustPhone, CustAddress)\nDELIVERY (PackageID, DateDeliver, RiderID, ICNum, Status)\nStatus is either delivered or unsuccessful."
     },
     {
       "id": "JULY23-Q1-A",
@@ -303,8 +285,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "theory_and_applied_interpretation",
       "difficulty": "intermediate",
       "marks": 6,
-      "prompt": "Explain THREE characteristics of a relational table violated by the sample STUDENT table.",
-      "answer": "Column names must be distinct. Two columns are both named “Name”, so the attributes are\nambiguous.\nAll values in a column must conform to the same data format/domain. StudID contains numeric\nvalues and an alphanumeric value (2023455abc).\nEach row-column intersection must contain one atomic value. “Modern Dance, Singing” and\n“Modern Dance, Playing Drum” contain multiple skills in one cell."
+      "prompt": "Explain THREE characteristics of a relational table that the sample STUDENT table violates.",
+      "answer": "Column names must be distinct. Two columns are both named “Name”, so the attributes are\nambiguous.\nAll values in a column must conform to the same data format/domain. StudID contains numeric\nvalues and an alphanumeric value (2023455abc).\nEach row-column intersection must contain one atomic value. “Modern Dance, Singing” and\n“Modern Dance, Playing Drum” contain multiple skills in one cell.",
+      "context": "Art and culture club STUDENT sample columns: StudID | Name | Name | Skill.\n2023123456 | Izyan | Mimiey Ahmad | Modern Dance, Singing\n2023456789 | Jeonghan | Lee | Traditional Dance\n2023455abc | Azri | [blank] | Modern Dance, Playing Drum"
     },
     {
       "id": "JULY23-Q1-C-II",
@@ -319,8 +302,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "theory_and_applied_interpretation",
       "difficulty": "intermediate",
       "marks": 6,
-      "prompt": "Explain a course of action for each violation.",
-      "answer": "Rename the two Name columns as FirstName and LastName so every attribute has a unique,\nmeaningful name.\nDefine and enforce a StudID domain/data type and validation rule; reject or correct values that do\nnot follow the required format.\nMove skills to SKILL and STUDENT_SKILL tables so each skill is stored as one atomic value per\nrow.\nTip: For relational-table questions, check eight characteristics systematically: two-dimensional\nstructure, one entity per row, distinct column names, one value per cell, consistent formats, valid domains,\nirrelevant row/column order, and a key that uniquely identifies each row."
+      "prompt": "For each violation in the sample STUDENT table, explain a suitable corrective action.",
+      "answer": "Rename the two Name columns as FirstName and LastName so every attribute has a unique,\nmeaningful name.\nDefine and enforce a StudID domain/data type and validation rule; reject or correct values that do\nnot follow the required format.\nMove skills to SKILL and STUDENT_SKILL tables so each skill is stored as one atomic value per\nrow.\nTip: For relational-table questions, check eight characteristics systematically: two-dimensional\nstructure, one entity per row, distinct column names, one value per cell, consistent formats, valid domains,\nirrelevant row/column order, and a key that uniquely identifies each row.",
+      "context": "Art and culture club STUDENT sample columns: StudID | Name | Name | Skill. The sample includes an alphanumeric StudID (2023455abc) and cells listing more than one skill, such as “Modern Dance, Singing”."
     },
     {
       "id": "JULY23-Q2-A",
@@ -382,7 +366,8 @@ window.ICT450_PRACTICE_DATA = {
       "difficulty": "advanced",
       "marks": 3,
       "prompt": "Define normalization and explain its purpose for the banquet reservation form.",
-      "answer": "Normalization is the process of evaluating and correcting table structures to minimize data\nredundancy and eliminate data anomalies.\nIt improves integrity and consistency by ensuring that each fact is stored in the correct table and\nupdated in one place.\nIt reduces insertion, update, and deletion anomalies and normally produces well-structured\ntables up to 3NF for business databases."
+      "answer": "Normalization is the process of evaluating and correcting table structures to minimize data\nredundancy and eliminate data anomalies.\nIt improves integrity and consistency by ensuring that each fact is stored in the correct table and\nupdated in one place.\nIt reduces insertion, update, and deletion anomalies and normally produces well-structured\ntables up to 3NF for business databases.",
+      "context": "Dewan Cempaka banquet reservation form: ReservationID, ReservationDate, customer Name, Email, Address, PhoneNumber, DateOfBanquet, TypeOfEvent, NumberOfGuests, ArrivalTime, FoodServiceTime, TotalPayment and PaymentType. It also lists repeating MenuCode/MenuName/MenuDescription/Quantity entries and one chosen FacilityCode/FacilityName/FacilityDescription."
     },
     {
       "id": "JULY23-Q3-B",
@@ -396,7 +381,8 @@ window.ICT450_PRACTICE_DATA = {
       "difficulty": "advanced",
       "marks": 6,
       "prompt": "Describe THREE effects of poor database design.",
-      "answer": "Update anomaly: the same menu or facility description is repeated and must be changed in\nseveral rows; missed updates create inconsistency.\nInsertion anomaly: a new menu or facility cannot be stored unless a reservation exists.\nDeletion anomaly: deleting the last reservation using a menu/facility can unintentionally remove\nthe only stored details of that menu/facility."
+      "answer": "Update anomaly: the same menu or facility description is repeated and must be changed in\nseveral rows; missed updates create inconsistency.\nInsertion anomaly: a new menu or facility cannot be stored unless a reservation exists.\nDeletion anomaly: deleting the last reservation using a menu/facility can unintentionally remove\nthe only stored details of that menu/facility.",
+      "context": "Dewan Cempaka banquet reservation form: ReservationID, ReservationDate, customer Name, Email, Address, PhoneNumber, DateOfBanquet, TypeOfEvent, NumberOfGuests, ArrivalTime, FoodServiceTime, TotalPayment and PaymentType. It also lists repeating MenuCode/MenuName/MenuDescription/Quantity entries and one chosen FacilityCode/FacilityName/FacilityDescription."
     },
     {
       "id": "JULY23-Q3-C",
@@ -409,8 +395,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "normalization_problem",
       "difficulty": "advanced",
       "marks": 11,
-      "prompt": "Normalize the banquet reservation structure to 3NF and identify keys and dependencies.",
-      "answer": "UNF and functional dependencies\nKeys and dependencies\nNotation: underlined attribute = primary key; italic attribute with * = foreign key.\n1NF schema: BANQUET_1NF (ReservationID, MenuCode, ReservationDate, CustomerName, Email, Address,\nPhoneNumber, DateOfBanquet, EventType, NumberOfGuests, ArrivalTime, FoodServiceTime, MenuName, MenuDescription,\nQuantity, FacilityCode, FacilityName, FacilityDescription, TotalPayment, PaymentType)\nPrimary key(s)\n• ReservationID + MenuCode (composite primary key).\nFull dependency\n• (ReservationID, MenuCode) -> Quantity\nPartial dependencies\n• ReservationID -> reservation, customer, event, payment and facility attributes\n• MenuCode -> MenuName, MenuDescription\nTransitive dependencies\n• FacilityCode -> FacilityName, FacilityDescription\nNormalization steps\n1NF (First Normal Form)\nEliminate repeating groups, make every attribute atomic, and identify the primary key.\nBANQUET_1NF (ReservationID, MenuCode, ReservationDate, CustomerName, Email, Address, PhoneNumber,\nDateOfBanquet, EventType, NumberOfGuests, ArrivalTime, FoodServiceTime, MenuName, MenuDescription, Quantity,\nFacilityCode, FacilityName, FacilityDescription, TotalPayment, PaymentType) - Store one menu selection per row.\n2NF (Second Normal Form)\nThe relation must be in 1NF. Remove partial dependencies so every non-key attribute depends on the whole composite key.\nRESERVATION_2NF (ReservationID, ReservationDate, CustomerName, Email, Address, PhoneNumber, DateOfBanquet,\nEventType, NumberOfGuests, ArrivalTime, FoodServiceTime, FacilityCode, FacilityName, FacilityDescription, TotalPayment,\nPaymentType) - Removes attributes dependent only on ReservationID.\nMENU (MenuCode, MenuName, MenuDescription) - Removes attributes dependent only on MenuCode.\nRESERVATION_MENU (ReservationID*, MenuCode*, Quantity) - Quantity depends on the whole key.\n3NF (Third Normal Form)\nThe relations must be in 2NF. Remove transitive dependencies so non-key attributes depend on nothing but the key.\nFACILITY (FacilityCode, FacilityName, FacilityDescription) - Removes the facility transitive dependency.\nRESERVATION (ReservationID, ReservationDate, CustomerName, Email, Address, PhoneNumber, DateOfBanquet,\nEventType, NumberOfGuests, ArrivalTime, FoodServiceTime, FacilityCode*, TotalPayment, PaymentType) - Contains\nreservation facts and references FACILITY.\nMENU (MenuCode, MenuName, MenuDescription) - Remains in 3NF.\nRESERVATION_MENU (ReservationID*, MenuCode*, Quantity) - Final associative relation.\nTip: For a form containing a repeating list, begin with the transaction identifier plus the repeating-\nitem identifier as the 1NF composite key. Then test which attributes depend on only one part of that key.\nAssumption: customer details are treated as reservation facts because the source provides no stable CustomerID."
+      "prompt": "Normalize the banquet reservation data to third normal form (3NF). Show the stages and identify keys and relevant dependencies.",
+      "answer": "UNF and functional dependencies\nKeys and dependencies\nNotation: underlined attribute = primary key; italic attribute with * = foreign key.\n1NF schema: BANQUET_1NF (ReservationID, MenuCode, ReservationDate, CustomerName, Email, Address,\nPhoneNumber, DateOfBanquet, EventType, NumberOfGuests, ArrivalTime, FoodServiceTime, MenuName, MenuDescription,\nQuantity, FacilityCode, FacilityName, FacilityDescription, TotalPayment, PaymentType)\nPrimary key(s)\n• ReservationID + MenuCode (composite primary key).\nFull dependency\n• (ReservationID, MenuCode) -> Quantity\nPartial dependencies\n• ReservationID -> reservation, customer, event, payment and facility attributes\n• MenuCode -> MenuName, MenuDescription\nTransitive dependencies\n• FacilityCode -> FacilityName, FacilityDescription\nNormalization steps\n1NF (First Normal Form)\nEliminate repeating groups, make every attribute atomic, and identify the primary key.\nBANQUET_1NF (ReservationID, MenuCode, ReservationDate, CustomerName, Email, Address, PhoneNumber,\nDateOfBanquet, EventType, NumberOfGuests, ArrivalTime, FoodServiceTime, MenuName, MenuDescription, Quantity,\nFacilityCode, FacilityName, FacilityDescription, TotalPayment, PaymentType) - Store one menu selection per row.\n2NF (Second Normal Form)\nThe relation must be in 1NF. Remove partial dependencies so every non-key attribute depends on the whole composite key.\nRESERVATION_2NF (ReservationID, ReservationDate, CustomerName, Email, Address, PhoneNumber, DateOfBanquet,\nEventType, NumberOfGuests, ArrivalTime, FoodServiceTime, FacilityCode, FacilityName, FacilityDescription, TotalPayment,\nPaymentType) - Removes attributes dependent only on ReservationID.\nMENU (MenuCode, MenuName, MenuDescription) - Removes attributes dependent only on MenuCode.\nRESERVATION_MENU (ReservationID*, MenuCode*, Quantity) - Quantity depends on the whole key.\n3NF (Third Normal Form)\nThe relations must be in 2NF. Remove transitive dependencies so non-key attributes depend on nothing but the key.\nFACILITY (FacilityCode, FacilityName, FacilityDescription) - Removes the facility transitive dependency.\nRESERVATION (ReservationID, ReservationDate, CustomerName, Email, Address, PhoneNumber, DateOfBanquet,\nEventType, NumberOfGuests, ArrivalTime, FoodServiceTime, FacilityCode*, TotalPayment, PaymentType) - Contains\nreservation facts and references FACILITY.\nMENU (MenuCode, MenuName, MenuDescription) - Remains in 3NF.\nRESERVATION_MENU (ReservationID*, MenuCode*, Quantity) - Final associative relation.\nTip: For a form containing a repeating list, begin with the transaction identifier plus the repeating-\nitem identifier as the 1NF composite key. Then test which attributes depend on only one part of that key.\nAssumption: customer details are treated as reservation facts because the source provides no stable CustomerID.",
+      "context": "Dewan Cempaka banquet reservation form: ReservationID, ReservationDate, customer Name, Email, Address, PhoneNumber, DateOfBanquet, TypeOfEvent, NumberOfGuests, ArrivalTime, FoodServiceTime, TotalPayment and PaymentType. It also lists repeating MenuCode/MenuName/MenuDescription/Quantity entries and one chosen FacilityCode/FacilityName/FacilityDescription."
     },
     {
       "id": "JULY23-Q4-A",
@@ -423,8 +410,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Create the APPLYLOAN table.",
-      "answer": "Access SQL using explicit JOIN\nCREATE TABLE APPLYLOAN (\nClientNum TEXT(20) NOT NULL,\nLoanID TEXT(20) NOT NULL,\nLoanTotal CURRENCY NOT NULL,\nLoanRemainder CURRENCY,\nLoanDate DATETIME NOT NULL,\nCONSTRAINT PK_APPLYLOAN PRIMARY KEY (ClientNum, LoanID),\nCONSTRAINT FK_APPLYLOAN_CLIENT FOREIGN KEY (ClientNum)\nREFERENCES CLIENT (ClientNum),\nCONSTRAINT FK_APPLYLOAN_LOAN FOREIGN KEY (LoanID)\nREFERENCES LOAN (LoanID)\n);\nAlternative Access SQL\nCREATE TABLE APPLYLOAN (\nClientNum TEXT(20) NOT NULL,\nLoanID TEXT(20) NOT NULL,\nLoanTotal CURRENCY NOT NULL,\nLoanRemainder CURRENCY,\nLoanDate DATETIME NOT NULL,\nPRIMARY KEY (ClientNum, LoanID),\nFOREIGN KEY (ClientNum) REFERENCES CLIENT (ClientNum),\nFOREIGN KEY (LoanID) REFERENCES LOAN (LoanID)\n);"
+      "prompt": "Write a Microsoft Access SQL statement to create the APPLYLOAN table in the given relational schema.",
+      "answer": "Access SQL using explicit JOIN\nCREATE TABLE APPLYLOAN (\nClientNum TEXT(20) NOT NULL,\nLoanID TEXT(20) NOT NULL,\nLoanTotal CURRENCY NOT NULL,\nLoanRemainder CURRENCY,\nLoanDate DATETIME NOT NULL,\nCONSTRAINT PK_APPLYLOAN PRIMARY KEY (ClientNum, LoanID),\nCONSTRAINT FK_APPLYLOAN_CLIENT FOREIGN KEY (ClientNum)\nREFERENCES CLIENT (ClientNum),\nCONSTRAINT FK_APPLYLOAN_LOAN FOREIGN KEY (LoanID)\nREFERENCES LOAN (LoanID)\n);\nAlternative Access SQL\nCREATE TABLE APPLYLOAN (\nClientNum TEXT(20) NOT NULL,\nLoanID TEXT(20) NOT NULL,\nLoanTotal CURRENCY NOT NULL,\nLoanRemainder CURRENCY,\nLoanDate DATETIME NOT NULL,\nPRIMARY KEY (ClientNum, LoanID),\nFOREIGN KEY (ClientNum) REFERENCES CLIENT (ClientNum),\nFOREIGN KEY (LoanID) REFERENCES LOAN (LoanID)\n);",
+      "context": "Loan database relational schema:\nDEPARTMENT (DeptID, DeptName)\nAPPLYLOAN (ClientNum, LoanID, LoanTotal, LoanRemainder, LoanDate)\nLOAN (LoanID, LoanType, StaffID)\nCLIENT (ClientNum, ClientName, ClientAddress, ClientPhoneNum)\nOFFICER (StaffID, StaffName, DeptID)"
     },
     {
       "id": "JULY23-Q4-B",
@@ -437,8 +425,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Using a subquery, list client names that make a personal loan.",
-      "answer": "Access SQL using explicit JOIN\nSELECT ClientName\nFROM CLIENT\nWHERE ClientNum IN (\nSELECT ClientNum\nFROM APPLYLOAN\nWHERE LoanID IN (\nSELECT LoanID\nFROM LOAN\nWHERE LoanType = 'Personal Loan'\n)\n);\nAlternative Access SQL\nSELECT ClientName\nFROM CLIENT\nWHERE ClientNum IN\n(SELECT ClientNum\nFROM APPLYLOAN\nWHERE LoanID IN\n(SELECT LoanID\nFROM LOAN\nWHERE LoanType = 'Personal Loan'));"
+      "prompt": "Using a subquery, write a Microsoft Access SQL query to list the names of clients who have made a personal loan.",
+      "answer": "Access SQL using explicit JOIN\nSELECT ClientName\nFROM CLIENT\nWHERE ClientNum IN (\nSELECT ClientNum\nFROM APPLYLOAN\nWHERE LoanID IN (\nSELECT LoanID\nFROM LOAN\nWHERE LoanType = 'Personal Loan'\n)\n);\nAlternative Access SQL\nSELECT ClientName\nFROM CLIENT\nWHERE ClientNum IN\n(SELECT ClientNum\nFROM APPLYLOAN\nWHERE LoanID IN\n(SELECT LoanID\nFROM LOAN\nWHERE LoanType = 'Personal Loan'));",
+      "context": "Loan database relational schema:\nDEPARTMENT (DeptID, DeptName)\nAPPLYLOAN (ClientNum, LoanID, LoanTotal, LoanRemainder, LoanDate)\nLOAN (LoanID, LoanType, StaffID)\nCLIENT (ClientNum, ClientName, ClientAddress, ClientPhoneNum)\nOFFICER (StaffID, StaffName, DeptID)"
     },
     {
       "id": "JULY23-Q4-C",
@@ -451,8 +440,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Generate the total loan from 2021 until 2023.",
-      "answer": "Access SQL using explicit JOIN\nSELECT Sum(LoanTotal) AS [Total Loan]\nFROM APPLYLOAN\nWHERE LoanDate >= #2021-01-01#\nAND LoanDate < #2024-01-01#;\nAlternative Access SQL\nSELECT Sum(LoanTotal) AS [Total Loan]\nFROM APPLYLOAN\nWHERE LoanDate >= #2021-01-01# AND LoanDate < #2024-01-01#;"
+      "prompt": "Write a Microsoft Access SQL query to calculate the total loan amount for loans dated from 2021 through 2023.",
+      "answer": "Access SQL using explicit JOIN\nSELECT Sum(LoanTotal) AS [Total Loan]\nFROM APPLYLOAN\nWHERE LoanDate >= #2021-01-01#\nAND LoanDate < #2024-01-01#;\nAlternative Access SQL\nSELECT Sum(LoanTotal) AS [Total Loan]\nFROM APPLYLOAN\nWHERE LoanDate >= #2021-01-01# AND LoanDate < #2024-01-01#;",
+      "context": "Loan database relational schema:\nDEPARTMENT (DeptID, DeptName)\nAPPLYLOAN (ClientNum, LoanID, LoanTotal, LoanRemainder, LoanDate)\nLOAN (LoanID, LoanType, StaffID)\nCLIENT (ClientNum, ClientName, ClientAddress, ClientPhoneNum)\nOFFICER (StaffID, StaffName, DeptID)"
     },
     {
       "id": "JULY23-Q4-D",
@@ -465,8 +455,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "List officers who manage housing loans and are from the Finance department.",
-      "answer": "Access SQL using explicit JOIN\nSELECT DISTINCT O.StaffName\nFROM (OFFICER AS O\nINNER JOIN DEPARTMENT AS D ON O.DeptID = D.DeptID)\nINNER JOIN LOAN AS L ON O.StaffID = L.StaffID\nWHERE L.LoanType = 'Housing Loan'\nAND D.DeptName = 'Finance';\nAlternative Access SQL\nSELECT DISTINCT O.StaffName\nFROM OFFICER O, DEPARTMENT D, LOAN L\nWHERE O.DeptID = D.DeptID\nAND O.StaffID = L.StaffID\nAND L.LoanType = 'Housing Loan'\nAND D.DeptName = 'Finance';"
+      "prompt": "Write a Microsoft Access SQL query to list officers who manage housing loans and belong to the Finance department.",
+      "answer": "Access SQL using explicit JOIN\nSELECT DISTINCT O.StaffName\nFROM (OFFICER AS O\nINNER JOIN DEPARTMENT AS D ON O.DeptID = D.DeptID)\nINNER JOIN LOAN AS L ON O.StaffID = L.StaffID\nWHERE L.LoanType = 'Housing Loan'\nAND D.DeptName = 'Finance';\nAlternative Access SQL\nSELECT DISTINCT O.StaffName\nFROM OFFICER O, DEPARTMENT D, LOAN L\nWHERE O.DeptID = D.DeptID\nAND O.StaffID = L.StaffID\nAND L.LoanType = 'Housing Loan'\nAND D.DeptName = 'Finance';",
+      "context": "Loan database relational schema:\nDEPARTMENT (DeptID, DeptName)\nAPPLYLOAN (ClientNum, LoanID, LoanTotal, LoanRemainder, LoanDate)\nLOAN (LoanID, LoanType, StaffID)\nCLIENT (ClientNum, ClientName, ClientAddress, ClientPhoneNum)\nOFFICER (StaffID, StaffName, DeptID)"
     },
     {
       "id": "JULY23-Q4-E",
@@ -479,36 +470,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Generate the total loan for each loan type.",
-      "answer": "Access SQL using explicit JOIN\nSELECT L.LoanType, Sum(A.LoanTotal) AS [Total Loan]\nFROM LOAN AS L\nINNER JOIN APPLYLOAN AS A ON L.LoanID = A.LoanID\nGROUP BY L.LoanType;\nAlternative Access SQL\nSELECT L.LoanType,\nSum(A.LoanTotal) AS [Total Loan]\nFROM LOAN L, APPLYLOAN A\nWHERE L.LoanID = A.LoanID\nGROUP BY L.LoanType;\nTip: SQL is marked line by line. Even if unsure, write at least one correct line. Start with\nSELECT/CREATE/UPDATE, then add FROM, WHERE/JOIN, GROUP BY, HAVING, or ORDER BY. Each correct\nline can earn a mark; never leave SQL blank."
-    },
-    {
-      "id": "JULY23-Q5-A",
-      "parentId": "JULY23-Q5",
-      "session": "July 2023",
-      "chapters": [
-        4
-      ],
-      "topic": "Construct a hiking-agency ERD and propose reports",
-      "type": "erd_design",
-      "difficulty": "advanced",
-      "marks": 16,
-      "prompt": "Construct a Crow's Foot ERD for the hiking-agency database.",
-      "answer": "The ERD below uses direct Crow's Foot symbols at every relationship end: a circle means optional (minimum 0), a bar means\none, and the crow's foot means many. Read the two ends together to determine connectivity and cardinality.\nEntity and key checklist\nEntity / required key structure\nHIKER, FAMILY_MEMBER, TRIP, GUIDE, and MOUNTAIN with suitable PKs and all stated\nattributes.\nHIKER_TRIP resolves HIKER M:N TRIP and stores HikeStartDate and HikeEndDate.\nTRIP_GUIDE resolves TRIP M:N GUIDE and stores Payment.\nRelationship and cardinality checklist\nRequired relationship\nHIKER 1 : 0..M FAMILY_MEMBER.\nHIKER M:N TRIP through HIKER_TRIP.\nTRIP 1..M : 0..M GUIDE through TRIP_GUIDE; every trip has at least one guide.\nMOUNTAIN 1 : 0..M TRIP; every trip has exactly one mountain destination.\nCorrect Crow's Foot cardinality, PK/FK placement, and readable model."
-    },
-    {
-      "id": "JULY23-Q5-B",
-      "parentId": "JULY23-Q5",
-      "session": "July 2023",
-      "chapters": [
-        4
-      ],
-      "topic": "Construct a hiking-agency ERD and propose reports",
-      "type": "erd_design",
-      "difficulty": "advanced",
-      "marks": 4,
-      "prompt": "Explain TWO reports that can be generated.",
-      "answer": "Trip participant report: trip name, mountain, hike dates, and the hikers registered for each trip.\nGuide assignment/payment report: each guide, assigned trips, and payment for each trip.\nAlternative: hiker emergency-contact report or mountain/trip schedule report.\nTip: Every M:N relationship must be resolved with an associative entity. Place relationship\nattributes, such as Payment or HikeStartDate, in that associative entity—not in either parent table."
+      "prompt": "Write a Microsoft Access SQL query to calculate the total loan amount for each loan type.",
+      "answer": "Access SQL using explicit JOIN\nSELECT L.LoanType, Sum(A.LoanTotal) AS [Total Loan]\nFROM LOAN AS L\nINNER JOIN APPLYLOAN AS A ON L.LoanID = A.LoanID\nGROUP BY L.LoanType;\nAlternative Access SQL\nSELECT L.LoanType,\nSum(A.LoanTotal) AS [Total Loan]\nFROM LOAN L, APPLYLOAN A\nWHERE L.LoanID = A.LoanID\nGROUP BY L.LoanType;\nTip: SQL is marked line by line. Even if unsure, write at least one correct line. Start with\nSELECT/CREATE/UPDATE, then add FROM, WHERE/JOIN, GROUP BY, HAVING, or ORDER BY. Each correct\nline can earn a mark; never leave SQL blank.",
+      "context": "Loan database relational schema:\nDEPARTMENT (DeptID, DeptName)\nAPPLYLOAN (ClientNum, LoanID, LoanTotal, LoanRemainder, LoanDate)\nLOAN (LoanID, LoanType, StaffID)\nCLIENT (ClientNum, ClientName, ClientAddress, ClientPhoneNum)\nOFFICER (StaffID, StaffName, DeptID)"
     },
     {
       "id": "JAN24-Q1-A",
@@ -555,8 +519,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "theory_and_applied_interpretation",
       "difficulty": "intermediate",
       "marks": 6,
-      "prompt": "State the Customers-Orders-Products design problem and illustrate an ERD solution.",
-      "answer": "Problem: ORDERS and PRODUCTS have an M:N relationship—one order contains many products\nand one product appears in many orders. Directly linking the two causes repeating groups,\nredundancy, and difficult relational operations.\nSolution: add ORDER_DETAIL as an associative entity with composite PK/FKs (OrderID, ProductID)\nand relationship attributes such as Quantity and SalePrice.\nCUSTOMER 1:M ORDERS; ORDERS 1:M ORDER_DETAIL; PRODUCT 1:M ORDER_DETAIL."
+      "prompt": "Explain the Customers-Orders-Products design problem and illustrate a suitable entity-relationship diagram (ERD) solution.",
+      "answer": "Problem: ORDERS and PRODUCTS have an M:N relationship—one order contains many products\nand one product appears in many orders. Directly linking the two causes repeating groups,\nredundancy, and difficult relational operations.\nSolution: add ORDER_DETAIL as an associative entity with composite PK/FKs (OrderID, ProductID)\nand relationship attributes such as Quantity and SalePrice.\nCUSTOMER 1:M ORDERS; ORDERS 1:M ORDER_DETAIL; PRODUCT 1:M ORDER_DETAIL.",
+      "context": "ZY Stationary keeps Customers, Orders and Products in three tables. The paper reports that relational operations are complex and may produce efficiency or output errors. Modelling assumption for this exercise: an order can contain several products, and the same product can appear in several orders."
     },
     {
       "id": "JAN24-Q1-D",
@@ -605,8 +570,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "theory_and_applied_interpretation",
       "difficulty": "intermediate",
       "marks": 4,
-      "prompt": "Determine entity-integrity and referential-integrity violations in BOOKS and PUBLISHERS.",
-      "answer": "BOOKS violates entity integrity because ISBN 978-981-4824-24-7 appears twice. If ISBN is the PK,\nevery ISBN must be unique and non-null.\nReferential integrity is not violated by the shown non-null PublisherID values: 101, 102, and 103\nexist in PUBLISHERS. The blank PublisherID is allowed only when the relationship is optional and\nthe FK is not part of the PK; otherwise it violates the business rule/NOT NULL constraint.\nPUBLISHERS does not violate entity integrity: PublisherID values 101-104 are unique and non-\nnull. An unreferenced parent row such as 104 is valid."
+      "prompt": "Evaluate BOOKS and PUBLISHERS for entity-integrity and referential-integrity violations. Justify your conclusion for each table.",
+      "answer": "BOOKS violates entity integrity because ISBN 978-981-4824-24-7 appears twice. If ISBN is the PK,\nevery ISBN must be unique and non-null.\nReferential integrity is not violated by the shown non-null PublisherID values: 101, 102, and 103\nexist in PUBLISHERS. The blank PublisherID is allowed only when the relationship is optional and\nthe FK is not part of the PK; otherwise it violates the business rule/NOT NULL constraint.\nPUBLISHERS does not violate entity integrity: PublisherID values 101-104 are unique and non-\nnull. An unreferenced parent row such as 104 is valid.",
+      "context": "Publishing-company tables:\nBOOKS (ISBN, BookTitle, Authors, PublisherID): ISBN 978-981-4824-24-7 occurs in both the Database Systems and Digital Multimedia rows; the Healing the Invisible Wound row has no PublisherID. The other shown PublisherID values are 101, 102 and 103.\nPUBLISHERS (PublisherID, PublisherName, Country): PublisherID values 101, 102, 103 and 104 are present."
     },
     {
       "id": "JAN24-Q2-C",
@@ -622,8 +588,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "theory_and_applied_interpretation",
       "difficulty": "intermediate",
       "marks": 6,
-      "prompt": "Fill the database-design-process stages and dependency labels.",
-      "answer": "i) Conceptual design\nii) DBMS selection\niii) Logical design\niv) Physical design\nv) DBMS- and hardware-independent\nvi) Hardware-dependent"
+      "prompt": "Complete the database-design-process stages and hardware/software-dependency labels (i)-(vi) shown in the case information.",
+      "answer": "i) Conceptual design\nii) DBMS selection\niii) Logical design\niv) Physical design\nv) DBMS- and hardware-independent\nvi) Hardware-dependent",
+      "context": "Database design process shown in the figure:\nStage (i) -> Stage (ii) -> Stage (iii) -> Stage (iv)\nStage (i) points to dependency label (v). Stage (iii) is labelled “DBMS-dependent”. Stage (iv) points to dependency label (vi). Fill the six missing labels (i)-(vi)."
     },
     {
       "id": "JAN24-Q2-D",
@@ -654,7 +621,8 @@ window.ICT450_PRACTICE_DATA = {
       "difficulty": "advanced",
       "marks": 3,
       "prompt": "State the normal form of the employee evaluation report and explain.",
-      "answer": "The report is UNF (0NF) because employee details appear once while a repeating\nproject/evaluation group appears underneath them.\nThe same employee can have many project rows, so the form must first be flattened into one\natomic employee-project-location row."
+      "answer": "The report is UNF (0NF) because employee details appear once while a repeating\nproject/evaluation group appears underneath them.\nThe same employee can have many project rows, so the form must first be flattened into one\natomic employee-project-location row.",
+      "context": "IT Creative Solutions employee evaluation report: EmployeeID, EmployeeName, EmploymentYear, DepartmentID/DepartmentName, PhoneNumber and PermanentAddress, followed by repeated ProjectCode, ProjectName, Location, Grade, SupervisorID, SupervisorName and SupervisorDepartment. Each employee may work on several projects; each project may have several employees. A project has one supervisor, and a supervisor may manage several employees. The source report shows the same employee-project pair at more than one location."
     },
     {
       "id": "JAN24-Q3-B",
@@ -667,8 +635,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "normalization_problem",
       "difficulty": "advanced",
       "marks": 6,
-      "prompt": "Convert the report to a relational schema and identify keys/dependencies.",
-      "answer": "Keys and dependencies\nLocation is retained in the composite key because the same employee-project combination appears at more than one location\nin the source report.\nNotation: underlined attribute = primary key; italic attribute with * = foreign key.\n1NF schema: EMP_EVALUATION_1NF (EmployeeID, ProjectCode, Location, EmployeeName, EmploymentYear,\nDepartmentID, DepartmentName, PhoneNumber, PermanentAddress, ProjectName, Grade, SupervisorID, SupervisorName,\nSupervisorDepartmentID, SupervisorDepartmentName)\nPrimary key(s)\n• EmployeeID + ProjectCode + Location (composite primary key).\nFull dependency\n• (EmployeeID, ProjectCode, Location) -> Grade\nPartial dependencies\n• EmployeeID -> EmployeeName, EmploymentYear, DepartmentID, PhoneNumber, PermanentAddress\n• ProjectCode -> ProjectName, SupervisorID\nTransitive dependencies\n• DepartmentID -> DepartmentName\n• SupervisorID -> SupervisorName, SupervisorDepartmentID\n• SupervisorDepartmentID -> SupervisorDepartmentName"
+      "prompt": "Convert the employee evaluation report to a relational schema. Identify the primary key, partial dependencies and transitive dependencies.",
+      "answer": "Keys and dependencies\nLocation is retained in the composite key because the same employee-project combination appears at more than one location\nin the source report.\nNotation: underlined attribute = primary key; italic attribute with * = foreign key.\n1NF schema: EMP_EVALUATION_1NF (EmployeeID, ProjectCode, Location, EmployeeName, EmploymentYear,\nDepartmentID, DepartmentName, PhoneNumber, PermanentAddress, ProjectName, Grade, SupervisorID, SupervisorName,\nSupervisorDepartmentID, SupervisorDepartmentName)\nPrimary key(s)\n• EmployeeID + ProjectCode + Location (composite primary key).\nFull dependency\n• (EmployeeID, ProjectCode, Location) -> Grade\nPartial dependencies\n• EmployeeID -> EmployeeName, EmploymentYear, DepartmentID, PhoneNumber, PermanentAddress\n• ProjectCode -> ProjectName, SupervisorID\nTransitive dependencies\n• DepartmentID -> DepartmentName\n• SupervisorID -> SupervisorName, SupervisorDepartmentID\n• SupervisorDepartmentID -> SupervisorDepartmentName",
+      "context": "IT Creative Solutions employee evaluation report: EmployeeID, EmployeeName, EmploymentYear, DepartmentID/DepartmentName, PhoneNumber and PermanentAddress, followed by repeated ProjectCode, ProjectName, Location, Grade, SupervisorID, SupervisorName and SupervisorDepartment. Each employee may work on several projects; each project may have several employees. A project has one supervisor, and a supervisor may manage several employees. The source report shows the same employee-project pair at more than one location."
     },
     {
       "id": "JAN24-Q3-C",
@@ -681,8 +650,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "normalization_problem",
       "difficulty": "advanced",
       "marks": 11,
-      "prompt": "Normalize the schema to 3NF.",
-      "answer": "Normalization steps\n1NF (First Normal Form)\nEliminate repeating groups, make every attribute atomic, and identify the primary key.\nEMP_EVALUATION_1NF (EmployeeID, ProjectCode, Location, EmployeeName, EmploymentYear, DepartmentID,\nDepartmentName, PhoneNumber, PermanentAddress, ProjectName, Grade, SupervisorID, SupervisorName,\nSupervisorDepartmentID, SupervisorDepartmentName) - One atomic employee-project-location evaluation row.\n2NF (Second Normal Form)\nThe relation must be in 1NF. Remove partial dependencies so every non-key attribute depends on the whole composite key.\nEMPLOYEE_2NF (EmployeeID, EmployeeName, EmploymentYear, DepartmentID, DepartmentName, PhoneNumber,\nPermanentAddress) - Removes the EmployeeID partial dependency.\nPROJECT_2NF (ProjectCode, ProjectName, SupervisorID, SupervisorName, SupervisorDepartmentID,\nSupervisorDepartmentName) - Removes the ProjectCode partial dependency.\nPROJECT_EVALUATION (EmployeeID*, ProjectCode*, Location, Grade) - Grade depends on the whole key.\n3NF (Third Normal Form)\nThe relations must be in 2NF. Remove transitive dependencies so non-key attributes depend on nothing but the key.\nDEPARTMENT (DepartmentID, DepartmentName) - Stores each department once.\nEMPLOYEE (EmployeeID, EmployeeName, EmploymentYear, DepartmentID*, PhoneNumber, PermanentAddress) - Employee\ndepartment is referenced by FK.\nPROJECT (ProjectCode, ProjectName, SupervisorID*) - SupervisorID references EMPLOYEE.\nPROJECT_EVALUATION (EmployeeID*, ProjectCode*, Location, Grade) - Final evaluation relation.\nTip: When the same employee-project combination appears more than once, confirm the real\ntransaction grain. Here, Location is required in the composite key unless an EvaluationID is introduced."
+      "prompt": "Normalize the employee evaluation relation to third normal form (3NF), showing each stage and its resulting relations.",
+      "answer": "Normalization steps\n1NF (First Normal Form)\nEliminate repeating groups, make every attribute atomic, and identify the primary key.\nEMP_EVALUATION_1NF (EmployeeID, ProjectCode, Location, EmployeeName, EmploymentYear, DepartmentID,\nDepartmentName, PhoneNumber, PermanentAddress, ProjectName, Grade, SupervisorID, SupervisorName,\nSupervisorDepartmentID, SupervisorDepartmentName) - One atomic employee-project-location evaluation row.\n2NF (Second Normal Form)\nThe relation must be in 1NF. Remove partial dependencies so every non-key attribute depends on the whole composite key.\nEMPLOYEE_2NF (EmployeeID, EmployeeName, EmploymentYear, DepartmentID, DepartmentName, PhoneNumber,\nPermanentAddress) - Removes the EmployeeID partial dependency.\nPROJECT_2NF (ProjectCode, ProjectName, SupervisorID, SupervisorName, SupervisorDepartmentID,\nSupervisorDepartmentName) - Removes the ProjectCode partial dependency.\nPROJECT_EVALUATION (EmployeeID*, ProjectCode*, Location, Grade) - Grade depends on the whole key.\n3NF (Third Normal Form)\nThe relations must be in 2NF. Remove transitive dependencies so non-key attributes depend on nothing but the key.\nDEPARTMENT (DepartmentID, DepartmentName) - Stores each department once.\nEMPLOYEE (EmployeeID, EmployeeName, EmploymentYear, DepartmentID*, PhoneNumber, PermanentAddress) - Employee\ndepartment is referenced by FK.\nPROJECT (ProjectCode, ProjectName, SupervisorID*) - SupervisorID references EMPLOYEE.\nPROJECT_EVALUATION (EmployeeID*, ProjectCode*, Location, Grade) - Final evaluation relation.\nTip: When the same employee-project combination appears more than once, confirm the real\ntransaction grain. Here, Location is required in the composite key unless an EvaluationID is introduced.",
+      "context": "IT Creative Solutions employee evaluation report: EmployeeID, EmployeeName, EmploymentYear, DepartmentID/DepartmentName, PhoneNumber and PermanentAddress, followed by repeated ProjectCode, ProjectName, Location, Grade, SupervisorID, SupervisorName and SupervisorDepartment. Each employee may work on several projects; each project may have several employees. A project has one supervisor, and a supervisor may manage several employees. The source report shows the same employee-project pair at more than one location."
     },
     {
       "id": "JAN24-Q4-A",
@@ -695,8 +665,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Display movies released from 2021 until 2023.",
-      "answer": "Access SQL using explicit JOIN\nSELECT *\nFROM MOVIE\nWHERE DateRelease >= #2021-01-01#\nAND DateRelease < #2024-01-01#;\nAlternative Access SQL\nSELECT *\nFROM MOVIE\nWHERE DateRelease >= #2021-01-01# AND DateRelease < #2024-01-01#;"
+      "prompt": "Write a Microsoft Access SQL query to display movies released from 2021 through 2023.",
+      "answer": "Access SQL using explicit JOIN\nSELECT *\nFROM MOVIE\nWHERE DateRelease >= #2021-01-01#\nAND DateRelease < #2024-01-01#;\nAlternative Access SQL\nSELECT *\nFROM MOVIE\nWHERE DateRelease >= #2021-01-01# AND DateRelease < #2024-01-01#;",
+      "context": "Movie database relational schema (* denotes a foreign key):\nMOVIE (MovieID, MovieName, Genre, DateRelease, NetProfit, DirectorID*)\nDIRECTOR (DirectorID, DirectorName, Nationality)\nREVIEW (ReviewID, Description, MovieID*, ReviewerID*)\nREVIEWER (ReviewerID, ReviewerName)"
     },
     {
       "id": "JAN24-Q4-B",
@@ -709,8 +680,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Identify the total movies directed by Malaysian directors.",
-      "answer": "Access SQL using explicit JOIN\nSELECT Count(M.MovieID) AS [Total Movies]\nFROM DIRECTOR AS D\nINNER JOIN MOVIE AS M ON D.DirectorID = M.DirectorID\nWHERE D.Nationality = 'Malaysian';\nAlternative Access SQL\nSELECT Count(M.MovieID) AS [Total Movies]\nFROM DIRECTOR D, MOVIE M\nWHERE D.DirectorID = M.DirectorID\nAND D.Nationality = 'Malaysian';"
+      "prompt": "Write a Microsoft Access SQL query to count movies directed by Malaysian directors.",
+      "answer": "Access SQL using explicit JOIN\nSELECT Count(M.MovieID) AS [Total Movies]\nFROM DIRECTOR AS D\nINNER JOIN MOVIE AS M ON D.DirectorID = M.DirectorID\nWHERE D.Nationality = 'Malaysian';\nAlternative Access SQL\nSELECT Count(M.MovieID) AS [Total Movies]\nFROM DIRECTOR D, MOVIE M\nWHERE D.DirectorID = M.DirectorID\nAND D.Nationality = 'Malaysian';",
+      "context": "Movie database relational schema (* denotes a foreign key):\nMOVIE (MovieID, MovieName, Genre, DateRelease, NetProfit, DirectorID*)\nDIRECTOR (DirectorID, DirectorName, Nationality)\nREVIEW (ReviewID, Description, MovieID*, ReviewerID*)\nREVIEWER (ReviewerID, ReviewerName)"
     },
     {
       "id": "JAN24-Q4-C",
@@ -723,8 +695,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Calculate average net profit for each genre as “Average Net Profit”.",
-      "answer": "Access SQL using explicit JOIN\nSELECT Genre, Avg(NetProfit) AS [Average Net Profit]\nFROM MOVIE\nGROUP BY Genre;\nAlternative Access SQL\nSELECT Genre, Avg(NetProfit) AS [Average Net Profit]\nFROM MOVIE\nGROUP BY Genre;"
+      "prompt": "Write a Microsoft Access SQL query to calculate average net profit by genre, naming the result Average Net Profit.",
+      "answer": "Access SQL using explicit JOIN\nSELECT Genre, Avg(NetProfit) AS [Average Net Profit]\nFROM MOVIE\nGROUP BY Genre;\nAlternative Access SQL\nSELECT Genre, Avg(NetProfit) AS [Average Net Profit]\nFROM MOVIE\nGROUP BY Genre;",
+      "context": "Movie database relational schema (* denotes a foreign key):\nMOVIE (MovieID, MovieName, Genre, DateRelease, NetProfit, DirectorID*)\nDIRECTOR (DirectorID, DirectorName, Nationality)\nREVIEW (ReviewID, Description, MovieID*, ReviewerID*)\nREVIEWER (ReviewerID, ReviewerName)"
     },
     {
       "id": "JAN24-Q4-D",
@@ -737,8 +710,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Identify reviewers who made more than two reviews.",
-      "answer": "Access SQL using explicit JOIN\nSELECT R.ReviewerName, Count(V.ReviewID) AS [Total Reviews]\nFROM REVIEWER AS R\nINNER JOIN REVIEW AS V ON R.ReviewerID = V.ReviewerID\nGROUP BY R.ReviewerID, R.ReviewerName\nHAVING Count(V.ReviewID) > 2;\nAlternative Access SQL\nSELECT R.ReviewerName,\nCount(V.ReviewID) AS [Total Reviews]\nFROM REVIEWER R, REVIEW V\nWHERE R.ReviewerID = V.ReviewerID\nGROUP BY R.ReviewerID, R.ReviewerName\nHAVING Count(V.ReviewID) > 2;"
+      "prompt": "Write a Microsoft Access SQL query to list reviewers who have submitted more than two reviews.",
+      "answer": "Access SQL using explicit JOIN\nSELECT R.ReviewerName, Count(V.ReviewID) AS [Total Reviews]\nFROM REVIEWER AS R\nINNER JOIN REVIEW AS V ON R.ReviewerID = V.ReviewerID\nGROUP BY R.ReviewerID, R.ReviewerName\nHAVING Count(V.ReviewID) > 2;\nAlternative Access SQL\nSELECT R.ReviewerName,\nCount(V.ReviewID) AS [Total Reviews]\nFROM REVIEWER R, REVIEW V\nWHERE R.ReviewerID = V.ReviewerID\nGROUP BY R.ReviewerID, R.ReviewerName\nHAVING Count(V.ReviewID) > 2;",
+      "context": "Movie database relational schema (* denotes a foreign key):\nMOVIE (MovieID, MovieName, Genre, DateRelease, NetProfit, DirectorID*)\nDIRECTOR (DirectorID, DirectorName, Nationality)\nREVIEW (ReviewID, Description, MovieID*, ReviewerID*)\nREVIEWER (ReviewerID, ReviewerName)"
     },
     {
       "id": "JAN24-Q4-E",
@@ -751,36 +725,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Display the movie that received the most reviews.",
-      "answer": "Access SQL - complete model answer\nSELECT TOP 1 M.MovieID, M.MovieName, Count(R.ReviewID) AS [Total Reviews]\nFROM MOVIE AS M INNER JOIN REVIEW AS R ON M.MovieID = R.MovieID\nGROUP BY M.MovieID, M.MovieName\nORDER BY Count(R.ReviewID) DESC;"
-    },
-    {
-      "id": "JAN24-Q5-A",
-      "parentId": "JAN24-Q5",
-      "session": "January 2024",
-      "chapters": [
-        4
-      ],
-      "topic": "Construct an auxiliary-police ERD and identify information outputs",
-      "type": "erd_design",
-      "difficulty": "advanced",
-      "marks": 16,
-      "prompt": "Construct the auxiliary-police Crow's Foot ERD.",
-      "answer": "The ERD below uses direct Crow's Foot symbols at every relationship end: a circle means optional (minimum 0), a bar means\none, and the crow's foot means many. Read the two ends together to determine connectivity and cardinality.\nEntity and key checklist\nEntity / required key structure\nPOLICE_OFFICER, DUTY, STUDENT, SUMMON, and OFFENSE with stated attributes and suitable\nPKs.\nOFFICER_DUTY resolves the M:N officer-duty assignment and stores duty date/time.\nSUMMON_OFFENSE resolves the M:N summon-offense relationship.\nRelationship and cardinality checklist\nRequired relationship\nPOLICE_OFFICER M:N DUTY through OFFICER_DUTY; each duty has more than one officer.\nPOLICE_OFFICER 1:M SUMMON and STUDENT 1:M SUMMON.\nSUMMON M:N OFFENSE through SUMMON_OFFENSE; each summon contains more than one\noffense.\nCorrect PK/FK/cardinality and readable Crow's Foot notation."
-    },
-    {
-      "id": "JAN24-Q5-B",
-      "parentId": "JAN24-Q5",
-      "session": "January 2024",
-      "chapters": [
-        4
-      ],
-      "topic": "Construct an auxiliary-police ERD and identify information outputs",
-      "type": "erd_design",
-      "difficulty": "advanced",
-      "marks": 4,
-      "prompt": "Identify TWO relevant reports/information outputs.",
-      "answer": "Duty roster report by duty date/time, showing assigned officers and duty type.\nSummons report by student, issue date, offense details, and total fees.\nTip: Attributes describing an assignment—such as DutyDate and DutyTime—belong in the\nassociative OFFICER_DUTY entity because they describe the relationship, not the officer or duty alone."
+      "prompt": "Write a Microsoft Access SQL query to display the movie with the highest number of reviews.",
+      "answer": "Access SQL - complete model answer\nSELECT TOP 1 M.MovieID, M.MovieName, Count(R.ReviewID) AS [Total Reviews]\nFROM MOVIE AS M INNER JOIN REVIEW AS R ON M.MovieID = R.MovieID\nGROUP BY M.MovieID, M.MovieName\nORDER BY Count(R.ReviewID) DESC;",
+      "context": "Movie database relational schema (* denotes a foreign key):\nMOVIE (MovieID, MovieName, Genre, DateRelease, NetProfit, DirectorID*)\nDIRECTOR (DirectorID, DirectorName, Nationality)\nREVIEW (ReviewID, Description, MovieID*, ReviewerID*)\nREVIEWER (ReviewerID, ReviewerName)"
     },
     {
       "id": "JULY24-Q1-A",
@@ -827,8 +774,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "theory_and_applied_interpretation",
       "difficulty": "intermediate",
       "marks": 6,
-      "prompt": "Identify and justify THREE problems in the MENU table.",
-      "answer": "Bihun Goreng has no MenuCode, violating entity integrity because the row cannot be uniquely\nidentified by the intended key.\nNasi Ayam has a missing Price, so the row is incomplete and AVG may ignore the null, producing\nan unreliable result.\nLaksa has “2.SO” instead of a numeric value such as 2.50, violating the Price domain/data type\nand preventing numeric aggregation."
+      "prompt": "Identify and justify THREE data-quality problems in Gerai 17's MENU table.",
+      "answer": "Bihun Goreng has no MenuCode, violating entity integrity because the row cannot be uniquely\nidentified by the intended key.\nNasi Ayam has a missing Price, so the row is incomplete and AVG may ignore the null, producing\nan unreliable result.\nLaksa has “2.SO” instead of a numeric value such as 2.50, violating the Price domain/data type\nand preventing numeric aggregation.",
+      "context": "Gerai 17 MENU table (a blank cell is shown as [blank]):\nMenuCode | MenuName | Price (RM)\nM1 | Nasi Bujang | 3.50\nM2 | Nasi Ayam | [blank]\n[blank] | Bihun Goreng | 3.00\nM4 | Laksa | 2.SO\nThe owner needs a reliable menu count and average price."
     },
     {
       "id": "JULY24-Q1-D",
@@ -859,8 +807,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "theory_and_applied_interpretation",
       "difficulty": "intermediate",
       "marks": 4,
-      "prompt": "Match each data model to the correct statement.",
-      "answer": "Hierarchical -> Parent/child relationship promotes data integrity.\nNetwork -> Handles more relationship types, including M:N and multiparent relationships.\nRelational -> May promote islands of information when individuals/departments easily develop\nseparate applications.\nEntity Relationship -> Visual representation makes it an effective communication tool."
+      "prompt": "Match each of the FOUR data models to its correct description in the case information.",
+      "answer": "Hierarchical -> Parent/child relationship promotes data integrity.\nNetwork -> Handles more relationship types, including M:N and multiparent relationships.\nRelational -> May promote islands of information when individuals/departments easily develop\nseparate applications.\nEntity Relationship -> Visual representation makes it an effective communication tool.",
+      "context": "Match these data models: Hierarchical, Network, Relational, Entity Relationship.\nDescriptions: (1) visual representation supports communication; (2) easily developed separate applications may create islands of information; (3) parent/child relationships promote data integrity; (4) handles M:N and multiparent relationships."
     },
     {
       "id": "JULY24-Q2-B",
@@ -875,8 +824,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "theory_and_applied_interpretation",
       "difficulty": "intermediate",
       "marks": 4,
-      "prompt": "Describe TWO business rules from the PETS-CUSTOMERS-PURCHASES schema.",
-      "answer": "One CUSTOMER may make zero or many PURCHASES; each PURCHASE must belong to one\nCUSTOMER through CustomerID.\nOne PURCHASE may include one or many PETS; each sold PET belongs to one PURCHASE through\nPurchaseID, while an unsold pet may have a null PurchaseID if participation is optional."
+      "prompt": "State and explain TWO business rules represented by the pet-shop relational schema.",
+      "answer": "One CUSTOMER may make zero or many PURCHASES; each PURCHASE must belong to one\nCUSTOMER through CustomerID.\nOne PURCHASE may include one or many PETS; each sold PET belongs to one PURCHASE through\nPurchaseID, while an unsold pet may have a null PurchaseID if participation is optional.",
+      "context": "Pet-shop relational schema (* denotes a foreign key):\nPETS (PetID, Name, Species, Age, Price, PurchaseID*)\nCUSTOMERS (CustomerID, Name, Address, Phone, Email)\nPURCHASES (PurchaseID, CustomerID*, PurchaseDate)"
     },
     {
       "id": "JULY24-Q2-C",
@@ -922,7 +872,8 @@ window.ICT450_PRACTICE_DATA = {
       "difficulty": "advanced",
       "marks": 3,
       "prompt": "State the normal form of the Sasa eStore invoice and explain.",
-      "answer": "The invoice layout is UNF (0NF) because the item section is a repeating group inside one invoice.\nA line identifier is also absent; the same item appears twice, so an invoice-item row cannot be\nuniquely identified without LineNo or aggregation."
+      "answer": "The invoice layout is UNF (0NF) because the item section is a repeating group inside one invoice.\nA line identifier is also absent; the same item appears twice, so an invoice-item row cannot be\nuniquely identified without LineNo or aggregation.",
+      "context": "Sasa eStore invoice #100 dated 26 February 2024: MemberID SS11, member name and address; repeating item lines with ItemName, Quantity, UnitPrice and Amount; Total 307.00, PaidAmount 310.00 and BalanceDue 3.00. Argan Oil Cleansing Foam appears on two separate lines. The source form gives no ProductID or unique line number."
     },
     {
       "id": "JULY24-Q3-B",
@@ -935,8 +886,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "normalization_problem",
       "difficulty": "advanced",
       "marks": 6,
-      "prompt": "Identify the primary key(s), partial dependencies, and transitive dependencies.",
-      "answer": "Keys and dependencies\nLineNo and ProductID are introduced because the invoice does not provide a unique line identifier or product code; the same\nproduct appears more than once.\nNotation: underlined attribute = primary key; italic attribute with * = foreign key.\n1NF schema: INVOICE_LINE_1NF (InvoiceNo, LineNo, InvoiceDate, MemberID, MemberName, MemberAddress, ProductID,\nProductName, Quantity, UnitPrice, Amount, Total, PaidAmount, BalanceDue)\nPrimary key(s)\n• InvoiceNo + LineNo (composite primary key).\nFull dependency\n• (InvoiceNo, LineNo) -> ProductID, Quantity\nPartial dependencies\n• InvoiceNo -> InvoiceDate, MemberID, Total, PaidAmount, BalanceDue\nTransitive dependencies\n• MemberID -> MemberName, MemberAddress\n• ProductID -> ProductName, UnitPrice"
+      "prompt": "Identify a suitable primary key and the partial and transitive dependencies in the invoice data. State clearly when a new identifier is introduced.",
+      "answer": "Keys and dependencies\nLineNo and ProductID are introduced because the invoice does not provide a unique line identifier or product code; the same\nproduct appears more than once.\nNotation: underlined attribute = primary key; italic attribute with * = foreign key.\n1NF schema: INVOICE_LINE_1NF (InvoiceNo, LineNo, InvoiceDate, MemberID, MemberName, MemberAddress, ProductID,\nProductName, Quantity, UnitPrice, Amount, Total, PaidAmount, BalanceDue)\nPrimary key(s)\n• InvoiceNo + LineNo (composite primary key).\nFull dependency\n• (InvoiceNo, LineNo) -> ProductID, Quantity\nPartial dependencies\n• InvoiceNo -> InvoiceDate, MemberID, Total, PaidAmount, BalanceDue\nTransitive dependencies\n• MemberID -> MemberName, MemberAddress\n• ProductID -> ProductName, UnitPrice",
+      "context": "Sasa eStore invoice #100 dated 26 February 2024: MemberID SS11, member name and address; repeating item lines with ItemName, Quantity, UnitPrice and Amount; Total 307.00, PaidAmount 310.00 and BalanceDue 3.00. Argan Oil Cleansing Foam appears on two separate lines. The source form gives no ProductID or unique line number."
     },
     {
       "id": "JULY24-Q3-C",
@@ -949,8 +901,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "normalization_problem",
       "difficulty": "advanced",
       "marks": 11,
-      "prompt": "Normalize the invoice from 1NF to 3NF.",
-      "answer": "Normalization steps\n1NF (First Normal Form)\nEliminate repeating groups, make every attribute atomic, and identify the primary key.\nINVOICE_LINE_1NF (InvoiceNo, LineNo, InvoiceDate, MemberID, MemberName, MemberAddress, ProductID, ProductName,\nQuantity, UnitPrice, Amount, Total, PaidAmount, BalanceDue) - One atomic invoice line per row; LineNo distinguishes duplicate\nproduct lines.\n2NF (Second Normal Form)\nThe relation must be in 1NF. Remove partial dependencies so every non-key attribute depends on the whole composite key.\nINVOICE_2NF (InvoiceNo, InvoiceDate, MemberID, MemberName, MemberAddress, Total, PaidAmount, BalanceDue) -\nRemoves attributes dependent only on InvoiceNo.\nINVOICE_LINE_2NF (InvoiceNo*, LineNo, ProductID, ProductName, Quantity, UnitPrice, Amount) - Keeps facts that describe a\nspecific line; product details are still transitive.\n3NF (Third Normal Form)\nThe relations must be in 2NF. Remove transitive dependencies so non-key attributes depend on nothing but the key.\nMEMBER (MemberID, MemberName, MemberAddress) - Removes MemberID -> member details.\nPRODUCT (ProductID, ProductName, UnitPrice) - Removes ProductID -> product details.\nINVOICE (InvoiceNo, InvoiceDate, MemberID*, Total, PaidAmount, BalanceDue) - References MEMBER.\nINVOICE_LINE (InvoiceNo*, LineNo, ProductID*, Quantity) - References PRODUCT; Amount is derived as Quantity x UnitPrice.\nTip: Invoice totals, line amounts, and balances are derived attributes. In a clean schema they can be\ncalculated from stored facts; if stored for audit/performance, label and control them carefully."
+      "prompt": "Normalize the invoice data from first normal form (1NF) to third normal form (3NF), showing each stage.",
+      "answer": "Normalization steps\n1NF (First Normal Form)\nEliminate repeating groups, make every attribute atomic, and identify the primary key.\nINVOICE_LINE_1NF (InvoiceNo, LineNo, InvoiceDate, MemberID, MemberName, MemberAddress, ProductID, ProductName,\nQuantity, UnitPrice, Amount, Total, PaidAmount, BalanceDue) - One atomic invoice line per row; LineNo distinguishes duplicate\nproduct lines.\n2NF (Second Normal Form)\nThe relation must be in 1NF. Remove partial dependencies so every non-key attribute depends on the whole composite key.\nINVOICE_2NF (InvoiceNo, InvoiceDate, MemberID, MemberName, MemberAddress, Total, PaidAmount, BalanceDue) -\nRemoves attributes dependent only on InvoiceNo.\nINVOICE_LINE_2NF (InvoiceNo*, LineNo, ProductID, ProductName, Quantity, UnitPrice, Amount) - Keeps facts that describe a\nspecific line; product details are still transitive.\n3NF (Third Normal Form)\nThe relations must be in 2NF. Remove transitive dependencies so non-key attributes depend on nothing but the key.\nMEMBER (MemberID, MemberName, MemberAddress) - Removes MemberID -> member details.\nPRODUCT (ProductID, ProductName, UnitPrice) - Removes ProductID -> product details.\nINVOICE (InvoiceNo, InvoiceDate, MemberID*, Total, PaidAmount, BalanceDue) - References MEMBER.\nINVOICE_LINE (InvoiceNo*, LineNo, ProductID*, Quantity) - References PRODUCT; Amount is derived as Quantity x UnitPrice.\nTip: Invoice totals, line amounts, and balances are derived attributes. In a clean schema they can be\ncalculated from stored facts; if stored for audit/performance, label and control them carefully.",
+      "context": "Sasa eStore invoice #100 dated 26 February 2024: MemberID SS11, member name and address; repeating item lines with ItemName, Quantity, UnitPrice and Amount; Total 307.00, PaidAmount 310.00 and BalanceDue 3.00. Argan Oil Cleansing Foam appears on two separate lines. The source form gives no ProductID or unique line number."
     },
     {
       "id": "JULY24-Q4-A",
@@ -963,8 +916,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Calculate the total candidates for each faculty.",
-      "answer": "Access SQL using explicit JOIN\nSELECT F.FacultyID, F.FacultyName,\nCount(C.CandidateID) AS [Total Candidates]\nFROM (FACULTY AS F\nINNER JOIN STUDENT AS S ON F.FacultyID = S.FacultyID)\nINNER JOIN CANDIDATE AS C ON S.StudentID = C.StudentID\nGROUP BY F.FacultyID, F.FacultyName;\nAlternative Access SQL\nSELECT F.FacultyID, F.FacultyName,\nCount(C.CandidateID) AS [Total Candidates]\nFROM FACULTY F, STUDENT S, CANDIDATE C\nWHERE F.FacultyID = S.FacultyID\nAND S.StudentID = C.StudentID\nGROUP BY F.FacultyID, F.FacultyName;"
+      "prompt": "Write a Microsoft Access SQL query to calculate the number of candidates for each faculty.",
+      "answer": "Access SQL using explicit JOIN\nSELECT F.FacultyID, F.FacultyName,\nCount(C.CandidateID) AS [Total Candidates]\nFROM (FACULTY AS F\nINNER JOIN STUDENT AS S ON F.FacultyID = S.FacultyID)\nINNER JOIN CANDIDATE AS C ON S.StudentID = C.StudentID\nGROUP BY F.FacultyID, F.FacultyName;\nAlternative Access SQL\nSELECT F.FacultyID, F.FacultyName,\nCount(C.CandidateID) AS [Total Candidates]\nFROM FACULTY F, STUDENT S, CANDIDATE C\nWHERE F.FacultyID = S.FacultyID\nAND S.StudentID = C.StudentID\nGROUP BY F.FacultyID, F.FacultyName;",
+      "context": "University e-Voting relational schema (* denotes a foreign key):\nSTUDENT (StudentID, FirstName, LastName, PhoneNumber, FacultyID*)\nCANDIDATE (CandidateID, StudentID*)\nVOTING (VotingID, VotingDate, StudID*)\nVOTING_DETAILS (VotingID*, CandidateID*, VotingTime)\nFACULTY (FacultyID, FacultyName)\nEach student may vote for up to two candidates."
     },
     {
       "id": "JULY24-Q4-B",
@@ -977,8 +931,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Display students who did not vote for any candidate.",
-      "answer": "Access SQL using explicit JOIN\nSELECT S.*\nFROM STUDENT AS S\nLEFT JOIN VOTING AS V ON S.StudentID = V.StudID\nWHERE V.VotingID IS NULL;\nAlternative Access SQL\nSELECT S.*\nFROM STUDENT S\nWHERE S.StudentID NOT IN\n(SELECT StudID\nFROM VOTING);"
+      "prompt": "Write a Microsoft Access SQL query to display students who have not voted for any candidate.",
+      "answer": "Access SQL using explicit JOIN\nSELECT S.*\nFROM STUDENT AS S\nLEFT JOIN VOTING AS V ON S.StudentID = V.StudID\nWHERE V.VotingID IS NULL;\nAlternative Access SQL\nSELECT S.*\nFROM STUDENT S\nWHERE S.StudentID NOT IN\n(SELECT StudID\nFROM VOTING);",
+      "context": "University e-Voting relational schema (* denotes a foreign key):\nSTUDENT (StudentID, FirstName, LastName, PhoneNumber, FacultyID*)\nCANDIDATE (CandidateID, StudentID*)\nVOTING (VotingID, VotingDate, StudID*)\nVOTING_DETAILS (VotingID*, CandidateID*, VotingTime)\nFACULTY (FacultyID, FacultyName)\nEach student may vote for up to two candidates."
     },
     {
       "id": "JULY24-Q4-C",
@@ -991,8 +946,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Identify the total voters for each faculty.",
-      "answer": "Access SQL using explicit JOIN\nSELECT F.FacultyID, F.FacultyName,\nCount(V.VotingID) AS [Total Voters]\nFROM (FACULTY AS F\nINNER JOIN STUDENT AS S ON F.FacultyID = S.FacultyID)\nINNER JOIN VOTING AS V ON S.StudentID = V.StudID\nGROUP BY F.FacultyID, F.FacultyName;\nAlternative Access SQL\nSELECT F.FacultyID, F.FacultyName,\nCount(V.VotingID) AS [Total Voters]\nFROM FACULTY F, STUDENT S, VOTING V\nWHERE F.FacultyID = S.FacultyID\nAND S.StudentID = V.StudID\nGROUP BY F.FacultyID, F.FacultyName;"
+      "prompt": "Write a Microsoft Access SQL query to calculate the number of voters for each faculty.",
+      "answer": "Access SQL using explicit JOIN\nSELECT F.FacultyID, F.FacultyName,\nCount(V.VotingID) AS [Total Voters]\nFROM (FACULTY AS F\nINNER JOIN STUDENT AS S ON F.FacultyID = S.FacultyID)\nINNER JOIN VOTING AS V ON S.StudentID = V.StudID\nGROUP BY F.FacultyID, F.FacultyName;\nAlternative Access SQL\nSELECT F.FacultyID, F.FacultyName,\nCount(V.VotingID) AS [Total Voters]\nFROM FACULTY F, STUDENT S, VOTING V\nWHERE F.FacultyID = S.FacultyID\nAND S.StudentID = V.StudID\nGROUP BY F.FacultyID, F.FacultyName;",
+      "context": "University e-Voting relational schema (* denotes a foreign key):\nSTUDENT (StudentID, FirstName, LastName, PhoneNumber, FacultyID*)\nCANDIDATE (CandidateID, StudentID*)\nVOTING (VotingID, VotingDate, StudID*)\nVOTING_DETAILS (VotingID*, CandidateID*, VotingTime)\nFACULTY (FacultyID, FacultyName)\nEach student may vote for up to two candidates."
     },
     {
       "id": "JULY24-Q4-D",
@@ -1005,8 +961,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Display full names of candidates receiving more than 500 votes.",
-      "answer": "Access SQL using explicit JOIN\nSELECT S.FirstName & ' ' & S.LastName AS [Candidate Name],\nCount(VD.VotingID) AS [Total Votes]\nFROM (CANDIDATE AS C\nINNER JOIN STUDENT AS S ON C.StudentID = S.StudentID)\nINNER JOIN VOTING_DETAILS AS VD ON C.CandidateID = VD.CandidateID\nGROUP BY C.CandidateID, S.FirstName, S.LastName\nHAVING Count(VD.VotingID) > 500;\nAlternative Access SQL\nSELECT S.FirstName & ' ' & S.LastName AS [Candidate Name],\nCount(VD.VotingID) AS [Total Votes]\nFROM CANDIDATE C, STUDENT S, VOTING_DETAILS VD\nWHERE C.StudentID = S.StudentID\nAND C.CandidateID = VD.CandidateID\nGROUP BY C.CandidateID, S.FirstName, S.LastName\nHAVING Count(VD.VotingID) > 500;"
+      "prompt": "Write a Microsoft Access SQL query to display the full names of candidates with more than 500 votes.",
+      "answer": "Access SQL using explicit JOIN\nSELECT S.FirstName & ' ' & S.LastName AS [Candidate Name],\nCount(VD.VotingID) AS [Total Votes]\nFROM (CANDIDATE AS C\nINNER JOIN STUDENT AS S ON C.StudentID = S.StudentID)\nINNER JOIN VOTING_DETAILS AS VD ON C.CandidateID = VD.CandidateID\nGROUP BY C.CandidateID, S.FirstName, S.LastName\nHAVING Count(VD.VotingID) > 500;\nAlternative Access SQL\nSELECT S.FirstName & ' ' & S.LastName AS [Candidate Name],\nCount(VD.VotingID) AS [Total Votes]\nFROM CANDIDATE C, STUDENT S, VOTING_DETAILS VD\nWHERE C.StudentID = S.StudentID\nAND C.CandidateID = VD.CandidateID\nGROUP BY C.CandidateID, S.FirstName, S.LastName\nHAVING Count(VD.VotingID) > 500;",
+      "context": "University e-Voting relational schema (* denotes a foreign key):\nSTUDENT (StudentID, FirstName, LastName, PhoneNumber, FacultyID*)\nCANDIDATE (CandidateID, StudentID*)\nVOTING (VotingID, VotingDate, StudID*)\nVOTING_DETAILS (VotingID*, CandidateID*, VotingTime)\nFACULTY (FacultyID, FacultyName)\nEach student may vote for up to two candidates."
     },
     {
       "id": "JULY24-Q4-E",
@@ -1019,36 +976,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Identify the total students who voted for only one candidate.",
-      "answer": "Access SQL using explicit JOIN\nSELECT Count(*) AS [Total Students]\nFROM (\nSELECT V.StudID\nFROM VOTING AS V\nINNER JOIN VOTING_DETAILS AS VD ON V.VotingID = VD.VotingID\nGROUP BY V.StudID\nHAVING Count(VD.CandidateID) = 1\n) AS X;\nAlternative Access SQL\n-- Query 1: identify students who selected exactly one candidate.\nSELECT V.StudID\nFROM VOTING V, VOTING_DETAILS VD\nWHERE V.VotingID = VD.VotingID\nGROUP BY V.StudID\nHAVING Count(VD.CandidateID) = 1;\n-- Save Query 1 as Q_OneCandidateVoters.\n-- Query 2: count the saved rows.\nSELECT Count(StudID) AS [Total Students]\nFROM Q_OneCandidateVoters;\nAccess note: Use the complete Access SQL answer shown above; a saved-query sequence is acceptable when it returns the same result.\nTip: SQL answers are marked line by line. Even when you are unsure, write at least one correct line.\nStart with SELECT (or CREATE/UPDATE), then add FROM, WHERE or JOIN, GROUP BY, HAVING, and\nORDER BY as far as you can. Each correct line may earn a mark, so do not leave the SQL answer blank.\nTechnical note: In Microsoft Access, LEFT JOIN plus IS NULL is suitable for finding records with no match."
-    },
-    {
-      "id": "JULY24-Q5-A",
-      "parentId": "JULY24-Q5",
-      "session": "July 2024",
-      "chapters": [
-        4
-      ],
-      "topic": "Construct a football-tournament ERD and identify information outputs",
-      "type": "erd_design",
-      "difficulty": "advanced",
-      "marks": 16,
-      "prompt": "Construct the football-tournament Crow's Foot ERD.",
-      "answer": "The ERD below uses direct Crow's Foot symbols at every relationship end: a circle means optional (minimum 0), a bar means\none, and the crow's foot means many. Read the two ends together to determine connectivity and cardinality.\nEntity and key checklist\nEntity / required key structure\nTOURNAMENT, TEAM, PLAYER, FIXTURE, MATCH, and VENUE with all stated attributes and PKs.\nTOURNAMENT_TEAM resolves participation of teams in tournaments.\nMATCH includes FixtureID, VenueID, HomeTeamID, and AwayTeamID as FKs.\nRelationship and cardinality checklist\nRequired relationship\nTOURNAMENT M:N TEAM through TOURNAMENT_TEAM.\nTEAM 1:M PLAYER; each player belongs to exactly one team.\nTOURNAMENT 1:M FIXTURE and FIXTURE 1:M MATCH.\nVENUE 1:M MATCH; TEAM participates twice in MATCH as home and away roles."
-    },
-    {
-      "id": "JULY24-Q5-B",
-      "parentId": "JULY24-Q5",
-      "session": "July 2024",
-      "chapters": [
-        4
-      ],
-      "topic": "Construct a football-tournament ERD and identify information outputs",
-      "type": "erd_design",
-      "difficulty": "advanced",
-      "marks": 4,
-      "prompt": "Identify FOUR relevant information outputs.",
-      "answer": "Tournament fixture schedule with kick-off times and match dates.\nTeams participating in each tournament.\nPlayer roster for each team.\nMatch results with home team, away team, and venue.\nTip: When the same entity participates twice in one relationship, label the roles clearly. MATCH has\ntwo FKs to TEAM: HomeTeamID and AwayTeamID."
+      "prompt": "Write a Microsoft Access SQL query to count students who voted for exactly one candidate.",
+      "answer": "Access SQL using explicit JOIN\nSELECT Count(*) AS [Total Students]\nFROM (\nSELECT V.StudID\nFROM VOTING AS V\nINNER JOIN VOTING_DETAILS AS VD ON V.VotingID = VD.VotingID\nGROUP BY V.StudID\nHAVING Count(VD.CandidateID) = 1\n) AS X;\nAlternative Access SQL\n-- Query 1: identify students who selected exactly one candidate.\nSELECT V.StudID\nFROM VOTING V, VOTING_DETAILS VD\nWHERE V.VotingID = VD.VotingID\nGROUP BY V.StudID\nHAVING Count(VD.CandidateID) = 1;\n-- Save Query 1 as Q_OneCandidateVoters.\n-- Query 2: count the saved rows.\nSELECT Count(StudID) AS [Total Students]\nFROM Q_OneCandidateVoters;\nAccess note: Use the complete Access SQL answer shown above; a saved-query sequence is acceptable when it returns the same result.\nTip: SQL answers are marked line by line. Even when you are unsure, write at least one correct line.\nStart with SELECT (or CREATE/UPDATE), then add FROM, WHERE or JOIN, GROUP BY, HAVING, and\nORDER BY as far as you can. Each correct line may earn a mark, so do not leave the SQL answer blank.\nTechnical note: In Microsoft Access, LEFT JOIN plus IS NULL is suitable for finding records with no match.",
+      "context": "University e-Voting relational schema (* denotes a foreign key):\nSTUDENT (StudentID, FirstName, LastName, PhoneNumber, FacultyID*)\nCANDIDATE (CandidateID, StudentID*)\nVOTING (VotingID, VotingDate, StudID*)\nVOTING_DETAILS (VotingID*, CandidateID*, VotingTime)\nFACULTY (FacultyID, FacultyName)\nEach student may vote for up to two candidates."
     },
     {
       "id": "FEB25-Q1-A",
@@ -1193,8 +1123,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "normalization_problem",
       "difficulty": "advanced",
       "marks": 3,
-      "prompt": "State THREE problems in the burger logbook.",
-      "answer": "Update anomaly/data inconsistency caused by repeated customer, staff, and menu facts.\nInsertion anomaly: a menu item, customer, or staff member cannot be stored independently of an\norder.\nDeletion anomaly: deleting the last order may remove the only stored evidence of a customer,\nstaff assignment, or menu usage."
+      "prompt": "Identify THREE data-management problems that may occur in the burger order logbook.",
+      "answer": "Update anomaly/data inconsistency caused by repeated customer, staff, and menu facts.\nInsertion anomaly: a menu item, customer, or staff member cannot be stored independently of an\norder.\nDeletion anomaly: deleting the last order may remove the only stored evidence of a customer,\nstaff assignment, or menu usage.",
+      "context": "Ridz's Burger logbook: Date, CustomerName, TotalOrders, a list of MenuCode-Quantity pairs, TotalPayment, PaymentType and StaffName. Each customer may place several orders; each order is managed by one staff member. The menu-code legend names B1, CK1, CK2, BF1, BF2 and BF3. The logbook supplies no stable order, customer or staff identifier."
     },
     {
       "id": "FEB25-Q3-B",
@@ -1207,8 +1138,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "normalization_problem",
       "difficulty": "advanced",
       "marks": 6,
-      "prompt": "Create primary key(s) and identify dependencies.",
-      "answer": "Keys and dependencies\nOrderID, CustomerID, and StaffID are introduced as surrogate identifiers because the logbook provides only dates and names,\nwhich are not guaranteed to be unique.\nNotation: underlined attribute = primary key; italic attribute with * = foreign key.\n1NF schema: ORDER_RECORD_1NF (OrderID, MenuCode, OrderDate, CustomerID, CustomerName, StaffID, StaffName,\nTotalOrders, MenuName, Quantity, TotalPayment, PaymentType)\nPrimary key(s)\n• OrderID + MenuCode (composite primary key).\nFull dependency\n• (OrderID, MenuCode) -> Quantity\nPartial dependencies\n• OrderID -> OrderDate, CustomerID, StaffID, TotalOrders, TotalPayment, PaymentType\n• MenuCode -> MenuName\nTransitive dependencies\n• CustomerID -> CustomerName\n• StaffID -> StaffName"
+      "prompt": "For the burger order record, propose suitable primary keys and identify the partial and transitive dependencies.",
+      "answer": "Keys and dependencies\nOrderID, CustomerID, and StaffID are introduced as surrogate identifiers because the logbook provides only dates and names,\nwhich are not guaranteed to be unique.\nNotation: underlined attribute = primary key; italic attribute with * = foreign key.\n1NF schema: ORDER_RECORD_1NF (OrderID, MenuCode, OrderDate, CustomerID, CustomerName, StaffID, StaffName,\nTotalOrders, MenuName, Quantity, TotalPayment, PaymentType)\nPrimary key(s)\n• OrderID + MenuCode (composite primary key).\nFull dependency\n• (OrderID, MenuCode) -> Quantity\nPartial dependencies\n• OrderID -> OrderDate, CustomerID, StaffID, TotalOrders, TotalPayment, PaymentType\n• MenuCode -> MenuName\nTransitive dependencies\n• CustomerID -> CustomerName\n• StaffID -> StaffName",
+      "context": "Ridz's Burger logbook: Date, CustomerName, TotalOrders, a list of MenuCode-Quantity pairs, TotalPayment, PaymentType and StaffName. Each customer may place several orders; each order is managed by one staff member. The menu-code legend names B1, CK1, CK2, BF1, BF2 and BF3. The logbook supplies no stable order, customer or staff identifier."
     },
     {
       "id": "FEB25-Q3-C",
@@ -1221,8 +1153,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "normalization_problem",
       "difficulty": "advanced",
       "marks": 11,
-      "prompt": "Normalize the logbook from 1NF to 3NF.",
-      "answer": "Normalization steps\n1NF (First Normal Form)\nEliminate repeating groups, make every attribute atomic, and identify the primary key.\nORDER_RECORD_1NF (OrderID, MenuCode, OrderDate, CustomerID, CustomerName, StaffID, StaffName, TotalOrders,\nMenuName, Quantity, TotalPayment, PaymentType) - Split the list of ordered items into one menu item per row.\n2NF (Second Normal Form)\nThe relation must be in 1NF. Remove partial dependencies so every non-key attribute depends on the whole composite key.\nORDERS_2NF (OrderID, OrderDate, CustomerID, CustomerName, StaffID, StaffName, TotalOrders, TotalPayment,\nPaymentType) - Removes facts dependent only on OrderID.\nMENU (MenuCode, MenuName) - Removes the MenuCode partial dependency.\nORDER_DETAIL (OrderID*, MenuCode*, Quantity) - Quantity depends on the whole key.\n3NF (Third Normal Form)\nThe relations must be in 2NF. Remove transitive dependencies so non-key attributes depend on nothing but the key.\nCUSTOMER (CustomerID, CustomerName) - Stores customer facts once.\nSTAFF (StaffID, StaffName) - Stores staff facts once.\nMENU (MenuCode, MenuName) - Remains in 3NF.\nORDERS (OrderID, OrderDate, CustomerID*, StaffID*, PaymentType, TotalPayment) - References CUSTOMER and STAFF;\nTotalOrders is derived from ORDER_DETAIL.\nORDER_DETAIL (OrderID*, MenuCode*, Quantity) - Final associative/detail relation.\nTip: When the source has no reliable transaction ID, state the assumption and introduce a surrogate\nkey. Do not use a customer name as a permanent identifier."
+      "prompt": "Normalize the burger order record from first normal form (1NF) to third normal form (3NF), showing each stage.",
+      "answer": "Normalization steps\n1NF (First Normal Form)\nEliminate repeating groups, make every attribute atomic, and identify the primary key.\nORDER_RECORD_1NF (OrderID, MenuCode, OrderDate, CustomerID, CustomerName, StaffID, StaffName, TotalOrders,\nMenuName, Quantity, TotalPayment, PaymentType) - Split the list of ordered items into one menu item per row.\n2NF (Second Normal Form)\nThe relation must be in 1NF. Remove partial dependencies so every non-key attribute depends on the whole composite key.\nORDERS_2NF (OrderID, OrderDate, CustomerID, CustomerName, StaffID, StaffName, TotalOrders, TotalPayment,\nPaymentType) - Removes facts dependent only on OrderID.\nMENU (MenuCode, MenuName) - Removes the MenuCode partial dependency.\nORDER_DETAIL (OrderID*, MenuCode*, Quantity) - Quantity depends on the whole key.\n3NF (Third Normal Form)\nThe relations must be in 2NF. Remove transitive dependencies so non-key attributes depend on nothing but the key.\nCUSTOMER (CustomerID, CustomerName) - Stores customer facts once.\nSTAFF (StaffID, StaffName) - Stores staff facts once.\nMENU (MenuCode, MenuName) - Remains in 3NF.\nORDERS (OrderID, OrderDate, CustomerID*, StaffID*, PaymentType, TotalPayment) - References CUSTOMER and STAFF;\nTotalOrders is derived from ORDER_DETAIL.\nORDER_DETAIL (OrderID*, MenuCode*, Quantity) - Final associative/detail relation.\nTip: When the source has no reliable transaction ID, state the assumption and introduce a surrogate\nkey. Do not use a customer name as a permanent identifier.",
+      "context": "Ridz's Burger logbook: Date, CustomerName, TotalOrders, a list of MenuCode-Quantity pairs, TotalPayment, PaymentType and StaffName. Each customer may place several orders; each order is managed by one staff member. The menu-code legend names B1, CK1, CK2, BF1, BF2 and BF3. The logbook supplies no stable order, customer or staff identifier."
     },
     {
       "id": "FEB25-Q4-A",
@@ -1235,8 +1168,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Calculate the total number of trips for each date.",
-      "answer": "Access SQL using explicit JOIN\nSELECT TripDate, Count(BookingID) AS [Total Trips]\nFROM BOOKING\nGROUP BY TripDate;\nAlternative Access SQL\nSELECT TripDate, Count(BookingID) AS [Total Trips]\nFROM BOOKING\nGROUP BY TripDate;"
+      "prompt": "Write a Microsoft Access SQL query to calculate the number of trips for each trip date.",
+      "answer": "Access SQL using explicit JOIN\nSELECT TripDate, Count(BookingID) AS [Total Trips]\nFROM BOOKING\nGROUP BY TripDate;\nAlternative Access SQL\nSELECT TripDate, Count(BookingID) AS [Total Trips]\nFROM BOOKING\nGROUP BY TripDate;",
+      "context": "e-Travel Package relational schema (* denotes a foreign key):\nCUSTOMERS (CustomerID, FirstName, LastName, PhoneNumber)\nBOOKING (BookingID, BookingDate, NumberOfPax, TripDate, CustomerID*, GuideID*, PackageID*)\nGUIDE (GuideID, GuideName, BasicSalary, HireDate)\nPACKAGE (PackageID, PackageName, PricePerPax, PackageDetails)"
     },
     {
       "id": "FEB25-Q4-B",
@@ -1249,8 +1183,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Display the customer with the highest number of bookings.",
-      "answer": "Access SQL - complete model answer\nSELECT TOP 1 C.CustomerID, C.FirstName, C.LastName, C.PhoneNumber,\n       Count(B.BookingID) AS [Total Bookings]\nFROM CUSTOMERS AS C INNER JOIN BOOKING AS B ON C.CustomerID = B.CustomerID\nGROUP BY C.CustomerID, C.FirstName, C.LastName, C.PhoneNumber\nORDER BY Count(B.BookingID) DESC;"
+      "prompt": "Write a Microsoft Access SQL query to display the customer with the highest number of bookings.",
+      "answer": "Access SQL - complete model answer\nSELECT TOP 1 C.CustomerID, C.FirstName, C.LastName, C.PhoneNumber,\n       Count(B.BookingID) AS [Total Bookings]\nFROM CUSTOMERS AS C INNER JOIN BOOKING AS B ON C.CustomerID = B.CustomerID\nGROUP BY C.CustomerID, C.FirstName, C.LastName, C.PhoneNumber\nORDER BY Count(B.BookingID) DESC;",
+      "context": "e-Travel Package relational schema (* denotes a foreign key):\nCUSTOMERS (CustomerID, FirstName, LastName, PhoneNumber)\nBOOKING (BookingID, BookingDate, NumberOfPax, TripDate, CustomerID*, GuideID*, PackageID*)\nGUIDE (GuideID, GuideName, BasicSalary, HireDate)\nPACKAGE (PackageID, PackageName, PricePerPax, PackageDetails)"
     },
     {
       "id": "FEB25-Q4-C",
@@ -1263,8 +1198,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Increase salary by 10% for guides working on a trip in February 2025.",
-      "answer": "Access SQL using explicit JOIN\nUPDATE GUIDE\nSET BasicSalary = BasicSalary * 1.10\nWHERE GuideID IN (\nSELECT GuideID\nFROM BOOKING\nWHERE TripDate >= #2025-02-01#\nAND TripDate < #2025-03-01#\n);\nAlternative Access SQL\nUPDATE GUIDE\nSET BasicSalary = BasicSalary * 1.10\nWHERE GuideID IN\n(SELECT GuideID\nFROM BOOKING\nWHERE TripDate >= #2025-02-01# AND TripDate < #2025-03-01#);"
+      "prompt": "Write a Microsoft Access SQL statement to increase by 10% the salary of guides assigned to a trip in February 2025.",
+      "answer": "Access SQL using explicit JOIN\nUPDATE GUIDE\nSET BasicSalary = BasicSalary * 1.10\nWHERE GuideID IN (\nSELECT GuideID\nFROM BOOKING\nWHERE TripDate >= #2025-02-01#\nAND TripDate < #2025-03-01#\n);\nAlternative Access SQL\nUPDATE GUIDE\nSET BasicSalary = BasicSalary * 1.10\nWHERE GuideID IN\n(SELECT GuideID\nFROM BOOKING\nWHERE TripDate >= #2025-02-01# AND TripDate < #2025-03-01#);",
+      "context": "e-Travel Package relational schema (* denotes a foreign key):\nCUSTOMERS (CustomerID, FirstName, LastName, PhoneNumber)\nBOOKING (BookingID, BookingDate, NumberOfPax, TripDate, CustomerID*, GuideID*, PackageID*)\nGUIDE (GuideID, GuideName, BasicSalary, HireDate)\nPACKAGE (PackageID, PackageName, PricePerPax, PackageDetails)"
     },
     {
       "id": "FEB25-Q4-D",
@@ -1277,8 +1213,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Display package names booked more than 70 times.",
-      "answer": "Access SQL using explicit JOIN\nSELECT P.PackageName, Count(B.BookingID) AS [Total Bookings]\nFROM PACKAGE AS P\nINNER JOIN BOOKING AS B ON P.PackageID = B.PackageID\nGROUP BY P.PackageID, P.PackageName\nHAVING Count(B.BookingID) > 70;\nAlternative Access SQL\nSELECT P.PackageName,\nCount(B.BookingID) AS [Total Bookings]\nFROM PACKAGE P, BOOKING B\nWHERE P.PackageID = B.PackageID\nGROUP BY P.PackageID, P.PackageName\nHAVING Count(B.BookingID) > 70;"
+      "prompt": "Write a Microsoft Access SQL query to display package names booked more than 70 times.",
+      "answer": "Access SQL using explicit JOIN\nSELECT P.PackageName, Count(B.BookingID) AS [Total Bookings]\nFROM PACKAGE AS P\nINNER JOIN BOOKING AS B ON P.PackageID = B.PackageID\nGROUP BY P.PackageID, P.PackageName\nHAVING Count(B.BookingID) > 70;\nAlternative Access SQL\nSELECT P.PackageName,\nCount(B.BookingID) AS [Total Bookings]\nFROM PACKAGE P, BOOKING B\nWHERE P.PackageID = B.PackageID\nGROUP BY P.PackageID, P.PackageName\nHAVING Count(B.BookingID) > 70;",
+      "context": "e-Travel Package relational schema (* denotes a foreign key):\nCUSTOMERS (CustomerID, FirstName, LastName, PhoneNumber)\nBOOKING (BookingID, BookingDate, NumberOfPax, TripDate, CustomerID*, GuideID*, PackageID*)\nGUIDE (GuideID, GuideName, BasicSalary, HireDate)\nPACKAGE (PackageID, PackageName, PricePerPax, PackageDetails)"
     },
     {
       "id": "FEB25-Q4-E",
@@ -1291,36 +1228,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Count distinct customers who made a booking from February through March 2025.",
-      "answer": "Access SQL using explicit JOIN\nSELECT Count(*) AS [Total Customers]\nFROM (\nSELECT DISTINCT CustomerID\nFROM BOOKING\nWHERE BookingDate >= #2025-02-01#\nAND BookingDate < #2025-04-01#\n) AS X;\nAlternative Access SQL\n-- Query 1: list each customer once.\nSELECT CustomerID\nFROM BOOKING\nWHERE BookingDate >= #2025-02-01# AND BookingDate < #2025-04-01#\nGROUP BY CustomerID;\n-- Save Query 1 as Q_FebMarBookingCustomers.\n-- Query 2: count the saved rows.\nSELECT Count(CustomerID) AS [Total Customers]\nFROM Q_FebMarBookingCustomers;\nAccess note: Use the complete Access SQL answer shown above; a saved-query sequence is acceptable when it returns the same result.\nTip: SQL answers are marked line by line. Even when you are unsure, write at least one correct line.\nStart with SELECT (or CREATE/UPDATE), then add FROM, WHERE or JOIN, GROUP BY, HAVING, and\nORDER BY as far as you can. Each correct line may earn a mark, so do not leave the SQL answer blank.\nTechnical reminder: Use BookingDate when the wording says 'made a booking'; use TripDate when it refers\nto the travel/trip date."
-    },
-    {
-      "id": "FEB25-Q5-A",
-      "parentId": "FEB25-Q5",
-      "session": "February 2025",
-      "chapters": [
-        4
-      ],
-      "topic": "Construct an art-training ERD and propose reports",
-      "type": "erd_design",
-      "difficulty": "advanced",
-      "marks": 16,
-      "prompt": "Construct the Excellent Art Crow's Foot ERD.",
-      "answer": "The ERD below uses direct Crow's Foot symbols at every relationship end: a circle means optional (minimum 0), a bar means\none, and the crow's foot means many. Read the two ends together to determine connectivity and cardinality.\nEntity and key checklist\nEntity / required key structure\nSTUDIO, SUPPLIER, ART_MATERIAL, PROGRAM, EMPLOYEE, and SKILL with all required\nattributes and PKs.\nSTUDIO_SUPPLIER and SUPPLIER_MATERIAL associative entities.\nPROGRAM supertype plus VISUAL_ART, GLASS_PAINTING, and HANDICRAFT subtypes; disjoint\nand total.\nEMPLOYEE_SKILL and EMPLOYEE_MARRIAGE associative entities.\nRelationship and cardinality checklist\nRequired relationship\nSTUDIO M:N SUPPLIER and SUPPLIER M:N ART_MATERIAL.\nSTUDIO 1:M PROGRAM and STUDIO 1:M EMPLOYEE.\nEMPLOYEE M:N SKILL; recursive 0..1 spouse relationship with DateOfMarriage."
-    },
-    {
-      "id": "FEB25-Q5-B",
-      "parentId": "FEB25-Q5",
-      "session": "February 2025",
-      "chapters": [
-        4
-      ],
-      "topic": "Construct an art-training ERD and propose reports",
-      "type": "erd_design",
-      "difficulty": "advanced",
-      "marks": 4,
-      "prompt": "List TWO reports that can be produced.",
-      "answer": "Studio programme catalogue: studio, programme type, programme fee, and subtype-specific\ndetail.\nEmployee skills report by studio, including employee, job title, and acquired skills.\nAlternatives: supplier/material/price report or employee marriage report.\nTip: Subtype-specific attributes must not be placed in the supertype for every row. Put ClassType,\nProgramLevel, and CraftData in their respective subtype tables."
+      "prompt": "Write a Microsoft Access SQL query to count customers who made at least one booking from February through March 2025.",
+      "answer": "Access SQL using explicit JOIN\nSELECT Count(*) AS [Total Customers]\nFROM (\nSELECT DISTINCT CustomerID\nFROM BOOKING\nWHERE BookingDate >= #2025-02-01#\nAND BookingDate < #2025-04-01#\n) AS X;\nAlternative Access SQL\n-- Query 1: list each customer once.\nSELECT CustomerID\nFROM BOOKING\nWHERE BookingDate >= #2025-02-01# AND BookingDate < #2025-04-01#\nGROUP BY CustomerID;\n-- Save Query 1 as Q_FebMarBookingCustomers.\n-- Query 2: count the saved rows.\nSELECT Count(CustomerID) AS [Total Customers]\nFROM Q_FebMarBookingCustomers;\nAccess note: Use the complete Access SQL answer shown above; a saved-query sequence is acceptable when it returns the same result.\nTip: SQL answers are marked line by line. Even when you are unsure, write at least one correct line.\nStart with SELECT (or CREATE/UPDATE), then add FROM, WHERE or JOIN, GROUP BY, HAVING, and\nORDER BY as far as you can. Each correct line may earn a mark, so do not leave the SQL answer blank.\nTechnical reminder: Use BookingDate when the wording says 'made a booking'; use TripDate when it refers\nto the travel/trip date.",
+      "context": "e-Travel Package relational schema (* denotes a foreign key):\nCUSTOMERS (CustomerID, FirstName, LastName, PhoneNumber)\nBOOKING (BookingID, BookingDate, NumberOfPax, TripDate, CustomerID*, GuideID*, PackageID*)\nGUIDE (GuideID, GuideName, BasicSalary, HireDate)\nPACKAGE (PackageID, PackageName, PricePerPax, PackageDetails)"
     },
     {
       "id": "JULY25-Q1-A",
@@ -1367,8 +1277,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "theory_and_applied_interpretation",
       "difficulty": "intermediate",
       "marks": 6,
-      "prompt": "Describe candidate, primary, and secondary keys and give examples from AGENT.",
-      "answer": "Candidate key (2 marks): a minimal attribute or set that uniquely identifies a row. AgentID and PassportNumber are candidate keys when both are unique and non-null.\nPrimary key (2 marks): the selected main row identifier. Example: AgentID.\nSecondary key (2 marks): a non-unique field used for retrieval or indexing. Examples: FirstName or AreaCode. PassportNumber remains an alternate candidate key."
+      "prompt": "Define candidate, primary and secondary keys. Give ONE example of each using the AGENT table.",
+      "answer": "Candidate key (2 marks): a minimal attribute or set that uniquely identifies a row. AgentID and PassportNumber are candidate keys when both are unique and non-null.\nPrimary key (2 marks): the selected main row identifier. Example: AgentID.\nSecondary key (2 marks): a non-unique field used for retrieval or indexing. Examples: FirstName or AreaCode. PassportNumber remains an alternate candidate key.",
+      "context": "AGENT sample columns: AgentID, FirstName, LastName, PassportNumber, AreaCode and PhoneNumber. The shown AgentID values are 503-506; FirstName repeats (Alex), while PassportNumber is intended as an individual identifier when present."
     },
     {
       "id": "JULY25-Q1-D",
@@ -1417,8 +1328,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "theory_and_applied_interpretation",
       "difficulty": "intermediate",
       "marks": 4,
-      "prompt": "Explain TWO reasons the BOOKS table violates relational-table characteristics.",
-      "answer": "ISBN is intended to identify a book, but 978-9814824-24-7 occurs twice; the table therefore lacks a\nunique row identifier/entity integrity.\nAuthors contains several names in one cell (for example, Ahmad Rostam, Rozanizam, Alizi Alias),\nviolating the rule that each intersection contains one atomic value."
+      "prompt": "Explain TWO characteristics of a relational table that the BOOKS data violates.",
+      "answer": "ISBN is intended to identify a book, but 978-9814824-24-7 occurs twice; the table therefore lacks a\nunique row identifier/entity integrity.\nAuthors contains several names in one cell (for example, Ahmad Rostam, Rozanizam, Alizi Alias),\nviolating the rule that each intersection contains one atomic value.",
+      "context": "BOOKS table columns: ISBN, BookTitle, Authors, PublisherID and PublisherName. The ISBN 978-9814824-24-7 appears in two different book rows. The Authors cell for Healing the Invisible Wound contains Ahmad Rostam, Rozanizam and Alizi Alias together."
     },
     {
       "id": "JULY25-Q2-C",
@@ -1466,7 +1378,8 @@ window.ICT450_PRACTICE_DATA = {
       "difficulty": "advanced",
       "marks": 3,
       "prompt": "State the normal form of the employee-skills table and explain.",
-      "answer": "The table is UNF (not yet 1NF) because Department ID & Name and Skill ID & Skill Name combine\nmultiple facts in single cells.\nCompletionDate also mixes a date domain with the text “Not complete yet”; incomplete\ncertification should use NULL plus a separate status if required."
+      "answer": "The table is UNF (not yet 1NF) because Department ID & Name and Skill ID & Skill Name combine\nmultiple facts in single cells.\nCompletionDate also mixes a date domain with the text “Not complete yet”; incomplete\ncertification should use NULL plus a separate status if required.",
+      "context": "IT Creative Solution employee-skills record: StaffID, StaffName, Position, DepartmentID/DepartmentName, SkillID/SkillName and CompletionDate. An employee may list up to two important skills; some have no completed certification, while others have several. A skill may be held by several employees or by none. CompletionDate may be recorded as not yet complete."
     },
     {
       "id": "JULY25-Q3-B",
@@ -1479,8 +1392,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "normalization_problem",
       "difficulty": "advanced",
       "marks": 6,
-      "prompt": "Identify keys and dependencies.",
-      "answer": "Keys and dependencies\nNotation: underlined attribute = primary key; italic attribute with * = foreign key.\n1NF schema: EMPLOYEE_SKILL_1NF (StaffID, SkillID, StaffName, Position, DepartmentID, DepartmentName, SkillName,\nCompletionDate)\nPrimary key(s)\n• StaffID + SkillID (composite primary key).\nFull dependency\n• (StaffID, SkillID) -> CompletionDate\nPartial dependencies\n• StaffID -> StaffName, Position, DepartmentID\n• SkillID -> SkillName\nTransitive dependencies\n• DepartmentID -> DepartmentName"
+      "prompt": "Identify the primary key, partial dependencies and transitive dependencies in the employee-skills record.",
+      "answer": "Keys and dependencies\nNotation: underlined attribute = primary key; italic attribute with * = foreign key.\n1NF schema: EMPLOYEE_SKILL_1NF (StaffID, SkillID, StaffName, Position, DepartmentID, DepartmentName, SkillName,\nCompletionDate)\nPrimary key(s)\n• StaffID + SkillID (composite primary key).\nFull dependency\n• (StaffID, SkillID) -> CompletionDate\nPartial dependencies\n• StaffID -> StaffName, Position, DepartmentID\n• SkillID -> SkillName\nTransitive dependencies\n• DepartmentID -> DepartmentName",
+      "context": "IT Creative Solution employee-skills record: StaffID, StaffName, Position, DepartmentID/DepartmentName, SkillID/SkillName and CompletionDate. An employee may list up to two important skills; some have no completed certification, while others have several. A skill may be held by several employees or by none. CompletionDate may be recorded as not yet complete."
     },
     {
       "id": "JULY25-Q3-C",
@@ -1493,8 +1407,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "normalization_problem",
       "difficulty": "advanced",
       "marks": 11,
-      "prompt": "Normalize the table from 1NF to 3NF.",
-      "answer": "Normalization steps\n1NF (First Normal Form)\nEliminate repeating groups, make every attribute atomic, and identify the primary key.\nEMPLOYEE_SKILL_1NF (StaffID, SkillID, StaffName, Position, DepartmentID, DepartmentName, SkillName, CompletionDate)\n- Split combined Department and Skill cells; store one skill per row.\n2NF (Second Normal Form)\nThe relation must be in 1NF. Remove partial dependencies so every non-key attribute depends on the whole composite key.\nSTAFF_2NF (StaffID, StaffName, Position, DepartmentID, DepartmentName) - Removes the StaffID partial dependency.\nSKILL (SkillID, SkillName) - Removes the SkillID partial dependency.\nCERTIFICATION (StaffID*, SkillID*, CompletionDate) - CompletionDate depends on the whole key.\n3NF (Third Normal Form)\nThe relations must be in 2NF. Remove transitive dependencies so non-key attributes depend on nothing but the key.\nDEPARTMENT (DepartmentID, DepartmentName) - Removes DepartmentID -> DepartmentName.\nSTAFF (StaffID, StaffName, Position, DepartmentID*) - References DEPARTMENT.\nSKILL (SkillID, SkillName) - Remains in 3NF.\nCERTIFICATION (StaffID*, SkillID*, CompletionDate) - Staff with no skill remains in STAFF without a fake certification row.\nTip: A staff member with no skill must still be insertable. That is why STAFF must be independent of\nCERTIFICATION; do not create a fake skill row or store “no skill” as a value."
+      "prompt": "Normalize the employee-skills record from first normal form (1NF) to third normal form (3NF), showing each stage.",
+      "answer": "Normalization steps\n1NF (First Normal Form)\nEliminate repeating groups, make every attribute atomic, and identify the primary key.\nEMPLOYEE_SKILL_1NF (StaffID, SkillID, StaffName, Position, DepartmentID, DepartmentName, SkillName, CompletionDate)\n- Split combined Department and Skill cells; store one skill per row.\n2NF (Second Normal Form)\nThe relation must be in 1NF. Remove partial dependencies so every non-key attribute depends on the whole composite key.\nSTAFF_2NF (StaffID, StaffName, Position, DepartmentID, DepartmentName) - Removes the StaffID partial dependency.\nSKILL (SkillID, SkillName) - Removes the SkillID partial dependency.\nCERTIFICATION (StaffID*, SkillID*, CompletionDate) - CompletionDate depends on the whole key.\n3NF (Third Normal Form)\nThe relations must be in 2NF. Remove transitive dependencies so non-key attributes depend on nothing but the key.\nDEPARTMENT (DepartmentID, DepartmentName) - Removes DepartmentID -> DepartmentName.\nSTAFF (StaffID, StaffName, Position, DepartmentID*) - References DEPARTMENT.\nSKILL (SkillID, SkillName) - Remains in 3NF.\nCERTIFICATION (StaffID*, SkillID*, CompletionDate) - Staff with no skill remains in STAFF without a fake certification row.\nTip: A staff member with no skill must still be insertable. That is why STAFF must be independent of\nCERTIFICATION; do not create a fake skill row or store “no skill” as a value.",
+      "context": "IT Creative Solution employee-skills record: StaffID, StaffName, Position, DepartmentID/DepartmentName, SkillID/SkillName and CompletionDate. An employee may list up to two important skills; some have no completed certification, while others have several. A skill may be held by several employees or by none. CompletionDate may be recorded as not yet complete."
     },
     {
       "id": "JULY25-Q4-A",
@@ -1507,8 +1422,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Display project names assigned from January through April 2025.",
-      "answer": "Access SQL using explicit JOIN\nSELECT DISTINCT P.ProjName\nFROM PROJECT AS P\nINNER JOIN ASSIGN AS A ON P.ProjCode = A.ProjCode\nWHERE A.AssignDate >= #2025-01-01#\nAND A.AssignDate < #2025-05-01#;\nAlternative Access SQL\nSELECT DISTINCT P.ProjName\nFROM PROJECT P, ASSIGN A\nWHERE P.ProjCode = A.ProjCode\nAND A.AssignDate >= #2025-01-01# AND A.AssignDate < #2025-05-01#;"
+      "prompt": "Write a Microsoft Access SQL query to display project names for assignments dated January through April 2025.",
+      "answer": "Access SQL using explicit JOIN\nSELECT DISTINCT P.ProjName\nFROM PROJECT AS P\nINNER JOIN ASSIGN AS A ON P.ProjCode = A.ProjCode\nWHERE A.AssignDate >= #2025-01-01#\nAND A.AssignDate < #2025-05-01#;\nAlternative Access SQL\nSELECT DISTINCT P.ProjName\nFROM PROJECT P, ASSIGN A\nWHERE P.ProjCode = A.ProjCode\nAND A.AssignDate >= #2025-01-01# AND A.AssignDate < #2025-05-01#;",
+      "context": "XY Company relational schema:\nEMPLOYEE (EmpID, EmpFirstName, EmpLastName, EmpHireDate, JobCode)\nJOB (JobCode, JobName, JobChargeHour)\nPROJECT (ProjCode, ProjName)\nASSIGN (AssignID, AssignDate, AssignHours, ProjCode, EmpID)"
     },
     {
       "id": "JULY25-Q4-B",
@@ -1521,8 +1437,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 5,
-      "prompt": "Display total charge for each employee as “Total Charge”.",
-      "answer": "Access SQL using explicit JOIN\nSELECT E.EmpID,\nE.EmpFirstName & ' ' & E.EmpLastName AS [Employee Name],\nSum(A.AssignHours * J.JobChargeHour) AS [Total Charge]\nFROM (EMPLOYEE AS E\nINNER JOIN JOB AS J ON E.JobCode = J.JobCode)\nINNER JOIN ASSIGN AS A ON E.EmpID = A.EmpID\nGROUP BY E.EmpID, E.EmpFirstName, E.EmpLastName;\nAlternative Access SQL\nSELECT E.EmpID,\nE.EmpFirstName & ' ' & E.EmpLastName AS [Employee Name],\nSum(A.AssignHours * J.JobChargeHour) AS [Total Charge]\nFROM EMPLOYEE E, JOB J, ASSIGN A\nWHERE E.JobCode = J.JobCode\nAND E.EmpID = A.EmpID\nGROUP BY E.EmpID, E.EmpFirstName, E.EmpLastName;"
+      "prompt": "Write a Microsoft Access SQL query to calculate the total charge for each employee, naming the result Total Charge.",
+      "answer": "Access SQL using explicit JOIN\nSELECT E.EmpID,\nE.EmpFirstName & ' ' & E.EmpLastName AS [Employee Name],\nSum(A.AssignHours * J.JobChargeHour) AS [Total Charge]\nFROM (EMPLOYEE AS E\nINNER JOIN JOB AS J ON E.JobCode = J.JobCode)\nINNER JOIN ASSIGN AS A ON E.EmpID = A.EmpID\nGROUP BY E.EmpID, E.EmpFirstName, E.EmpLastName;\nAlternative Access SQL\nSELECT E.EmpID,\nE.EmpFirstName & ' ' & E.EmpLastName AS [Employee Name],\nSum(A.AssignHours * J.JobChargeHour) AS [Total Charge]\nFROM EMPLOYEE E, JOB J, ASSIGN A\nWHERE E.JobCode = J.JobCode\nAND E.EmpID = A.EmpID\nGROUP BY E.EmpID, E.EmpFirstName, E.EmpLastName;",
+      "context": "XY Company relational schema:\nEMPLOYEE (EmpID, EmpFirstName, EmpLastName, EmpHireDate, JobCode)\nJOB (JobCode, JobName, JobChargeHour)\nPROJECT (ProjCode, ProjName)\nASSIGN (AssignID, AssignDate, AssignHours, ProjCode, EmpID)"
     },
     {
       "id": "JULY25-Q4-C",
@@ -1535,8 +1452,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 5,
-      "prompt": "Display full names of employees assigned to more than two distinct projects.",
-      "answer": "Access SQL using explicit JOIN\nSELECT E.EmpID,\nE.EmpFirstName & ' ' & E.EmpLastName AS [Employee Name]\nFROM EMPLOYEE AS E\nINNER JOIN (\nSELECT EmpID, ProjCode\nFROM ASSIGN\nGROUP BY EmpID, ProjCode\n) AS AP ON E.EmpID = AP.EmpID\nGROUP BY E.EmpID, E.EmpFirstName, E.EmpLastName\nHAVING Count(AP.ProjCode) > 2;\nAlternative Access SQL\n-- Query 1: keep one row for each employee-project pair.\nSELECT EmpID, ProjCode\nFROM ASSIGN\nGROUP BY EmpID, ProjCode;\n-- Save Query 1 as Q_EmpProject.\n-- Query 2: count distinct projects for each employee.\nSELECT E.EmpID,\nE.EmpFirstName & ' ' & E.EmpLastName AS [Employee Name]\nFROM EMPLOYEE E, Q_EmpProject Q\nWHERE E.EmpID = Q.EmpID\nGROUP BY E.EmpID, E.EmpFirstName, E.EmpLastName\nHAVING Count(Q.ProjCode) > 2;\nAccess note: Use the complete Access SQL answer shown above; a saved-query sequence is acceptable when it returns the same result."
+      "prompt": "Write a Microsoft Access SQL query to display the full names of employees assigned to more than two projects.",
+      "answer": "Access SQL using explicit JOIN\nSELECT E.EmpID,\nE.EmpFirstName & ' ' & E.EmpLastName AS [Employee Name]\nFROM EMPLOYEE AS E\nINNER JOIN (\nSELECT EmpID, ProjCode\nFROM ASSIGN\nGROUP BY EmpID, ProjCode\n) AS AP ON E.EmpID = AP.EmpID\nGROUP BY E.EmpID, E.EmpFirstName, E.EmpLastName\nHAVING Count(AP.ProjCode) > 2;\nAlternative Access SQL\n-- Query 1: keep one row for each employee-project pair.\nSELECT EmpID, ProjCode\nFROM ASSIGN\nGROUP BY EmpID, ProjCode;\n-- Save Query 1 as Q_EmpProject.\n-- Query 2: count distinct projects for each employee.\nSELECT E.EmpID,\nE.EmpFirstName & ' ' & E.EmpLastName AS [Employee Name]\nFROM EMPLOYEE E, Q_EmpProject Q\nWHERE E.EmpID = Q.EmpID\nGROUP BY E.EmpID, E.EmpFirstName, E.EmpLastName\nHAVING Count(Q.ProjCode) > 2;\nAccess note: Use the complete Access SQL answer shown above; a saved-query sequence is acceptable when it returns the same result.",
+      "context": "XY Company relational schema:\nEMPLOYEE (EmpID, EmpFirstName, EmpLastName, EmpHireDate, JobCode)\nJOB (JobCode, JobName, JobChargeHour)\nPROJECT (ProjCode, ProjName)\nASSIGN (AssignID, AssignDate, AssignHours, ProjCode, EmpID)"
     },
     {
       "id": "JULY25-Q4-D",
@@ -1549,36 +1467,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 6,
-      "prompt": "Using a subquery, display job names with RM50 charge/hour and more than 10 employees.",
-      "answer": "Access SQL using explicit JOIN\nSELECT JobName\nFROM JOB\nWHERE JobChargeHour = 50\nAND JobCode IN (\nSELECT JobCode\nFROM EMPLOYEE\nGROUP BY JobCode\nHAVING Count(EmpID) > 10\n);\nAlternative Access SQL\nSELECT JobName\nFROM JOB\nWHERE JobChargeHour = 50\nAND JobCode IN\n(SELECT JobCode\nFROM EMPLOYEE\nGROUP BY JobCode\nHAVING Count(EmpID) > 10);\nTip: SQL answers are marked line by line. Even when you are unsure, write at least one correct line.\nStart with SELECT (or CREATE/UPDATE), then add FROM, WHERE or JOIN, GROUP BY, HAVING, and\nORDER BY as far as you can. Each correct line may earn a mark, so do not leave the SQL answer blank.\nTechnical reminder: Microsoft Access does not support COUNT(DISTINCT field). Use a grouped/distinct\nsubquery or a saved query before counting."
-    },
-    {
-      "id": "JULY25-Q5-A",
-      "parentId": "JULY25-Q5",
-      "session": "July 2025",
-      "chapters": [
-        4
-      ],
-      "topic": "Construct a solid-waste ERD and identify information outputs",
-      "type": "erd_design",
-      "difficulty": "advanced",
-      "marks": 16,
-      "prompt": "Construct the solid-waste recycling Crow's Foot ERD.",
-      "answer": "The ERD below uses direct Crow's Foot symbols at every relationship end: a circle means optional (minimum 0), a bar means\none, and the crow's foot means many. Read the two ends together to determine connectivity and cardinality.\nEntity and key checklist\nEntity / required key structure\nCOLLECTOR, COLLECTION_DUTY, LOCALITY, HOUSE, VEHICLE, and SOLID_WASTE with stated\nattributes and suitable PKs.\nCOLLECTOR.SupervisorID is a self-referencing FK for the recursive supervisor relationship.\nDUTY_WASTE associative entity stores TotalWeight and resolves the duty-waste M:N relationship.\nRelationship and cardinality checklist\nRequired relationship\nSupervisor COLLECTOR 0..1 : 0..M subordinate COLLECTOR; the top-level supervisor has none and every other collector has one.\nCOLLECTOR, LOCALITY, and VEHICLE each have 1:M relationships with COLLECTION_DUTY.\nLOCALITY 1:M HOUSE.\nCOLLECTION_DUTY M:N SOLID_WASTE through DUTY_WASTE.\nSupervisorID is empty only for the designated top-level supervisor; supervision must be acyclic."
-    },
-    {
-      "id": "JULY25-Q5-B",
-      "parentId": "JULY25-Q5",
-      "session": "July 2025",
-      "chapters": [
-        4
-      ],
-      "topic": "Construct a solid-waste ERD and identify information outputs",
-      "type": "erd_design",
-      "difficulty": "advanced",
-      "marks": 4,
-      "prompt": "Identify TWO relevant information outputs.",
-      "answer": "Waste collection report by date/locality, showing waste type and total weight.\nCollector duty schedule showing collector, supervisor, locality, and vehicle.\nAlternative: houses by locality/category or vehicle utilization report.\nTip: TotalWeight describes a particular waste type collected during a particular duty, so it belongs in\nDUTY_WASTE—not in SOLID_WASTE or COLLECTION_DUTY alone."
+      "prompt": "Using a subquery, write a Microsoft Access SQL query to display job names with an hourly charge of RM50 and more than 10 employees.",
+      "answer": "Access SQL using explicit JOIN\nSELECT JobName\nFROM JOB\nWHERE JobChargeHour = 50\nAND JobCode IN (\nSELECT JobCode\nFROM EMPLOYEE\nGROUP BY JobCode\nHAVING Count(EmpID) > 10\n);\nAlternative Access SQL\nSELECT JobName\nFROM JOB\nWHERE JobChargeHour = 50\nAND JobCode IN\n(SELECT JobCode\nFROM EMPLOYEE\nGROUP BY JobCode\nHAVING Count(EmpID) > 10);\nTip: SQL answers are marked line by line. Even when you are unsure, write at least one correct line.\nStart with SELECT (or CREATE/UPDATE), then add FROM, WHERE or JOIN, GROUP BY, HAVING, and\nORDER BY as far as you can. Each correct line may earn a mark, so do not leave the SQL answer blank.\nTechnical reminder: Microsoft Access does not support COUNT(DISTINCT field). Use a grouped/distinct\nsubquery or a saved query before counting.",
+      "context": "XY Company relational schema:\nEMPLOYEE (EmpID, EmpFirstName, EmpLastName, EmpHireDate, JobCode)\nJOB (JobCode, JobName, JobChargeHour)\nPROJECT (ProjCode, ProjName)\nASSIGN (AssignID, AssignDate, AssignHours, ProjCode, EmpID)"
     },
     {
       "id": "JULY26-Q1-A",
@@ -1610,7 +1501,8 @@ window.ICT450_PRACTICE_DATA = {
       "difficulty": "intermediate",
       "marks": 4,
       "prompt": "Describe TWO problems with Aisyah’s physical-folder record-keeping method as\nthe business expands.",
-      "answer": "Slow and inefficient retrieval/reporting: staff must\nmanually search, sort, cross-reference, and total\ncustomer, order, and material records; the process\nbecomes time-consuming as the file volume grows.\nWeak control and reliability: records may be duplicated,\ninconsistent, misfiled, lost, damaged, or accessed by\nunauthorized people; backup, simultaneous sharing, and\nvalidation are difficult."
+      "answer": "Slow and inefficient retrieval/reporting: staff must\nmanually search, sort, cross-reference, and total\ncustomer, order, and material records; the process\nbecomes time-consuming as the file volume grows.\nWeak control and reliability: records may be duplicated,\ninconsistent, misfiled, lost, damaged, or accessed by\nunauthorized people; backup, simultaneous sharing, and\nvalidation are difficult.",
+      "context": "Aisyah sells custom stickers, labels, tapes and planners. She keeps customer, order and material records in physical folders sorted by colour and alphabetically; the business is expanding."
     },
     {
       "id": "JULY26-Q1-C",
@@ -1675,8 +1567,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "theory_and_applied_interpretation",
       "difficulty": "intermediate",
       "marks": 4,
-      "prompt": "Explain the integrity constraints violated in APPOINTMENT and identify the key(s)\nenforcing them.",
-      "answer": "Entity integrity is violated because PatientID is part of the\ncomposite primary key (PatientID, DoctorID, Date) and a\nprimary-key component cannot be NULL. The composite\nprimary key enforces entity integrity.\nReferential integrity is violated because\nAPPOINTMENT.DeptID contains values that do not match\nan existing DEPARTMENT.DeptID. The foreign key\nAPPOINTMENT.DeptID -> DEPARTMENT.DeptID enforces\nthis rule. PatientID and DoctorID should likewise be FKs\nto PATIENT and DOCTOR."
+      "prompt": "Explain the entity-integrity and referential-integrity violations in the clinic APPOINTMENT data. Identify the key responsible for enforcing each rule.",
+      "answer": "Entity integrity is violated because PatientID is part of the\ncomposite primary key (PatientID, DoctorID, Date) and a\nprimary-key component cannot be NULL. The composite\nprimary key enforces entity integrity.\nReferential integrity is violated because\nAPPOINTMENT.DeptID contains values that do not match\nan existing DEPARTMENT.DeptID. The foreign key\nAPPOINTMENT.DeptID -> DEPARTMENT.DeptID enforces\nthis rule. PatientID and DoctorID should likewise be FKs\nto PATIENT and DOCTOR.",
+      "context": "Clinic schema: PATIENT (PatientID, Name), DOCTOR (DoctorID, DoctorName, DeptID), DEPARTMENT (DeptID, DeptName), APPOINTMENT (PatientID, DeptID, Date, Time). The paper separately declares APPOINTMENT's composite primary key as (PatientID, DoctorID, Date), although DoctorID is absent from its printed attribute list. Some appointments omit PatientID; some use DeptID values absent from DEPARTMENT. Use the declared key when evaluating the stated integrity rules."
     },
     {
       "id": "JULY26-Q2-C",
@@ -1724,7 +1617,8 @@ window.ICT450_PRACTICE_DATA = {
       "difficulty": "advanced",
       "marks": 3,
       "prompt": "State whether Sarah’s performance record is normalized and explain the problems.",
-      "answer": "No. The record is in Unnormalized Form (UNF/0NF), not a\nproperly normalized relational table.\nAssessment Details and Course Details contain composite\nvalues (code plus description/name) instead of separate\natomic attributes, and no primary key is officially\nidentified.\nCourse, lecturer, and office data are repeated, producing\nredundancy and possible insertion, update, and deletion\nanomalies."
+      "answer": "No. The record is in Unnormalized Form (UNF/0NF), not a\nproperly normalized relational table.\nAssessment Details and Course Details contain composite\nvalues (code plus description/name) instead of separate\natomic attributes, and no primary key is officially\nidentified.\nCourse, lecturer, and office data are repeated, producing\nredundancy and possible insertion, update, and deletion\nanomalies.",
+      "context": "Sarah's performance record combines AssessmentDetails, DueDate, Marks, CourseDetails, LecturerName and OfficeLocation. The sample repeats course and lecturer information across assessment rows. Each lecturer may teach several courses, but each course has one lecturer. The source gives a course code and assessment code/type within the combined details."
     },
     {
       "id": "JULY26-Q3-B",
@@ -1737,8 +1631,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "normalization_problem",
       "difficulty": "advanced",
       "marks": 6,
-      "prompt": "Identify the primary key(s), partial dependencies, and transitive dependencies.",
-      "answer": "Keys and dependencies\n1NF relation: STUDENT_PERFORMANCE_1NF (CourseCode, AssessmentCode, CourseName, AssessmentType, DueDate, Marks, LecturerName, OfficeLocation)\nComposite primary key: (CourseCode, AssessmentCode).\nFull dependency: (CourseCode, AssessmentCode) -> DueDate, Marks.\nPartial dependencies: CourseCode -> CourseName, LecturerName, OfficeLocation; AssessmentCode -> AssessmentType.\nTransitive dependency: LecturerName -> OfficeLocation. Consequently, CourseCode -> LecturerName -> OfficeLocation."
+      "prompt": "Identify the primary key, partial dependencies and transitive dependencies in Sarah's performance record.",
+      "answer": "Keys and dependencies\n1NF relation: STUDENT_PERFORMANCE_1NF (CourseCode, AssessmentCode, CourseName, AssessmentType, DueDate, Marks, LecturerName, OfficeLocation)\nComposite primary key: (CourseCode, AssessmentCode).\nFull dependency: (CourseCode, AssessmentCode) -> DueDate, Marks.\nPartial dependencies: CourseCode -> CourseName, LecturerName, OfficeLocation; AssessmentCode -> AssessmentType.\nTransitive dependency: LecturerName -> OfficeLocation. Consequently, CourseCode -> LecturerName -> OfficeLocation.",
+      "context": "Sarah's performance record combines AssessmentDetails, DueDate, Marks, CourseDetails, LecturerName and OfficeLocation. The sample repeats course and lecturer information across assessment rows. Each lecturer may teach several courses, but each course has one lecturer. The source gives a course code and assessment code/type within the combined details."
     },
     {
       "id": "JULY26-Q3-C",
@@ -1751,8 +1646,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "normalization_problem",
       "difficulty": "advanced",
       "marks": 11,
-      "prompt": "Normalize the relational schema to 3NF and show all work.",
-      "answer": "1NF — separate the combined Course Details and Assessment Details into atomic attributes. Store one course–assessment result per row.\nSTUDENT_PERFORMANCE_1NF (CourseCode, AssessmentCode, CourseName, AssessmentType, DueDate, Marks, LecturerName, OfficeLocation)\nPK: (CourseCode, AssessmentCode).\n\n2NF — remove attributes that depend on only one part of the composite key.\nCOURSE_2NF (CourseCode, CourseName, LecturerName, OfficeLocation)\nASSESSMENT_TYPE (AssessmentCode, AssessmentType)\nPERFORMANCE (CourseCode*, AssessmentCode*, DueDate, Marks)\n\n3NF — remove the transitive dependency LecturerName -> OfficeLocation.\nLECTURER (LecturerID, LecturerName, OfficeLocation)\nCOURSE (CourseCode, CourseName, LecturerID*)\nASSESSMENT_TYPE (AssessmentCode, AssessmentType)\nPERFORMANCE (CourseCode*, AssessmentCode*, DueDate, Marks)\n\nUnderline each primary key in a drawn schema; * identifies a foreign key here. LecturerID is introduced as a surrogate key because no lecturer identifier is given. LecturerName could instead be a primary key only if its uniqueness is guaranteed."
+      "prompt": "Normalize Sarah's performance record to third normal form (3NF), showing all stages and resulting relations.",
+      "answer": "1NF — separate the combined Course Details and Assessment Details into atomic attributes. Store one course–assessment result per row.\nSTUDENT_PERFORMANCE_1NF (CourseCode, AssessmentCode, CourseName, AssessmentType, DueDate, Marks, LecturerName, OfficeLocation)\nPK: (CourseCode, AssessmentCode).\n\n2NF — remove attributes that depend on only one part of the composite key.\nCOURSE_2NF (CourseCode, CourseName, LecturerName, OfficeLocation)\nASSESSMENT_TYPE (AssessmentCode, AssessmentType)\nPERFORMANCE (CourseCode*, AssessmentCode*, DueDate, Marks)\n\n3NF — remove the transitive dependency LecturerName -> OfficeLocation.\nLECTURER (LecturerID, LecturerName, OfficeLocation)\nCOURSE (CourseCode, CourseName, LecturerID*)\nASSESSMENT_TYPE (AssessmentCode, AssessmentType)\nPERFORMANCE (CourseCode*, AssessmentCode*, DueDate, Marks)\n\nUnderline each primary key in a drawn schema; * identifies a foreign key here. LecturerID is introduced as a surrogate key because no lecturer identifier is given. LecturerName could instead be a primary key only if its uniqueness is guaranteed.",
+      "context": "Sarah's performance record combines AssessmentDetails, DueDate, Marks, CourseDetails, LecturerName and OfficeLocation. The sample repeats course and lecturer information across assessment rows. Each lecturer may teach several courses, but each course has one lecturer. The source gives a course code and assessment code/type within the combined details."
     },
     {
       "id": "JULY26-Q4-A",
@@ -1765,8 +1661,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 4,
-      "prompt": "Create ENROLLMENT with a composite primary key and the required foreign keys.",
-      "answer": "Access SQL using named constraints\nCREATE TABLE ENROLLMENT (\nMember_ID INTEGER NOT NULL,\nClass_ID INTEGER NOT NULL,\nEnrollDate DATE,\nCONSTRAINT ENROLLMENT_PK\nPRIMARY KEY (Member_ID, Class_ID),\nCONSTRAINT ENROLLMENT_MEMBER_FK\nFOREIGN KEY (Member_ID) REFERENCES [MEMBER] (Member_ID),\nCONSTRAINT ENROLLMENT_CLASS_FK\nFOREIGN KEY (Class_ID) REFERENCES [CLASS] (Class_ID)\n);\nAlternative Access SQL\nCREATE TABLE ENROLLMENT (\nMember_ID INTEGER NOT NULL,\nClass_ID INTEGER NOT NULL,\nEnrollDate DATE,\nPRIMARY KEY (Member_ID, Class_ID),\nFOREIGN KEY (Member_ID) REFERENCES [MEMBER],\nFOREIGN KEY (Class_ID) REFERENCES [CLASS]\n);\nSquare brackets are used because MEMBER and CLASS can conflict with reserved words in Microsoft Access."
+      "prompt": "Write a Microsoft Access SQL statement to create ENROLLMENT with a composite primary key and foreign keys to MEMBER and CLASS.",
+      "answer": "Access SQL using named constraints\nCREATE TABLE ENROLLMENT (\nMember_ID INTEGER NOT NULL,\nClass_ID INTEGER NOT NULL,\nEnrollDate DATE,\nCONSTRAINT ENROLLMENT_PK\nPRIMARY KEY (Member_ID, Class_ID),\nCONSTRAINT ENROLLMENT_MEMBER_FK\nFOREIGN KEY (Member_ID) REFERENCES [MEMBER] (Member_ID),\nCONSTRAINT ENROLLMENT_CLASS_FK\nFOREIGN KEY (Class_ID) REFERENCES [CLASS] (Class_ID)\n);\nAlternative Access SQL\nCREATE TABLE ENROLLMENT (\nMember_ID INTEGER NOT NULL,\nClass_ID INTEGER NOT NULL,\nEnrollDate DATE,\nPRIMARY KEY (Member_ID, Class_ID),\nFOREIGN KEY (Member_ID) REFERENCES [MEMBER],\nFOREIGN KEY (Class_ID) REFERENCES [CLASS]\n);\nSquare brackets are used because MEMBER and CLASS can conflict with reserved words in Microsoft Access.",
+      "context": "Fitness Center relational schema (* denotes a foreign key):\nTRAINER (Trainer_ID, Name, Specialization, Salary)\nCLASS (Class_ID, ClassName, Schedule, Trainer_ID*)\nMEMBER (Member_ID, MemberName, Level)\nENROLLMENT (Member_ID*, Class_ID*, EnrollDate)"
     },
     {
       "id": "JULY26-Q4-B",
@@ -1779,8 +1676,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 5,
-      "prompt": "Display trainers earning more than RM4,500, specializing in Yoga or Pilates, with\nnames beginning A; sort alphabetically.",
-      "answer": "Access SQL using explicit JOIN\nSELECT Name\nFROM TRAINER\nWHERE Salary > 4500\nAND Specialization IN ('Yoga', 'Pilates')\nAND Name LIKE 'A*'\nORDER BY Name;\nMicrosoft Access uses * as the multi-character wildcard. In standard SQL, the equivalent pattern is A%.\nAlternative Access SQL\nSELECT Name\nFROM TRAINER\nWHERE Salary > 4500\nAND (Specialization = 'Yoga'\nOR Specialization = 'Pilates')\nAND Name LIKE 'A*'\nORDER BY Name;"
+      "prompt": "Write a Microsoft Access SQL query to list trainer names beginning with A where salary exceeds RM4,500 and specialization is Yoga or Pilates; sort by name.",
+      "answer": "Access SQL using explicit JOIN\nSELECT Name\nFROM TRAINER\nWHERE Salary > 4500\nAND Specialization IN ('Yoga', 'Pilates')\nAND Name LIKE 'A*'\nORDER BY Name;\nMicrosoft Access uses * as the multi-character wildcard. In standard SQL, the equivalent pattern is A%.\nAlternative Access SQL\nSELECT Name\nFROM TRAINER\nWHERE Salary > 4500\nAND (Specialization = 'Yoga'\nOR Specialization = 'Pilates')\nAND Name LIKE 'A*'\nORDER BY Name;",
+      "context": "Fitness Center relational schema (* denotes a foreign key):\nTRAINER (Trainer_ID, Name, Specialization, Salary)\nCLASS (Class_ID, ClassName, Schedule, Trainer_ID*)\nMEMBER (Member_ID, MemberName, Level)\nENROLLMENT (Member_ID*, Class_ID*, EnrollDate)"
     },
     {
       "id": "JULY26-Q4-C",
@@ -1793,8 +1691,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 5,
-      "prompt": "Display each class and its total members, only where more than 15 members\nenrolled after 1 January 2026.",
-      "answer": "Access SQL using explicit JOIN\nSELECT C.ClassName,\nCount(E.Member_ID) AS [Total Members]\nFROM [CLASS] AS C\nINNER JOIN ENROLLMENT AS E\nON C.Class_ID = E.Class_ID\nWHERE E.EnrollDate > #2026-01-01#\nGROUP BY C.Class_ID, C.ClassName\nHAVING Count(E.Member_ID) > 15;\nAlternative Access SQL\nSELECT C.ClassName,\nCOUNT(E.Member_ID) AS [Total Members]\nFROM [CLASS] C, ENROLLMENT E\nWHERE C.Class_ID = E.Class_ID\nAND E.EnrollDate > #2026-01-01#\nGROUP BY C.Class_ID, C.ClassName\nHAVING COUNT(E.Member_ID) > 15;"
+      "prompt": "Write a Microsoft Access SQL query to show each class name and its enrolled-member count where more than 15 members enrolled after 1 January 2026.",
+      "answer": "Access SQL using explicit JOIN\nSELECT C.ClassName,\nCount(E.Member_ID) AS [Total Members]\nFROM [CLASS] AS C\nINNER JOIN ENROLLMENT AS E\nON C.Class_ID = E.Class_ID\nWHERE E.EnrollDate > #2026-01-01#\nGROUP BY C.Class_ID, C.ClassName\nHAVING Count(E.Member_ID) > 15;\nAlternative Access SQL\nSELECT C.ClassName,\nCOUNT(E.Member_ID) AS [Total Members]\nFROM [CLASS] C, ENROLLMENT E\nWHERE C.Class_ID = E.Class_ID\nAND E.EnrollDate > #2026-01-01#\nGROUP BY C.Class_ID, C.ClassName\nHAVING COUNT(E.Member_ID) > 15;",
+      "context": "Fitness Center relational schema (* denotes a foreign key):\nTRAINER (Trainer_ID, Name, Specialization, Salary)\nCLASS (Class_ID, ClassName, Schedule, Trainer_ID*)\nMEMBER (Member_ID, MemberName, Level)\nENROLLMENT (Member_ID*, Class_ID*, EnrollDate)"
     },
     {
       "id": "JULY26-Q4-D",
@@ -1807,36 +1706,9 @@ window.ICT450_PRACTICE_DATA = {
       "type": "sql_construction",
       "difficulty": "advanced",
       "marks": 6,
-      "prompt": "Using a subquery, display trainers who teach Advanced-level members and earn\nmore than RM4,000.",
-      "answer": "Access SQL using explicit JOIN\nSELECT Name\nFROM TRAINER\nWHERE Salary > 4000\nAND Trainer_ID IN (\nSELECT C.Trainer_ID\nFROM ([CLASS] AS C\nINNER JOIN ENROLLMENT AS E\nON C.Class_ID = E.Class_ID)\nINNER JOIN [MEMBER] AS M\nON E.Member_ID = M.Member_ID\nWHERE M.Level = 'Advanced'\n);\nAlternative Access SQL\nSELECT Name\nFROM TRAINER\nWHERE Salary > 4000\nAND Trainer_ID IN\n(SELECT C.Trainer_ID\nFROM [CLASS] C, ENROLLMENT E, [MEMBER] M\nWHERE C.Class_ID = E.Class_ID\nAND E.Member_ID = M.Member_ID\nAND M.Level = 'Advanced');\nBoth versions connect CLASS to ENROLLMENT and MEMBER in the subquery, then return trainers whose salary exceeds RM4,000."
-    },
-    {
-      "id": "JULY26-Q5-A",
-      "parentId": "JULY26-Q5",
-      "session": "July 2026",
-      "chapters": [
-        4
-      ],
-      "topic": "Construct a student-merit ERD and identify information outputs",
-      "type": "erd_design",
-      "difficulty": "advanced",
-      "marks": 16,
-      "prompt": "Construct the Student Merit Activities database using Crow's Foot notation.",
-      "answer": "The ERD below shows direct Crow's Foot symbols for connectivity, minimum participation, and maximum\ncardinality. It also resolves both M:N relationships through associative entities.\nEntity and key checklist\nSTUDENT: StudentID (PK), Name, PhoneNumber,\nProgramCode.\nEVENT: EventID (PK), EventName, EventDate,\nMeritPoints, StaffID (FK), LeaderStudentID (FK).\nPARTICIPATION: ParticipationID (PK), StudentID (FK),\nEventID (FK).\nEQUIPMENT: EquipmentID (PK), EquipmentName,\nTotalQuantity.\nEVENT_EQUIPMENT: EventID and EquipmentID as\ncomposite PK/FKs, plus QuantityUsed.\nSTAFF: StaffID (PK), StaffName.\nRelationship and cardinality checklist\nSTUDENT 1 : 0..M PARTICIPATION; each PARTICIPATION\nbelongs to exactly one STUDENT.\nEVENT 1 : 1..M PARTICIPATION; each event must have at\nleast one participant and each participation belongs to\none event.\nSTUDENT 1 : 0..M EVENT as Event Leader; every EVENT is\nled by exactly one STUDENT.\nSTAFF 1 : 0..M EVENT; every EVENT is supervised by\nexactly one STAFF member, while a staff member may\nsupervise none.\nEVENT M:N EQUIPMENT is resolved by\nEVENT_EQUIPMENT; each detail row records\nQuantityUsed.\nTip: Do not place QuantityUsed in EVENT or EQUIPMENT. It describes one equipment item used for one particular\nevent, so it belongs in the associative entity EVENT_EQUIPMENT. The event leader is a role played by STUDENT, so\nEVENT.LeaderStudentID is a foreign key to STUDENT."
-    },
-    {
-      "id": "JULY26-Q5-B",
-      "parentId": "JULY26-Q5",
-      "session": "July 2026",
-      "chapters": [
-        4
-      ],
-      "topic": "Construct a student-merit ERD and identify information outputs",
-      "type": "erd_design",
-      "difficulty": "advanced",
-      "marks": 4,
-      "prompt": "Identify TWO relevant information outputs obtainable from the ERD.",
-      "answer": "Student hostel-merit report: each student’s event\nparticipation and total merit points, calculated by\nsumming EVENT.MeritPoints through PARTICIPATION.\nEvent equipment report: equipment required and\nQuantityUsed for each event, compared with\nEQUIPMENT.TotalQuantity to support availability\nplanning.\nOther acceptable output: event participant list, event leader\nlist, staff supervision schedule, or student participation\nhistory."
+      "prompt": "Using a subquery, write a Microsoft Access SQL query to list trainers who teach Advanced-level members and earn more than RM4,000.",
+      "answer": "Access SQL using explicit JOIN\nSELECT Name\nFROM TRAINER\nWHERE Salary > 4000\nAND Trainer_ID IN (\nSELECT C.Trainer_ID\nFROM ([CLASS] AS C\nINNER JOIN ENROLLMENT AS E\nON C.Class_ID = E.Class_ID)\nINNER JOIN [MEMBER] AS M\nON E.Member_ID = M.Member_ID\nWHERE M.Level = 'Advanced'\n);\nAlternative Access SQL\nSELECT Name\nFROM TRAINER\nWHERE Salary > 4000\nAND Trainer_ID IN\n(SELECT C.Trainer_ID\nFROM [CLASS] C, ENROLLMENT E, [MEMBER] M\nWHERE C.Class_ID = E.Class_ID\nAND E.Member_ID = M.Member_ID\nAND M.Level = 'Advanced');\nBoth versions connect CLASS to ENROLLMENT and MEMBER in the subquery, then return trainers whose salary exceeds RM4,000.",
+      "context": "Fitness Center relational schema (* denotes a foreign key):\nTRAINER (Trainer_ID, Name, Specialization, Salary)\nCLASS (Class_ID, ClassName, Schedule, Trainer_ID*)\nMEMBER (Member_ID, MemberName, Level)\nENROLLMENT (Member_ID*, Class_ID*, EnrollDate)"
     }
   ],
   "sql": [
@@ -1845,7 +1717,7 @@ window.ICT450_PRACTICE_DATA = {
       "session": "February 2023",
       "topic": "Write DDL and aggregate/join SQL for package delivery",
       "marks": 4,
-      "prompt": "Create table DELIVERY.",
+      "prompt": "Write a Microsoft Access SQL statement to create the DELIVERY table in the given relational schema.",
       "modelSql": "CREATE TABLE DELIVERY (\nPackageID TEXT(20) CONSTRAINT PK_DELIVERY PRIMARY KEY,\nDateDeliver DATETIME NOT NULL,\nRiderID TEXT(20) NOT NULL,\nICNum TEXT(20) NOT NULL,\nStatus TEXT(15) NOT NULL,\nCONSTRAINT FK_DELIVERY_RIDER FOREIGN KEY (RiderID)\nREFERENCES RIDER (RiderID),\nCONSTRAINT FK_DELIVERY_CUSTOMER FOREIGN KEY (ICNum)\nREFERENCES CUSTOMER (ICNum)\n);",
       "modelNote": "The paper does not specify data types or field lengths; these are compatible examples and the foreign-key types must match their parent keys. The SQL creates the table but does not restrict Status to the two stated values. In Access table Design View, set the Status field Validation Rule to In ('delivered','unsuccessful'). This is a separate step, not part of the SQL to copy.",
       "features": {
@@ -1862,14 +1734,15 @@ window.ICT450_PRACTICE_DATA = {
         "functions": [],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "Ninja Package relational schema:\nRIDER (RiderID, RiderName, StartDate, HpNum)\nCUSTOMER (ICNum, CustName, CustPhone, CustAddress)\nDELIVERY (PackageID, DateDeliver, RiderID, ICNum, Status)\nStatus is either delivered or unsuccessful."
     },
     {
       "id": "FEB23-Q4-B",
       "session": "February 2023",
       "topic": "Write DDL and aggregate/join SQL for package delivery",
       "marks": 4,
-      "prompt": "Find the total number of distinct customers who successfully received packages in November 2022.",
+      "prompt": "Write a Microsoft Access SQL query to count customers who successfully received at least one package in November 2022.",
       "modelSql": "SELECT Count(*) AS [Total Customers]\nFROM (\nSELECT DISTINCT ICNum\nFROM DELIVERY\nWHERE Status = 'delivered'\nAND DateDeliver >= #2022-11-01#\nAND DateDeliver < #2022-12-01#\n) AS X;",
       "features": {
         "operation": "SELECT",
@@ -1888,14 +1761,15 @@ window.ICT450_PRACTICE_DATA = {
           "2022-11-01",
           "2022-12-01"
         ]
-      }
+      },
+      "context": "Ninja Package relational schema:\nRIDER (RiderID, RiderName, StartDate, HpNum)\nCUSTOMER (ICNum, CustName, CustPhone, CustAddress)\nDELIVERY (PackageID, DateDeliver, RiderID, ICNum, Status)\nStatus is either delivered or unsuccessful."
     },
     {
       "id": "FEB23-Q4-C",
       "session": "February 2023",
       "topic": "Write DDL and aggregate/join SQL for package delivery",
       "marks": 4,
-      "prompt": "Find the total unsuccessful deliveries for each rider.",
+      "prompt": "Write a Microsoft Access SQL query to show the number of unsuccessful deliveries for each rider.",
       "modelSql": "SELECT R.RiderID, R.RiderName,\n       Sum(IIf(D.Status='unsuccessful',1,0)) AS [Total Unsuccessful]\nFROM RIDER AS R LEFT JOIN DELIVERY AS D ON R.RiderID = D.RiderID\nGROUP BY R.RiderID, R.RiderName;",
       "features": {
         "operation": "SELECT",
@@ -1914,14 +1788,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "Ninja Package relational schema:\nRIDER (RiderID, RiderName, StartDate, HpNum)\nCUSTOMER (ICNum, CustName, CustPhone, CustAddress)\nDELIVERY (PackageID, DateDeliver, RiderID, ICNum, Status)\nStatus is either delivered or unsuccessful."
     },
     {
       "id": "FEB23-Q4-D",
       "session": "February 2023",
       "topic": "Write DDL and aggregate/join SQL for package delivery",
       "marks": 4,
-      "prompt": "List rider names that have made at least one delivery.",
+      "prompt": "Write a Microsoft Access SQL query to list the names of riders who have made at least one delivery.",
       "modelSql": "SELECT DISTINCT R.RiderName\nFROM RIDER AS R\nINNER JOIN DELIVERY AS D ON R.RiderID = D.RiderID;",
       "features": {
         "operation": "SELECT",
@@ -1936,14 +1811,15 @@ window.ICT450_PRACTICE_DATA = {
         "functions": [],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "Ninja Package relational schema:\nRIDER (RiderID, RiderName, StartDate, HpNum)\nCUSTOMER (ICNum, CustName, CustPhone, CustAddress)\nDELIVERY (PackageID, DateDeliver, RiderID, ICNum, Status)\nStatus is either delivered or unsuccessful."
     },
     {
       "id": "FEB23-Q4-E",
       "session": "February 2023",
       "topic": "Write DDL and aggregate/join SQL for package delivery",
       "marks": 4,
-      "prompt": "Produce Package ID, Customer Name, and Status.",
+      "prompt": "Write a Microsoft Access SQL query to display Package ID, Customer Name and delivery Status.",
       "modelSql": "SELECT D.PackageID AS [Package ID],\nC.CustName AS [Customer Name],\nD.Status\nFROM CUSTOMER AS C\nINNER JOIN DELIVERY AS D ON C.ICNum = D.ICNum;",
       "features": {
         "operation": "SELECT",
@@ -1957,14 +1833,15 @@ window.ICT450_PRACTICE_DATA = {
         "functions": [],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "Ninja Package relational schema:\nRIDER (RiderID, RiderName, StartDate, HpNum)\nCUSTOMER (ICNum, CustName, CustPhone, CustAddress)\nDELIVERY (PackageID, DateDeliver, RiderID, ICNum, Status)\nStatus is either delivered or unsuccessful."
     },
     {
       "id": "JULY23-Q4-A",
       "session": "July 2023",
       "topic": "Write DDL, subquery, date-range and grouping SQL for loans",
       "marks": 4,
-      "prompt": "Create the APPLYLOAN table.",
+      "prompt": "Write a Microsoft Access SQL statement to create the APPLYLOAN table in the given relational schema.",
       "modelSql": "CREATE TABLE APPLYLOAN (\nClientNum TEXT(20) NOT NULL,\nLoanID TEXT(20) NOT NULL,\nLoanTotal CURRENCY NOT NULL,\nLoanRemainder CURRENCY,\nLoanDate DATETIME NOT NULL,\nCONSTRAINT PK_APPLYLOAN PRIMARY KEY (ClientNum, LoanID),\nCONSTRAINT FK_APPLYLOAN_CLIENT FOREIGN KEY (ClientNum)\nREFERENCES CLIENT (ClientNum),\nCONSTRAINT FK_APPLYLOAN_LOAN FOREIGN KEY (LoanID)\nREFERENCES LOAN (LoanID)\n);",
       "modelNote": "The paper does not specify data types or field lengths. These are example choices; each foreign key must use a type compatible with its parent primary key.",
       "features": {
@@ -1981,14 +1858,15 @@ window.ICT450_PRACTICE_DATA = {
         "functions": [],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "Loan database relational schema:\nDEPARTMENT (DeptID, DeptName)\nAPPLYLOAN (ClientNum, LoanID, LoanTotal, LoanRemainder, LoanDate)\nLOAN (LoanID, LoanType, StaffID)\nCLIENT (ClientNum, ClientName, ClientAddress, ClientPhoneNum)\nOFFICER (StaffID, StaffName, DeptID)"
     },
     {
       "id": "JULY23-Q4-B",
       "session": "July 2023",
       "topic": "Write DDL, subquery, date-range and grouping SQL for loans",
       "marks": 4,
-      "prompt": "Using a subquery, list client names that make a personal loan.",
+      "prompt": "Using a subquery, write a Microsoft Access SQL query to list the names of clients who have made a personal loan.",
       "modelSql": "SELECT ClientName\nFROM CLIENT\nWHERE ClientNum IN (\nSELECT ClientNum\nFROM APPLYLOAN\nWHERE LoanID IN (\nSELECT LoanID\nFROM LOAN\nWHERE LoanType = 'Personal Loan'\n)\n);",
       "features": {
         "operation": "SELECT",
@@ -2003,14 +1881,15 @@ window.ICT450_PRACTICE_DATA = {
         "functions": [],
         "minimumSubqueries": 2,
         "dateBounds": []
-      }
+      },
+      "context": "Loan database relational schema:\nDEPARTMENT (DeptID, DeptName)\nAPPLYLOAN (ClientNum, LoanID, LoanTotal, LoanRemainder, LoanDate)\nLOAN (LoanID, LoanType, StaffID)\nCLIENT (ClientNum, ClientName, ClientAddress, ClientPhoneNum)\nOFFICER (StaffID, StaffName, DeptID)"
     },
     {
       "id": "JULY23-Q4-C",
       "session": "July 2023",
       "topic": "Write DDL, subquery, date-range and grouping SQL for loans",
       "marks": 4,
-      "prompt": "Generate the total loan from 2021 until 2023.",
+      "prompt": "Write a Microsoft Access SQL query to calculate the total loan amount for loans dated from 2021 through 2023.",
       "modelSql": "SELECT Sum(LoanTotal) AS [Total Loan]\nFROM APPLYLOAN\nWHERE LoanDate >= #2021-01-01#\nAND LoanDate < #2024-01-01#;",
       "features": {
         "operation": "SELECT",
@@ -2028,14 +1907,15 @@ window.ICT450_PRACTICE_DATA = {
           "2021-01-01",
           "2024-01-01"
         ]
-      }
+      },
+      "context": "Loan database relational schema:\nDEPARTMENT (DeptID, DeptName)\nAPPLYLOAN (ClientNum, LoanID, LoanTotal, LoanRemainder, LoanDate)\nLOAN (LoanID, LoanType, StaffID)\nCLIENT (ClientNum, ClientName, ClientAddress, ClientPhoneNum)\nOFFICER (StaffID, StaffName, DeptID)"
     },
     {
       "id": "JULY23-Q4-D",
       "session": "July 2023",
       "topic": "Write DDL, subquery, date-range and grouping SQL for loans",
       "marks": 4,
-      "prompt": "List officers who manage housing loans and are from the Finance department.",
+      "prompt": "Write a Microsoft Access SQL query to list officers who manage housing loans and belong to the Finance department.",
       "modelSql": "SELECT DISTINCT O.StaffName\nFROM (OFFICER AS O\nINNER JOIN DEPARTMENT AS D ON O.DeptID = D.DeptID)\nINNER JOIN LOAN AS L ON O.StaffID = L.StaffID\nWHERE L.LoanType = 'Housing Loan'\nAND D.DeptName = 'Finance';",
       "features": {
         "operation": "SELECT",
@@ -2052,14 +1932,15 @@ window.ICT450_PRACTICE_DATA = {
         "functions": [],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "Loan database relational schema:\nDEPARTMENT (DeptID, DeptName)\nAPPLYLOAN (ClientNum, LoanID, LoanTotal, LoanRemainder, LoanDate)\nLOAN (LoanID, LoanType, StaffID)\nCLIENT (ClientNum, ClientName, ClientAddress, ClientPhoneNum)\nOFFICER (StaffID, StaffName, DeptID)"
     },
     {
       "id": "JULY23-Q4-E",
       "session": "July 2023",
       "topic": "Write DDL, subquery, date-range and grouping SQL for loans",
       "marks": 4,
-      "prompt": "Generate the total loan for each loan type.",
+      "prompt": "Write a Microsoft Access SQL query to calculate the total loan amount for each loan type.",
       "modelSql": "SELECT L.LoanType, Sum(A.LoanTotal) AS [Total Loan]\nFROM LOAN AS L\nINNER JOIN APPLYLOAN AS A ON L.LoanID = A.LoanID\nGROUP BY L.LoanType;",
       "features": {
         "operation": "SELECT",
@@ -2076,14 +1957,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "Loan database relational schema:\nDEPARTMENT (DeptID, DeptName)\nAPPLYLOAN (ClientNum, LoanID, LoanTotal, LoanRemainder, LoanDate)\nLOAN (LoanID, LoanType, StaffID)\nCLIENT (ClientNum, ClientName, ClientAddress, ClientPhoneNum)\nOFFICER (StaffID, StaffName, DeptID)"
     },
     {
       "id": "JAN24-Q4-A",
       "session": "January 2024",
       "topic": "Write date, aggregate, grouping and maximum-result SQL for movies",
       "marks": 4,
-      "prompt": "Display movies released from 2021 until 2023.",
+      "prompt": "Write a Microsoft Access SQL query to display movies released from 2021 through 2023.",
       "modelSql": "SELECT *\nFROM MOVIE\nWHERE DateRelease >= #2021-01-01#\nAND DateRelease < #2024-01-01#;",
       "features": {
         "operation": "SELECT",
@@ -2099,14 +1981,15 @@ window.ICT450_PRACTICE_DATA = {
           "2021-01-01",
           "2024-01-01"
         ]
-      }
+      },
+      "context": "Movie database relational schema (* denotes a foreign key):\nMOVIE (MovieID, MovieName, Genre, DateRelease, NetProfit, DirectorID*)\nDIRECTOR (DirectorID, DirectorName, Nationality)\nREVIEW (ReviewID, Description, MovieID*, ReviewerID*)\nREVIEWER (ReviewerID, ReviewerName)"
     },
     {
       "id": "JAN24-Q4-B",
       "session": "January 2024",
       "topic": "Write date, aggregate, grouping and maximum-result SQL for movies",
       "marks": 4,
-      "prompt": "Identify the total movies directed by Malaysian directors.",
+      "prompt": "Write a Microsoft Access SQL query to count movies directed by Malaysian directors.",
       "modelSql": "SELECT Count(M.MovieID) AS [Total Movies]\nFROM DIRECTOR AS D\nINNER JOIN MOVIE AS M ON D.DirectorID = M.DirectorID\nWHERE D.Nationality = 'Malaysian';",
       "features": {
         "operation": "SELECT",
@@ -2123,14 +2006,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "Movie database relational schema (* denotes a foreign key):\nMOVIE (MovieID, MovieName, Genre, DateRelease, NetProfit, DirectorID*)\nDIRECTOR (DirectorID, DirectorName, Nationality)\nREVIEW (ReviewID, Description, MovieID*, ReviewerID*)\nREVIEWER (ReviewerID, ReviewerName)"
     },
     {
       "id": "JAN24-Q4-C",
       "session": "January 2024",
       "topic": "Write date, aggregate, grouping and maximum-result SQL for movies",
       "marks": 4,
-      "prompt": "Calculate average net profit for each genre as “Average Net Profit”.",
+      "prompt": "Write a Microsoft Access SQL query to calculate average net profit by genre, naming the result Average Net Profit.",
       "modelSql": "SELECT Genre, Avg(NetProfit) AS [Average Net Profit]\nFROM MOVIE\nGROUP BY Genre;",
       "features": {
         "operation": "SELECT",
@@ -2145,14 +2029,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "Movie database relational schema (* denotes a foreign key):\nMOVIE (MovieID, MovieName, Genre, DateRelease, NetProfit, DirectorID*)\nDIRECTOR (DirectorID, DirectorName, Nationality)\nREVIEW (ReviewID, Description, MovieID*, ReviewerID*)\nREVIEWER (ReviewerID, ReviewerName)"
     },
     {
       "id": "JAN24-Q4-D",
       "session": "January 2024",
       "topic": "Write date, aggregate, grouping and maximum-result SQL for movies",
       "marks": 4,
-      "prompt": "Identify reviewers who made more than two reviews.",
+      "prompt": "Write a Microsoft Access SQL query to list reviewers who have submitted more than two reviews.",
       "modelSql": "SELECT R.ReviewerName, Count(V.ReviewID) AS [Total Reviews]\nFROM REVIEWER AS R\nINNER JOIN REVIEW AS V ON R.ReviewerID = V.ReviewerID\nGROUP BY R.ReviewerID, R.ReviewerName\nHAVING Count(V.ReviewID) > 2;",
       "features": {
         "operation": "SELECT",
@@ -2170,14 +2055,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "Movie database relational schema (* denotes a foreign key):\nMOVIE (MovieID, MovieName, Genre, DateRelease, NetProfit, DirectorID*)\nDIRECTOR (DirectorID, DirectorName, Nationality)\nREVIEW (ReviewID, Description, MovieID*, ReviewerID*)\nREVIEWER (ReviewerID, ReviewerName)"
     },
     {
       "id": "JAN24-Q4-E",
       "session": "January 2024",
       "topic": "Write date, aggregate, grouping and maximum-result SQL for movies",
       "marks": 4,
-      "prompt": "Display the movie that received the most reviews.",
+      "prompt": "Write a Microsoft Access SQL query to display the movie with the highest number of reviews.",
       "modelSql": "SELECT TOP 1 M.MovieID, M.MovieName, Count(R.ReviewID) AS [Total Reviews]\nFROM MOVIE AS M INNER JOIN REVIEW AS R ON M.MovieID = R.MovieID\nGROUP BY M.MovieID, M.MovieName\nORDER BY Count(R.ReviewID) DESC;",
       "modelNote": "In Access, TOP 1 can return more than one movie if the highest review counts are tied. The question does not specify how to break a tie.",
       "features": {
@@ -2196,14 +2082,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "Movie database relational schema (* denotes a foreign key):\nMOVIE (MovieID, MovieName, Genre, DateRelease, NetProfit, DirectorID*)\nDIRECTOR (DirectorID, DirectorName, Nationality)\nREVIEW (ReviewID, Description, MovieID*, ReviewerID*)\nREVIEWER (ReviewerID, ReviewerName)"
     },
     {
       "id": "JULY24-Q4-A",
       "session": "July 2024",
       "topic": "Write grouped, anti-join and counting SQL for electronic voting",
       "marks": 4,
-      "prompt": "Calculate the total candidates for each faculty.",
+      "prompt": "Write a Microsoft Access SQL query to calculate the number of candidates for each faculty.",
       "modelSql": "SELECT F.FacultyID, F.FacultyName,\nCount(C.CandidateID) AS [Total Candidates]\nFROM (FACULTY AS F\nINNER JOIN STUDENT AS S ON F.FacultyID = S.FacultyID)\nINNER JOIN CANDIDATE AS C ON S.StudentID = C.StudentID\nGROUP BY F.FacultyID, F.FacultyName;",
       "features": {
         "operation": "SELECT",
@@ -2221,14 +2108,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "University e-Voting relational schema (* denotes a foreign key):\nSTUDENT (StudentID, FirstName, LastName, PhoneNumber, FacultyID*)\nCANDIDATE (CandidateID, StudentID*)\nVOTING (VotingID, VotingDate, StudID*)\nVOTING_DETAILS (VotingID*, CandidateID*, VotingTime)\nFACULTY (FacultyID, FacultyName)\nEach student may vote for up to two candidates."
     },
     {
       "id": "JULY24-Q4-B",
       "session": "July 2024",
       "topic": "Write grouped, anti-join and counting SQL for electronic voting",
       "marks": 4,
-      "prompt": "Display students who did not vote for any candidate.",
+      "prompt": "Write a Microsoft Access SQL query to display students who have not voted for any candidate.",
       "modelSql": "SELECT S.*\nFROM STUDENT AS S\nLEFT JOIN VOTING AS V ON S.StudentID = V.StudID\nWHERE V.VotingID IS NULL;",
       "modelNote": "This answer treats a VOTING row as evidence that a student voted. If a VOTING row can exist without a VOTING_DETAILS row, check the details table to find students who selected no candidate.",
       "features": {
@@ -2245,14 +2133,15 @@ window.ICT450_PRACTICE_DATA = {
         "functions": [],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "University e-Voting relational schema (* denotes a foreign key):\nSTUDENT (StudentID, FirstName, LastName, PhoneNumber, FacultyID*)\nCANDIDATE (CandidateID, StudentID*)\nVOTING (VotingID, VotingDate, StudID*)\nVOTING_DETAILS (VotingID*, CandidateID*, VotingTime)\nFACULTY (FacultyID, FacultyName)\nEach student may vote for up to two candidates."
     },
     {
       "id": "JULY24-Q4-C",
       "session": "July 2024",
       "topic": "Write grouped, anti-join and counting SQL for electronic voting",
       "marks": 4,
-      "prompt": "Identify the total voters for each faculty.",
+      "prompt": "Write a Microsoft Access SQL query to calculate the number of voters for each faculty.",
       "modelSql": "SELECT F.FacultyID, F.FacultyName,\nCount(V.VotingID) AS [Total Voters]\nFROM (FACULTY AS F\nINNER JOIN STUDENT AS S ON F.FacultyID = S.FacultyID)\nINNER JOIN VOTING AS V ON S.StudentID = V.StudID\nGROUP BY F.FacultyID, F.FacultyName;",
       "modelNote": "Counting VOTING rows equals counting distinct students only if each student has at most one VOTING row. The paper does not state that uniqueness rule; with repeat voting records, group by student before counting voters.",
       "features": {
@@ -2271,14 +2160,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "University e-Voting relational schema (* denotes a foreign key):\nSTUDENT (StudentID, FirstName, LastName, PhoneNumber, FacultyID*)\nCANDIDATE (CandidateID, StudentID*)\nVOTING (VotingID, VotingDate, StudID*)\nVOTING_DETAILS (VotingID*, CandidateID*, VotingTime)\nFACULTY (FacultyID, FacultyName)\nEach student may vote for up to two candidates."
     },
     {
       "id": "JULY24-Q4-D",
       "session": "July 2024",
       "topic": "Write grouped, anti-join and counting SQL for electronic voting",
       "marks": 4,
-      "prompt": "Display full names of candidates receiving more than 500 votes.",
+      "prompt": "Write a Microsoft Access SQL query to display the full names of candidates with more than 500 votes.",
       "modelSql": "SELECT S.FirstName & ' ' & S.LastName AS [Candidate Name],\nCount(VD.VotingID) AS [Total Votes]\nFROM (CANDIDATE AS C\nINNER JOIN STUDENT AS S ON C.StudentID = S.StudentID)\nINNER JOIN VOTING_DETAILS AS VD ON C.CandidateID = VD.CandidateID\nGROUP BY C.CandidateID, S.FirstName, S.LastName\nHAVING Count(VD.VotingID) > 500;",
       "features": {
         "operation": "SELECT",
@@ -2297,14 +2187,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "University e-Voting relational schema (* denotes a foreign key):\nSTUDENT (StudentID, FirstName, LastName, PhoneNumber, FacultyID*)\nCANDIDATE (CandidateID, StudentID*)\nVOTING (VotingID, VotingDate, StudID*)\nVOTING_DETAILS (VotingID*, CandidateID*, VotingTime)\nFACULTY (FacultyID, FacultyName)\nEach student may vote for up to two candidates."
     },
     {
       "id": "JULY24-Q4-E",
       "session": "July 2024",
       "topic": "Write grouped, anti-join and counting SQL for electronic voting",
       "marks": 4,
-      "prompt": "Identify the total students who voted for only one candidate.",
+      "prompt": "Write a Microsoft Access SQL query to count students who voted for exactly one candidate.",
       "modelSql": "SELECT Count(*) AS [Total Students]\nFROM (\nSELECT V.StudID\nFROM VOTING AS V\nINNER JOIN VOTING_DETAILS AS VD ON V.VotingID = VD.VotingID\nGROUP BY V.StudID\nHAVING Count(VD.CandidateID) = 1\n) AS X;",
       "features": {
         "operation": "SELECT",
@@ -2322,14 +2213,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 1,
         "dateBounds": []
-      }
+      },
+      "context": "University e-Voting relational schema (* denotes a foreign key):\nSTUDENT (StudentID, FirstName, LastName, PhoneNumber, FacultyID*)\nCANDIDATE (CandidateID, StudentID*)\nVOTING (VotingID, VotingDate, StudID*)\nVOTING_DETAILS (VotingID*, CandidateID*, VotingTime)\nFACULTY (FacultyID, FacultyName)\nEach student may vote for up to two candidates."
     },
     {
       "id": "FEB25-Q4-A",
       "session": "February 2025",
       "topic": "Write aggregate, maximum, UPDATE and date-range SQL for travel bookings",
       "marks": 4,
-      "prompt": "Calculate the total number of trips for each date.",
+      "prompt": "Write a Microsoft Access SQL query to calculate the number of trips for each trip date.",
       "modelSql": "SELECT TripDate, Count(BookingID) AS [Total Trips]\nFROM BOOKING\nGROUP BY TripDate;",
       "features": {
         "operation": "SELECT",
@@ -2344,14 +2236,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "e-Travel Package relational schema (* denotes a foreign key):\nCUSTOMERS (CustomerID, FirstName, LastName, PhoneNumber)\nBOOKING (BookingID, BookingDate, NumberOfPax, TripDate, CustomerID*, GuideID*, PackageID*)\nGUIDE (GuideID, GuideName, BasicSalary, HireDate)\nPACKAGE (PackageID, PackageName, PricePerPax, PackageDetails)"
     },
     {
       "id": "FEB25-Q4-B",
       "session": "February 2025",
       "topic": "Write aggregate, maximum, UPDATE and date-range SQL for travel bookings",
       "marks": 4,
-      "prompt": "Display the customer with the highest number of bookings.",
+      "prompt": "Write a Microsoft Access SQL query to display the customer with the highest number of bookings.",
       "modelSql": "SELECT TOP 1 C.CustomerID, C.FirstName, C.LastName, C.PhoneNumber,\n       Count(B.BookingID) AS [Total Bookings]\nFROM CUSTOMERS AS C INNER JOIN BOOKING AS B ON C.CustomerID = B.CustomerID\nGROUP BY C.CustomerID, C.FirstName, C.LastName, C.PhoneNumber\nORDER BY Count(B.BookingID) DESC;",
       "modelNote": "In Access, TOP 1 can return multiple customers when their booking counts tie for first. The question does not specify a tie-break rule.",
       "features": {
@@ -2370,14 +2263,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "e-Travel Package relational schema (* denotes a foreign key):\nCUSTOMERS (CustomerID, FirstName, LastName, PhoneNumber)\nBOOKING (BookingID, BookingDate, NumberOfPax, TripDate, CustomerID*, GuideID*, PackageID*)\nGUIDE (GuideID, GuideName, BasicSalary, HireDate)\nPACKAGE (PackageID, PackageName, PricePerPax, PackageDetails)"
     },
     {
       "id": "FEB25-Q4-C",
       "session": "February 2025",
       "topic": "Write aggregate, maximum, UPDATE and date-range SQL for travel bookings",
       "marks": 4,
-      "prompt": "Increase salary by 10% for guides working on a trip in February 2025.",
+      "prompt": "Write a Microsoft Access SQL statement to increase by 10% the salary of guides assigned to a trip in February 2025.",
       "modelSql": "UPDATE GUIDE\nSET BasicSalary = BasicSalary * 1.10\nWHERE GuideID IN (\nSELECT GuideID\nFROM BOOKING\nWHERE TripDate >= #2025-02-01#\nAND TripDate < #2025-03-01#\n);",
       "features": {
         "operation": "UPDATE",
@@ -2394,14 +2288,15 @@ window.ICT450_PRACTICE_DATA = {
           "2025-02-01",
           "2025-03-01"
         ]
-      }
+      },
+      "context": "e-Travel Package relational schema (* denotes a foreign key):\nCUSTOMERS (CustomerID, FirstName, LastName, PhoneNumber)\nBOOKING (BookingID, BookingDate, NumberOfPax, TripDate, CustomerID*, GuideID*, PackageID*)\nGUIDE (GuideID, GuideName, BasicSalary, HireDate)\nPACKAGE (PackageID, PackageName, PricePerPax, PackageDetails)"
     },
     {
       "id": "FEB25-Q4-D",
       "session": "February 2025",
       "topic": "Write aggregate, maximum, UPDATE and date-range SQL for travel bookings",
       "marks": 4,
-      "prompt": "Display package names booked more than 70 times.",
+      "prompt": "Write a Microsoft Access SQL query to display package names booked more than 70 times.",
       "modelSql": "SELECT P.PackageName, Count(B.BookingID) AS [Total Bookings]\nFROM PACKAGE AS P\nINNER JOIN BOOKING AS B ON P.PackageID = B.PackageID\nGROUP BY P.PackageID, P.PackageName\nHAVING Count(B.BookingID) > 70;",
       "features": {
         "operation": "SELECT",
@@ -2419,14 +2314,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "e-Travel Package relational schema (* denotes a foreign key):\nCUSTOMERS (CustomerID, FirstName, LastName, PhoneNumber)\nBOOKING (BookingID, BookingDate, NumberOfPax, TripDate, CustomerID*, GuideID*, PackageID*)\nGUIDE (GuideID, GuideName, BasicSalary, HireDate)\nPACKAGE (PackageID, PackageName, PricePerPax, PackageDetails)"
     },
     {
       "id": "FEB25-Q4-E",
       "session": "February 2025",
       "topic": "Write aggregate, maximum, UPDATE and date-range SQL for travel bookings",
       "marks": 4,
-      "prompt": "Count distinct customers who made a booking from February through March 2025.",
+      "prompt": "Write a Microsoft Access SQL query to count customers who made at least one booking from February through March 2025.",
       "modelSql": "SELECT Count(*) AS [Total Customers]\nFROM (\nSELECT DISTINCT CustomerID\nFROM BOOKING\nWHERE BookingDate >= #2025-02-01#\nAND BookingDate < #2025-04-01#\n) AS X;",
       "features": {
         "operation": "SELECT",
@@ -2445,14 +2341,15 @@ window.ICT450_PRACTICE_DATA = {
           "2025-02-01",
           "2025-04-01"
         ]
-      }
+      },
+      "context": "e-Travel Package relational schema (* denotes a foreign key):\nCUSTOMERS (CustomerID, FirstName, LastName, PhoneNumber)\nBOOKING (BookingID, BookingDate, NumberOfPax, TripDate, CustomerID*, GuideID*, PackageID*)\nGUIDE (GuideID, GuideName, BasicSalary, HireDate)\nPACKAGE (PackageID, PackageName, PricePerPax, PackageDetails)"
     },
     {
       "id": "JULY25-Q4-A",
       "session": "July 2025",
       "topic": "Write date, calculation, grouping and subquery SQL for project assignments",
       "marks": 4,
-      "prompt": "Display project names assigned from January through April 2025.",
+      "prompt": "Write a Microsoft Access SQL query to display project names for assignments dated January through April 2025.",
       "modelSql": "SELECT DISTINCT P.ProjName\nFROM PROJECT AS P\nINNER JOIN ASSIGN AS A ON P.ProjCode = A.ProjCode\nWHERE A.AssignDate >= #2025-01-01#\nAND A.AssignDate < #2025-05-01#;",
       "features": {
         "operation": "SELECT",
@@ -2471,14 +2368,15 @@ window.ICT450_PRACTICE_DATA = {
           "2025-01-01",
           "2025-05-01"
         ]
-      }
+      },
+      "context": "XY Company relational schema:\nEMPLOYEE (EmpID, EmpFirstName, EmpLastName, EmpHireDate, JobCode)\nJOB (JobCode, JobName, JobChargeHour)\nPROJECT (ProjCode, ProjName)\nASSIGN (AssignID, AssignDate, AssignHours, ProjCode, EmpID)"
     },
     {
       "id": "JULY25-Q4-B",
       "session": "July 2025",
       "topic": "Write date, calculation, grouping and subquery SQL for project assignments",
       "marks": 5,
-      "prompt": "Display total charge for each employee as “Total Charge”.",
+      "prompt": "Write a Microsoft Access SQL query to calculate the total charge for each employee, naming the result Total Charge.",
       "modelSql": "SELECT E.EmpID,\nE.EmpFirstName & ' ' & E.EmpLastName AS [Employee Name],\nSum(A.AssignHours * J.JobChargeHour) AS [Total Charge]\nFROM (EMPLOYEE AS E\nINNER JOIN JOB AS J ON E.JobCode = J.JobCode)\nINNER JOIN ASSIGN AS A ON E.EmpID = A.EmpID\nGROUP BY E.EmpID, E.EmpFirstName, E.EmpLastName;",
       "features": {
         "operation": "SELECT",
@@ -2496,14 +2394,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "XY Company relational schema:\nEMPLOYEE (EmpID, EmpFirstName, EmpLastName, EmpHireDate, JobCode)\nJOB (JobCode, JobName, JobChargeHour)\nPROJECT (ProjCode, ProjName)\nASSIGN (AssignID, AssignDate, AssignHours, ProjCode, EmpID)"
     },
     {
       "id": "JULY25-Q4-C",
       "session": "July 2025",
       "topic": "Write date, calculation, grouping and subquery SQL for project assignments",
       "marks": 5,
-      "prompt": "Display full names of employees assigned to more than two distinct projects.",
+      "prompt": "Write a Microsoft Access SQL query to display the full names of employees assigned to more than two projects.",
       "modelSql": "SELECT E.EmpID,\nE.EmpFirstName & ' ' & E.EmpLastName AS [Employee Name]\nFROM EMPLOYEE AS E\nINNER JOIN (\nSELECT EmpID, ProjCode\nFROM ASSIGN\nGROUP BY EmpID, ProjCode\n) AS AP ON E.EmpID = AP.EmpID\nGROUP BY E.EmpID, E.EmpFirstName, E.EmpLastName\nHAVING Count(AP.ProjCode) > 2;",
       "features": {
         "operation": "SELECT",
@@ -2521,14 +2420,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 1,
         "dateBounds": []
-      }
+      },
+      "context": "XY Company relational schema:\nEMPLOYEE (EmpID, EmpFirstName, EmpLastName, EmpHireDate, JobCode)\nJOB (JobCode, JobName, JobChargeHour)\nPROJECT (ProjCode, ProjName)\nASSIGN (AssignID, AssignDate, AssignHours, ProjCode, EmpID)"
     },
     {
       "id": "JULY25-Q4-D",
       "session": "July 2025",
       "topic": "Write date, calculation, grouping and subquery SQL for project assignments",
       "marks": 6,
-      "prompt": "Using a subquery, display job names with RM50 charge/hour and more than 10 employees.",
+      "prompt": "Using a subquery, write a Microsoft Access SQL query to display job names with an hourly charge of RM50 and more than 10 employees.",
       "modelSql": "SELECT JobName\nFROM JOB\nWHERE JobChargeHour = 50\nAND JobCode IN (\nSELECT JobCode\nFROM EMPLOYEE\nGROUP BY JobCode\nHAVING Count(EmpID) > 10\n);",
       "features": {
         "operation": "SELECT",
@@ -2546,14 +2446,15 @@ window.ICT450_PRACTICE_DATA = {
         ],
         "minimumSubqueries": 1,
         "dateBounds": []
-      }
+      },
+      "context": "XY Company relational schema:\nEMPLOYEE (EmpID, EmpFirstName, EmpLastName, EmpHireDate, JobCode)\nJOB (JobCode, JobName, JobChargeHour)\nPROJECT (ProjCode, ProjName)\nASSIGN (AssignID, AssignDate, AssignHours, ProjCode, EmpID)"
     },
     {
       "id": "JULY26-Q4-A",
       "session": "July 2026",
       "topic": "Write composite-key DDL, filtering, grouping and subquery SQL for a fitness centre",
       "marks": 4,
-      "prompt": "Create ENROLLMENT with a composite primary key and the required foreign keys.",
+      "prompt": "Write a Microsoft Access SQL statement to create ENROLLMENT with a composite primary key and foreign keys to MEMBER and CLASS.",
       "modelSql": "CREATE TABLE ENROLLMENT (\nMember_ID INTEGER NOT NULL,\nClass_ID INTEGER NOT NULL,\nEnrollDate DATE,\nCONSTRAINT ENROLLMENT_PK\nPRIMARY KEY (Member_ID, Class_ID),\nCONSTRAINT ENROLLMENT_MEMBER_FK\nFOREIGN KEY (Member_ID) REFERENCES [MEMBER] (Member_ID),\nCONSTRAINT ENROLLMENT_CLASS_FK\nFOREIGN KEY (Class_ID) REFERENCES [CLASS] (Class_ID)\n);",
       "modelNote": "The paper does not specify data types. INTEGER and DATE are example Access types; Member_ID and Class_ID must match the corresponding parent-key types.",
       "features": {
@@ -2570,14 +2471,15 @@ window.ICT450_PRACTICE_DATA = {
         "functions": [],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "Fitness Center relational schema (* denotes a foreign key):\nTRAINER (Trainer_ID, Name, Specialization, Salary)\nCLASS (Class_ID, ClassName, Schedule, Trainer_ID*)\nMEMBER (Member_ID, MemberName, Level)\nENROLLMENT (Member_ID*, Class_ID*, EnrollDate)"
     },
     {
       "id": "JULY26-Q4-B",
       "session": "July 2026",
       "topic": "Write composite-key DDL, filtering, grouping and subquery SQL for a fitness centre",
       "marks": 5,
-      "prompt": "Display trainers earning more than RM4,500, specializing in Yoga or Pilates, with\nnames beginning A; sort alphabetically.",
+      "prompt": "Write a Microsoft Access SQL query to list trainer names beginning with A where salary exceeds RM4,500 and specialization is Yoga or Pilates; sort by name.",
       "modelSql": "SELECT Name\nFROM TRAINER\nWHERE Salary > 4500\nAND Specialization IN ('Yoga', 'Pilates')\nAND Name LIKE 'A*'\nORDER BY Name;",
       "modelNote": "For the usual ANSI-89 setting in an Access .accdb, * matches any sequence of characters in a LIKE pattern. An ANSI-92 database uses % instead.",
       "features": {
@@ -2592,14 +2494,15 @@ window.ICT450_PRACTICE_DATA = {
         "functions": [],
         "minimumSubqueries": 0,
         "dateBounds": []
-      }
+      },
+      "context": "Fitness Center relational schema (* denotes a foreign key):\nTRAINER (Trainer_ID, Name, Specialization, Salary)\nCLASS (Class_ID, ClassName, Schedule, Trainer_ID*)\nMEMBER (Member_ID, MemberName, Level)\nENROLLMENT (Member_ID*, Class_ID*, EnrollDate)"
     },
     {
       "id": "JULY26-Q4-C",
       "session": "July 2026",
       "topic": "Write composite-key DDL, filtering, grouping and subquery SQL for a fitness centre",
       "marks": 5,
-      "prompt": "Display each class and its total members, only where more than 15 members\nenrolled after 1 January 2026.",
+      "prompt": "Write a Microsoft Access SQL query to show each class name and its enrolled-member count where more than 15 members enrolled after 1 January 2026.",
       "modelSql": "SELECT C.ClassName,\nCount(E.Member_ID) AS [Total Members]\nFROM [CLASS] AS C\nINNER JOIN ENROLLMENT AS E\nON C.Class_ID = E.Class_ID\nWHERE E.EnrollDate > #2026-01-01#\nGROUP BY C.Class_ID, C.ClassName\nHAVING Count(E.Member_ID) > 15;",
       "features": {
         "operation": "SELECT",
@@ -2620,14 +2523,15 @@ window.ICT450_PRACTICE_DATA = {
         "dateBounds": [
           "2026-01-01"
         ]
-      }
+      },
+      "context": "Fitness Center relational schema (* denotes a foreign key):\nTRAINER (Trainer_ID, Name, Specialization, Salary)\nCLASS (Class_ID, ClassName, Schedule, Trainer_ID*)\nMEMBER (Member_ID, MemberName, Level)\nENROLLMENT (Member_ID*, Class_ID*, EnrollDate)"
     },
     {
       "id": "JULY26-Q4-D",
       "session": "July 2026",
       "topic": "Write composite-key DDL, filtering, grouping and subquery SQL for a fitness centre",
       "marks": 6,
-      "prompt": "Using a subquery, display trainers who teach Advanced-level members and earn\nmore than RM4,000.",
+      "prompt": "Using a subquery, write a Microsoft Access SQL query to list trainers who teach Advanced-level members and earn more than RM4,000.",
       "modelSql": "SELECT Name\nFROM TRAINER\nWHERE Salary > 4000\nAND Trainer_ID IN (\nSELECT C.Trainer_ID\nFROM ([CLASS] AS C\nINNER JOIN ENROLLMENT AS E\nON C.Class_ID = E.Class_ID)\nINNER JOIN [MEMBER] AS M\nON E.Member_ID = M.Member_ID\nWHERE M.Level = 'Advanced'\n);",
       "features": {
         "operation": "SELECT",
@@ -2644,7 +2548,8 @@ window.ICT450_PRACTICE_DATA = {
         "functions": [],
         "minimumSubqueries": 1,
         "dateBounds": []
-      }
+      },
+      "context": "Fitness Center relational schema (* denotes a foreign key):\nTRAINER (Trainer_ID, Name, Specialization, Salary)\nCLASS (Class_ID, ClassName, Schedule, Trainer_ID*)\nMEMBER (Member_ID, MemberName, Level)\nENROLLMENT (Member_ID*, Class_ID*, EnrollDate)"
     }
   ]
 };

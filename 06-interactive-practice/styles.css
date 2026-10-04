@@ -172,6 +172,9 @@ input, select, textarea {
 .detail-meta, .item-id { padding: 5px 9px; color: var(--blue-dark); background: var(--blue-soft); }
 .mark-badge { padding: 6px 10px; color: #72520b; background: var(--yellow); white-space: nowrap; }
 .topic-line { color: var(--muted); font-size: .9rem; }
+.case-context { margin: 18px 0; padding: 15px 17px; border: 1px solid #b9cee4; border-left: 5px solid var(--blue); border-radius: 10px; background: #f5f9fd; }
+.case-context summary { cursor: pointer; color: var(--navy); font-weight: 800; }
+.case-context pre { margin: 12px 0 0; color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; line-height: 1.55; }
 .prompt-box { margin: 20px 0; padding: 18px; border-left: 5px solid var(--blue); border-radius: 10px; background: #f8fbfe; white-space: pre-wrap; }
 .answer-panel { margin-top: 18px; padding: 18px; border: 1px solid #b8d8cc; border-radius: 10px; background: var(--green-soft); }
 .answer-panel pre, .model-panel pre { margin: 10px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; font: .91rem/1.55 Consolas, "Courier New", monospace; }

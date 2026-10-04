@@ -1,6 +1,6 @@
 (() => {
   "use strict";
-  const RELEASE = "2026.10.04-r61";
+  const RELEASE = "2026.10.04-r62";
   const $ = (id) => document.getElementById(id);
   const escapeHtml = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 
@@ -16,7 +16,7 @@
   ];
 
   const interactiveTools = [
-    {id:"GUIDE-PRACTICE",title:"ICT450 Practice Studio",meta:"122 question parts",description:"Search the question bank, write SQL, and use eight interactive ERD builders with their own question extracts.",href:"06-interactive-practice/index.html",format:"Interactive tool"},
+    {id:"GUIDE-PRACTICE",title:"ICT450 Practice Studio",meta:"108 question parts",description:"Search the question bank, write SQL, and use eight interactive ERD builders with their own question extracts.",href:"06-interactive-practice/index.html",format:"Interactive tool"},
     {id:"GUIDE-RECALL",title:"Chapter Quizzes and Flashcards",meta:"96 activities · 160 cards",description:"Complete formal chapter quizzes, study focused memory cards and keep separate local progress signals.",href:"08-revision/index.html",format:"Interactive tool"},
   ];
   const studyMaterials = [...mainReferences, ...additionalNotes, ...interactiveTools];
