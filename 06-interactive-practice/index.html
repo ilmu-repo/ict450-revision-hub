@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#17365d">
   <meta name="description" content="ICT450 question practice, Microsoft Access SQL feedback, and interactive ERD exercises.">
-  <meta name="ict450-release" content="2026.10.04-r59">
+  <meta name="ict450-release" content="2026.10.04-r60">
   <title>ICT450 Practice Studio</title>
-  <link rel="stylesheet" href="styles.css?v=2026.10.04-r59">
+  <link rel="stylesheet" href="styles.css?v=2026.10.04-r60">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to practice content</a>
@@ -121,16 +121,24 @@
         <div><p class="eyebrow">Interactive diagram practice</p><h1 id="erdTitle">ERD exercise library</h1></div>
       </div>
       <p class="erd-guide-intro">Each exercise links to its own test question extract. For step-by-step worked examples from final examinations, browse the <a href="../03-erd-guide/past-examination-erd.html">Past Examination ERD Questions</a>.</p>
-      <div class="erd-exercise-grid">
-        <article class="erd-exercise-card"><span>Chen notation</span><h2>Fini&amp;Co Desserts</h2><p>Source-aligned entities, relationships, keys, attributes and cardinalities.</p><a href="erd-exercises/fini-co-chen.html">Open exercise</a></article>
-        <article class="erd-exercise-card"><span>Crow's Foot</span><h2>Fini&amp;Co Desserts</h2><p>Resolve Package-Confectionery without inventing a staff-order relationship.</p><a href="erd-exercises/fini-co-crows-foot.html">Open exercise</a></article>
-        <article class="erd-exercise-card"><span>Chen notation</span><h2>Tarpack Gallery</h2><p>Build the sales model, including the recursive staff roles.</p><a href="erd-exercises/tarpack-gallery-chen.html">Open exercise</a></article>
-        <article class="erd-exercise-card"><span>Crow's Foot</span><h2>Tarpack Gallery</h2><p>Model unique artwork sales and role-labelled staff monitoring.</p><a href="erd-exercises/tarpack-gallery-crows-foot.html">Open exercise</a></article>
-        <article class="erd-exercise-card"><span>Chen notation</span><h2>Official and Registration</h2><p>Model the Part B(b) subdiagram and its zero-to-100 limit.</p><a href="erd-exercises/official-registration-chen.html">Open exercise</a></article>
-        <article class="erd-exercise-card"><span>Crow's Foot</span><h2>Splash &amp; Swim Club</h2><p>Connect registration directly to swimmer and keep round performance dependent on registration.</p><a href="erd-exercises/splash-swim-crows-foot.html">Open exercise</a></article>
-        <article class="erd-exercise-card"><span>Chen notation</span><h2>Medical Clinic</h2><p>Model appointments and treatment details with relationship attributes.</p><a href="erd-exercises/medical-clinic-chen.html">Open exercise</a></article>
-        <article class="erd-exercise-card"><span>Crow's Foot</span><h2>Medical Clinic</h2><p>Resolve Appointment-Treatment and keep dosage, instructions and duration on the bridge.</p><a href="erd-exercises/medical-clinic-crows-foot.html">Open exercise</a></article>
-      </div>
+      <section class="erd-notation-group" aria-labelledby="chenExercisesTitle">
+        <div class="erd-notation-heading"><h2 id="chenExercisesTitle">Chen notation</h2><span>4 exercises</span></div>
+        <div class="erd-exercise-grid">
+          <article class="erd-exercise-card"><h3>Fini&amp;Co Desserts</h3><p>Source-aligned entities, relationships, keys, attributes and cardinalities.</p><a href="erd-exercises/fini-co-chen.html">Open exercise</a></article>
+          <article class="erd-exercise-card"><h3>Tarpack Gallery</h3><p>Build the sales model, including the recursive staff roles.</p><a href="erd-exercises/tarpack-gallery-chen.html">Open exercise</a></article>
+          <article class="erd-exercise-card"><h3>Official and Registration</h3><p>Model the Part B(b) subdiagram and its zero-to-100 limit.</p><a href="erd-exercises/official-registration-chen.html">Open exercise</a></article>
+          <article class="erd-exercise-card"><h3>Medical Clinic</h3><p>Model appointments and treatment details with relationship attributes.</p><a href="erd-exercises/medical-clinic-chen.html">Open exercise</a></article>
+        </div>
+      </section>
+      <section class="erd-notation-group" aria-labelledby="crowExercisesTitle">
+        <div class="erd-notation-heading"><h2 id="crowExercisesTitle">Crow's Foot notation</h2><span>4 exercises</span></div>
+        <div class="erd-exercise-grid">
+          <article class="erd-exercise-card"><h3>Fini&amp;Co Desserts</h3><p>Resolve Package-Confectionery without inventing a staff-order relationship.</p><a href="erd-exercises/fini-co-crows-foot.html">Open exercise</a></article>
+          <article class="erd-exercise-card"><h3>Tarpack Gallery</h3><p>Model unique artwork sales and role-labelled staff monitoring.</p><a href="erd-exercises/tarpack-gallery-crows-foot.html">Open exercise</a></article>
+          <article class="erd-exercise-card"><h3>Splash &amp; Swim Club</h3><p>Connect registration directly to swimmer and keep round performance dependent on registration.</p><a href="erd-exercises/splash-swim-crows-foot.html">Open exercise</a></article>
+          <article class="erd-exercise-card"><h3>Medical Clinic</h3><p>Resolve Appointment-Treatment and keep dosage, instructions and duration on the bridge.</p><a href="erd-exercises/medical-clinic-crows-foot.html">Open exercise</a></article>
+        </div>
+      </section>
     </section>
   </main>
 
@@ -143,7 +151,7 @@
     </form>
   </dialog>
 
-  <script src="practice-data.js?v=2026.10.04-r59"></script>
-  <script src="app.js?v=2026.10.04-r59"></script>
+  <script src="practice-data.js?v=2026.10.04-r60"></script>
+  <script src="app.js?v=2026.10.04-r60"></script>
 </body>
 </html>

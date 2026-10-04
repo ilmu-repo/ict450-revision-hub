@@ -29,11 +29,11 @@
                     <ul class="rule-list">
                         <li>A swimmer can register for multiple events in one competition; each registration is supervised by exactly one official.</li>
                         <li>Registration must therefore identify the swimmer, event, competition and supervising official.</li>
-                        <li>Performance belongs to a registered event and records round name, round date, competition time and position.</li>
+                        <li>A registration may have no performance before the event takes place; each recorded round then stores its name, date, competition time and position.</li>
                         <li>Each competition takes place at exactly one venue; a venue may host many competitions over time.</li>
                     </ul>
                 </div>
-                <div class="notation-note"><strong>Modelling note:</strong> CompetitionID and RegistrationID are necessary identifiers even though the narrative does not list them. PERFORMANCE uses `(RegistrationID, RoundName)` as its composite key; repeating SwimmerID there would be redundant because Registration already identifies the swimmer. Crow's Foot shows “many”; the separate Part B(b) statement supplies the numeric maximum of 100 registrations per official.</div>
+                <div class="notation-note"><strong>Modelling note:</strong> EVENT is a reusable event definition across competitions; each REGISTRATION identifies both its event and competition. CompetitionID and RegistrationID are necessary identifiers even though the narrative does not list them. PERFORMANCE uses `(RegistrationID, RoundName)` as its composite key; repeating SwimmerID there would be redundant because Registration already identifies the swimmer. Crow's Foot shows “many”; the separate Part B(b) statement supplies the numeric maximum of 100 registrations per official.</div>
             </div>
         </details>
 
@@ -157,10 +157,10 @@
                     {id:"R_OR",type:"rel",expected:"SUPERVISES",label:"Official-Registration relationship"},
                     {id:"C_OR_R",type:"card",expected:"Zero or many (O<)",label:"Registration end of Supervises",feedback:"Part B(a) expresses many; Part B(b) supplies the maximum of 100."}
                 ]},
-                {from:"REG",to:"PER",route:{fromSide:"right",fromFraction:.5,toSide:"left",toFraction:.5},left:"REGISTRATION",right:"PERFORMANCE",rule:"Every PERFORMANCE row belongs to exactly one REGISTRATION; each registered event has one or many round performance records.",slots:[
+                {from:"REG",to:"PER",route:{fromSide:"right",fromFraction:.5,toSide:"left",toFraction:.5},left:"REGISTRATION",right:"PERFORMANCE",rule:"Every PERFORMANCE row belongs to exactly one REGISTRATION; a REGISTRATION may have zero performances before the event and many round records afterwards.",slots:[
                     {id:"C_RP_L",type:"card",expected:"Exactly one (||)",label:"Registration end of Records",feedback:"Performance depends on one registration."},
                     {id:"R_RP",type:"rel",expected:"RECORDS",label:"Registration-Performance relationship"},
-                    {id:"C_RP_R",type:"card",expected:"One or many (|<)",label:"Performance end of Records",feedback:"The question requires performance for each registered event and allows named rounds."}
+                    {id:"C_RP_R",type:"card",expected:"Zero or many (O<)",label:"Performance end of Records",feedback:"A registration can exist before the event takes place, so it may have no round performance yet."}
                 ]}
             ]
         };

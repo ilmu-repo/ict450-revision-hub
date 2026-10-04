@@ -1,6 +1,6 @@
 (() => {
   "use strict";
-  const RELEASE = "2026.10.04-r59";
+  const RELEASE = "2026.10.04-r60";
   const $ = (id) => document.getElementById(id);
   const escapeHtml = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 

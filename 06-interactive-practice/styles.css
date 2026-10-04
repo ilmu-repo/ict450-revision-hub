@@ -223,15 +223,18 @@ input, select, textarea {
 }
 .review-banner strong { color: #73530b; }
 .review-banner p { margin: 0; color: #5e4b20; }
-.erd-exercise-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .erd-guide-intro { margin: 0 0 20px; color: var(--muted); line-height: 1.55; }
 .erd-guide-intro a { color: var(--blue-dark); font-weight: 800; }
+.erd-notation-group + .erd-notation-group { margin-top: 34px; }
+.erd-notation-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 14px; padding-bottom: 9px; border-bottom: 3px solid var(--blue); }
+.erd-notation-heading h2 { margin: 0; color: var(--navy); font-size: 1.35rem; }
+.erd-notation-heading span { color: var(--muted); font-size: .88rem; font-weight: 700; white-space: nowrap; }
+.erd-exercise-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .erd-exercise-card {
   display: flex; min-height: 230px; flex-direction: column; padding: 20px;
   border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: var(--shadow);
 }
-.erd-exercise-card span { color: var(--blue); font-size: .76rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
-.erd-exercise-card h2 { margin: 10px 0 8px; font-size: 1.18rem; }
+.erd-exercise-card h3 { margin: 0 0 8px; font-size: 1.18rem; }
 .erd-exercise-card p { color: var(--muted); }
 .erd-exercise-card a {
   margin-top: auto; align-self: start; padding: 9px 12px; border-radius: 8px;

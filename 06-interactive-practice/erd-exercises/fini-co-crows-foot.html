@@ -29,7 +29,7 @@
                     <ul class="rule-list">
                         <li>Record customers, staff, orders, packages and Malay confectionery.</li>
                         <li>Each order is placed by one customer and requests exactly one package.</li>
-                        <li>An order must be placed at least three days before its event date. This is a validation rule, not another ERD relationship.</li>
+                        <li>An order must be placed at least three days before its event date. Check this when the order is placed; the model stores the event date, not a separate order-placement date.</li>
                         <li>Each package contains several confectionery items; the examples reuse the same confectionery across packages.</li>
                         <li>The question records staff but gives no rule connecting staff to an order. <strong>Do not invent that relationship.</strong></li>
                     </ul>
@@ -100,8 +100,8 @@
                 {id:"ORD",layout:{x:32,y:34,w:17},slots: [
                     {id:"E_ORD",type:"entity",expected:"ORDER",label:"Order table"},
                     {id:"PK_ORD",type:"pk",expected:"OrderID",label:"Order primary key"},
-                    {id:"FK_ORD_C",type:"fk",expected:"CustomerID",label:"Order customer foreign key"},
-                    {id:"FK_ORD_P",type:"fk",expected:"PackageID",label:"Order package foreign key"},
+                    {id:"FK_ORD_C",type:"fk",kindLabel:"FK1",expected:"CustomerID",label:"Order customer foreign key (FK1)"},
+                    {id:"FK_ORD_P",type:"fk",kindLabel:"FK2",expected:"PackageID",label:"Order package foreign key (FK2)"},
                     {id:"A_ORD_DT",type:"attr",expected:"EventDate",label:"Order event date"},
                     {id:"A_ORD_TM",type:"attr",expected:"EventTime",label:"Order event time"},
                     {id:"A_ORD_LC",type:"attr",expected:"EventLocation",label:"Order event location"}
@@ -119,8 +119,8 @@
                 {id:"PIT",layout:{x:62,y:72,w:17},slots: [
                     {id:"E_PIT",type:"entity",expected:"PACKAGE_ITEM",label:"Package item associative table"},
                     {id:"PK_PIT",type:"pk",expected:"PackageID + ConfectioneryID",label:"Package item composite primary key"},
-                    {id:"FK_PIT_P",type:"fk",expected:"PackageID",label:"Package item package foreign key"},
-                    {id:"FK_PIT_C",type:"fk",expected:"ConfectioneryID",label:"Package item confectionery foreign key"}
+                    {id:"FK_PIT_P",type:"fk",kindLabel:"FK1",expected:"PackageID",label:"Package item package foreign key (FK1)"},
+                    {id:"FK_PIT_C",type:"fk",kindLabel:"FK2",expected:"ConfectioneryID",label:"Package item confectionery foreign key (FK2)"}
                 ]}
             ],
             relationships: [
