@@ -52,7 +52,7 @@ window.ICT450_PRACTICE_DATA = {
       "difficulty": "intermediate",
       "marks": 6,
       "prompt": "Explain THREE common problems when a spreadsheet is used as a database.",
-      "answer": "Data redundancy: many users create separate copies of the same customer data.\nData inconsistency and update anomalies: one copy is updated while other copies remain\noutdated."
+      "answer": "Data redundancy: many users create separate copies of the same customer data.\nData inconsistency and update anomalies: one copy is updated while other copies remain\noutdated.\nWeak data integrity, security, sharing, and multi-user control: validation and access rules are\ndifficult to enforce consistently."
     },
     {
       "id": "FEB23-Q1-C-II",
