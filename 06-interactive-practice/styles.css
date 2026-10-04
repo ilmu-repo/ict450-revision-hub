@@ -292,11 +292,14 @@ input, select, textarea {
   .hero { grid-template-columns: 1fr; gap: 22px; padding-top: 42px; }
   .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
   .filter-bar { grid-template-columns: 1fr 1fr; }
-  .library-layout, .workshop-layout { grid-template-columns: 1fr; }
+  .library-layout { grid-template-columns: 1fr; }
+  .workshop-layout { grid-template-columns: minmax(0, 1fr); }
+  .workshop-menu, .work-card { min-width: 0; }
   .question-list { max-height: 360px; }
   .detail-card, .workshop-menu { position: static; }
-  .workshop-menu { display: grid; grid-template-columns: 1fr 1.5fr; gap: 12px; }
-  .compact-list { grid-template-columns: repeat(3, 1fr); margin-top: 0; }
+  .workshop-menu { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 12px; }
+  .workshop-menu > label, .compact-list { min-width: 0; }
+  .compact-list { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 0; }
   .erd-exercise-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -321,7 +324,7 @@ input, select, textarea {
   .section-heading { align-items: start; flex-direction: column; }
   .section-heading .pager { width: 100%; justify-content: space-between; }
   .workshop-menu { display: block; }
-  .compact-list { display: flex; overflow-x: auto; }
+  .compact-list { display: flex; max-width: 100%; overflow-x: auto; }
   .compact-item { min-width: 120px; }
   .work-card, .detail-card, .erd-case-card { padding: 19px; }
   .item-heading { flex-direction: column; }
