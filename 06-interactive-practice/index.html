@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#17365d">
-  <meta name="description" content="ICT450 question practice, Microsoft Access SQL feedback, and guided ERD self-checking.">
-  <meta name="ict450-release" content="2026.10.04-r56">
+  <meta name="description" content="ICT450 question practice, Microsoft Access SQL feedback, and interactive ERD exercises.">
+  <meta name="ict450-release" content="2026.10.04-r57">
   <title>ICT450 Practice Studio</title>
-  <link rel="stylesheet" href="styles.css?v=2026.10.04-r56">
+  <link rel="stylesheet" href="styles.css?v=2026.10.04-r57">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to practice content</a>
@@ -120,6 +120,7 @@
       <div class="section-heading">
         <div><p class="eyebrow">Interactive diagram practice</p><h1 id="erdTitle">ERD exercise library</h1></div>
       </div>
+      <p class="erd-guide-intro">Each exercise links to its own question extract. For a worked, step-by-step method, see the <a href="../03-erd-guide/A%20Beginner's%20Guide%20to%20Building%20an%20ERD%20from%20Business%20Rules.html">ERD study notes</a>.</p>
       <div class="erd-exercise-grid">
         <article class="erd-exercise-card"><span>Chen notation</span><h2>Fini&amp;Co Desserts</h2><p>Source-aligned entities, relationships, keys, attributes and cardinalities.</p><a href="erd-exercises/fini-co-chen.html">Open exercise</a></article>
         <article class="erd-exercise-card"><span>Crow's Foot</span><h2>Fini&amp;Co Desserts</h2><p>Resolve Package-Confectionery without inventing a staff-order relationship.</p><a href="erd-exercises/fini-co-crows-foot.html">Open exercise</a></article>
@@ -130,26 +131,6 @@
         <article class="erd-exercise-card"><span>Chen notation</span><h2>Medical Clinic</h2><p>Model appointments and treatment details with relationship attributes.</p><a href="erd-exercises/medical-clinic-chen.html">Open exercise</a></article>
         <article class="erd-exercise-card"><span>Crow's Foot</span><h2>Medical Clinic</h2><p>Resolve Appointment-Treatment and keep dosage, instructions and duration on the bridge.</p><a href="erd-exercises/medical-clinic-crows-foot.html">Open exercise</a></article>
       </div>
-      <details class="legacy-erd-panel">
-        <summary>Open the existing past-paper self-check</summary>
-        <div class="legacy-erd-heading"><div><p class="eyebrow">Secondary activity</p><h2>Past-paper ERD checklist</h2></div><label class="case-picker"><span>Case</span><select id="erdSelect"></select></label></div>
-        <article class="erd-case-card">
-          <div class="item-heading"><div><span class="item-id" id="erdId"></span><h2 id="erdPrompt"></h2></div><span class="mark-badge" id="erdMarks"></span></div>
-          <details class="case-details"><summary>Read the full case and business rules</summary><div id="erdCasePrompt" class="case-copy"></div></details>
-          <div class="workflow-strip" aria-label="Recommended ERD workflow"><span><b>1</b> Find nouns</span><span><b>2</b> choose keys</span><span><b>3</b> resolve M:N</span><span><b>4</b> set min/max</span></div>
-          <div class="instruction-callout amber"><strong>Draw first.</strong> Complete your ERD on paper or in your preferred diagram tool before opening the checklist.</div>
-          <button class="primary-button" id="startErdCheck" type="button">Open self-check checklist</button>
-        </article>
-        <section class="erd-check-area is-hidden" id="erdCheckArea">
-          <div class="self-score"><span id="erdScore">0 / 16</span><small>self-reported design marks</small></div>
-          <div class="check-grid">
-            <article class="check-card"><h3>Entities and keys</h3><div id="erdEntities"></div></article>
-            <article class="check-card"><h3>Relationships and cardinalities</h3><div id="erdRelationships"></div></article>
-          </div>
-          <aside class="concept-note" id="erdNote"></aside>
-          <article class="report-card"><div><h3 id="erdReportPrompt"></h3><p>Write your proposed outputs first, then compare them with the examples.</p></div><button class="secondary-button" id="revealReports" type="button" aria-expanded="false">Reveal examples</button><div class="report-list is-hidden" id="erdReports"></div></article>
-        </section>
-      </details>
     </section>
   </main>
 
@@ -162,7 +143,7 @@
     </form>
   </dialog>
 
-  <script src="practice-data.js?v=2026.10.04-r56"></script>
-  <script src="app.js?v=2026.10.04-r56"></script>
+  <script src="practice-data.js?v=2026.10.04-r57"></script>
+  <script src="app.js?v=2026.10.04-r57"></script>
 </body>
 </html>

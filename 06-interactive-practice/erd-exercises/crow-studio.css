@@ -71,6 +71,8 @@ button { color: inherit; }
 }
 .context-card { margin-bottom: 1rem; overflow: hidden; }
 .context-card > summary { cursor: pointer; padding: .9rem 1rem; color: #fff; background: var(--accent); font-weight: 800; }
+.question-links { display: flex; flex-wrap: wrap; gap: .65rem 1.25rem; margin: 0; padding: .85rem 1rem 0; }
+.question-links a { color: var(--accent-dark); font-weight: 800; text-underline-offset: 3px; }
 .context-body { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(260px, 1fr); gap: 1rem; padding: 1rem; }
 .source-line { margin: 0 0 .55rem; }
 .rule-list { margin: .4rem 0 0; padding-left: 1.3rem; }

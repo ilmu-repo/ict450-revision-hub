@@ -179,6 +179,15 @@ summary:focus-visible {
     font-weight: 800;
 }
 
+.question-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem 1.25rem;
+    margin: 0;
+    padding: 0 1rem 0.8rem;
+}
+.question-links a { color: var(--accent-dark); font-weight: 800; text-underline-offset: 3px; }
+
 .context-body {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(260px, 0.55fr);

@@ -27,17 +27,15 @@
       return {
         reviewed: Array.isArray(saved.reviewed) ? saved.reviewed : [],
         sqlAttempted: Array.isArray(saved.sqlAttempted) ? saved.sqlAttempted : [],
-        erdChecks: saved.erdChecks && typeof saved.erdChecks === "object" ? saved.erdChecks : {},
       };
     } catch {
-      return { reviewed: [], sqlAttempted: [], erdChecks: {} };
+      return { reviewed: [], sqlAttempted: [] };
     }
   }
 
   let state = loadState();
   let librarySelected = DATA.practice[0]?.id || "";
   let sqlIndex = 0;
-  let erdIndex = 0;
 
   function saveState() {
     try {
@@ -65,8 +63,7 @@
     $("metricDone").textContent = reviewed.size;
     $("progressSummary").innerHTML = `
       <div><strong>${reviewed.size}</strong><span>unique parts attempted</span></div>
-      <div><strong>${state.sqlAttempted.length}</strong><span>SQL attempts</span></div>
-      <div><strong>${Object.keys(state.erdChecks).length}</strong><span>ERD cases opened</span></div>`;
+      <div><strong>${state.sqlAttempted.length}</strong><span>SQL attempts</span></div>`;
   }
 
   function showView(name) {
@@ -81,7 +78,6 @@
     });
     if (name === "library") renderLibrary();
     if (name === "sql") renderSql();
-    if (name === "erd") renderErd();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -310,59 +306,6 @@
       <ul class="feedback-list">${requirements.map((entry) => `<li><span class="status-icon ${entry.ok ? "yes" : "no"}">${entry.ok ? "✓" : "×"}</span><span>${escapeHtml(entry.label)}</span></li>`).join("")}</ul>`;
   }
 
-  function renderErd() {
-    const item = DATA.erd[erdIndex];
-    if (!item) return;
-    if (!$("erdSelect").options.length) {
-      DATA.erd.forEach((candidate, index) => $("erdSelect").insertAdjacentHTML("beforeend", `<option value="${index}">${escapeHtml(candidate.session)} · ${escapeHtml(candidate.id)}</option>`));
-    }
-    $("erdSelect").value = String(erdIndex);
-    $("erdId").textContent = `${item.id} · ${item.session}`;
-    $("erdPrompt").textContent = item.designPrompt;
-    $("erdMarks").textContent = `${item.designMarks} marks`;
-    $("erdCasePrompt").textContent = item.casePrompt;
-    $("erdCheckArea").classList.add("is-hidden");
-    $("startErdCheck").textContent = "Open self-check checklist";
-    $("erdReportPrompt").textContent = item.reportPrompt;
-    $("erdReports").classList.add("is-hidden");
-    $("revealReports").textContent = "Reveal examples";
-    $("revealReports").setAttribute("aria-expanded", "false");
-  }
-
-  function criterionHtml(item, kind, entry, index, checked) {
-    const key = `${kind}-${index}`;
-    const inputId = `${item.id}-${key}`;
-    return `<div class="criterion">
-      <input id="${inputId}" type="checkbox" data-erd-key="${key}" ${checked ? "checked" : ""}>
-      <label for="${inputId}">${escapeHtml(entry.text)}</label>
-      <span class="criterion-marks">${entry.marks} mark${entry.marks === 1 ? "" : "s"}</span>
-    </div>`;
-  }
-
-  function openErdCheck() {
-    const item = DATA.erd[erdIndex];
-    const checked = new Set(state.erdChecks[item.id] || []);
-    state.erdChecks[item.id] = [...checked];
-    saveState();
-    $("erdEntities").innerHTML = item.entities.map((entry, index) => criterionHtml(item, "entity", entry, index, checked.has(`entity-${index}`))).join("");
-    $("erdRelationships").innerHTML = item.relationships.map((entry, index) => criterionHtml(item, "relationship", entry, index, checked.has(`relationship-${index}`))).join("");
-    $("erdNote").innerHTML = `<strong>Important design point</strong><br>${escapeHtml(item.note)}`;
-    $("erdReports").innerHTML = `<ul>${item.reports.map((report) => `<li>${escapeHtml(report)}</li>`).join("")}</ul>`;
-    $("erdCheckArea").classList.remove("is-hidden");
-    $("startErdCheck").textContent = "Checklist opened";
-    updateErdScore();
-  }
-
-  function updateErdScore() {
-    const item = DATA.erd[erdIndex];
-    const keys = state.erdChecks[item.id] || [];
-    let score = 0;
-    item.entities.forEach((entry, index) => { if (keys.includes(`entity-${index}`)) score += entry.marks; });
-    item.relationships.forEach((entry, index) => { if (keys.includes(`relationship-${index}`)) score += entry.marks; });
-    $("erdScore").textContent = `${score} / ${item.designMarks}`;
-    if (score === item.designMarks) addUnique("reviewed", `${item.id}-A`);
-  }
-
   function bindEvents() {
     document.querySelectorAll(".nav-button").forEach((button) => button.addEventListener("click", () => showView(button.dataset.view)));
     document.querySelectorAll("[data-go]").forEach((button) => button.addEventListener("click", () => showView(button.dataset.go)));
@@ -405,35 +348,14 @@
       }
     });
 
-    $("erdSelect").addEventListener("change", () => { erdIndex = Number($("erdSelect").value); renderErd(); });
-    $("startErdCheck").addEventListener("click", openErdCheck);
-    $("erdCheckArea").addEventListener("change", (event) => {
-      const input = event.target.closest("[data-erd-key]");
-      if (!input) return;
-      const item = DATA.erd[erdIndex];
-      const keys = new Set(state.erdChecks[item.id] || []);
-      if (input.checked) keys.add(input.dataset.erdKey); else keys.delete(input.dataset.erdKey);
-      state.erdChecks[item.id] = [...keys];
-      saveState();
-      updateErdScore();
-    });
-    $("revealReports").addEventListener("click", () => {
-      const item = DATA.erd[erdIndex];
-      const nowHidden = $("erdReports").classList.toggle("is-hidden");
-      $("revealReports").textContent = nowHidden ? "Reveal examples" : "Hide examples";
-      $("revealReports").setAttribute("aria-expanded", String(!nowHidden));
-      if (!nowHidden) addUnique("reviewed", `${item.id}-B`);
-    });
-
     $("progressButton").addEventListener("click", () => $("progressDialog").showModal());
     $("resetProgress").addEventListener("click", () => {
       if (!window.confirm("Reset all locally saved ICT450 practice progress on this device?")) return;
-      state = { reviewed: [], sqlAttempted: [], erdChecks: {} };
+      state = { reviewed: [], sqlAttempted: [] };
       try { localStorage.removeItem(STORAGE_KEY); } catch { /* storage may be unavailable */ }
       updateProgress();
       $("progressDialog").close();
       renderLibrary();
-      renderErd();
     });
   }
 
@@ -446,7 +368,6 @@
     updateProgress();
     renderLibrary();
     renderSql();
-    renderErd();
   }
 
   init();
