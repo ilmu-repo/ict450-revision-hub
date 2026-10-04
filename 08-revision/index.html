@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#17365d">
   <meta name="description" content="ICT450 chapter quizzes, flashcards and local revision progress.">
-  <meta name="ict450-release" content="2026.10.04-r54">
+  <meta name="ict450-release" content="2026.10.04-r55">
   <title>ICT450 Revision Activities</title>
-  <link rel="stylesheet" href="styles.css?v=2026.10.04-r54">
-  <link rel="stylesheet" href="revision-enhancements.css?v=2026.10.04-r54">
+  <link rel="stylesheet" href="styles.css?v=2026.10.04-r55">
+  <link rel="stylesheet" href="revision-enhancements.css?v=2026.10.04-r55">
 </head>
 <body>
   <a class="skip-link" href="#mainContent">Skip to revision content</a>
@@ -95,14 +95,23 @@
     <section class="view shell app-view" data-view-panel="progress" aria-labelledby="progressTitle">
       <div class="section-heading"><div><p class="eyebrow">This browser and device</p><h1 id="progressTitle">Revision progress</h1></div><button class="secondary-button" id="exportProgress" type="button">Export progress</button></div>
       <div class="progress-grid" id="progressMetrics"></div>
-      <section class="definition-card"><h2>What each number means</h2><div class="table-wrap"><table><thead><tr><th>Tracker</th><th>Meaning</th><th>Persistence</th></tr></thead><tbody><tr><td>Activity position</td><td>Your current place in one quiz session.</td><td>Resumes until completed or restarted.</td></tr><tr><td>Activity mastery</td><td>Unique quiz activities completed successfully.</td><td>Shared wherever that activity appears.</td></tr><tr><td>Review list</td><td>Activities answered incorrectly, rated Almost or marked Review.</td><td>Clears after a successful retry or reset.</td></tr><tr><td>Flashcard remembered</td><td>Cards whose latest rating is Remembered.</td><td>Independent from quiz mastery.</td></tr><tr><td>Flashcard learning</td><td>Cards whose latest rating is Again or Learning.</td><td>Independent from quiz mastery.</td></tr></tbody></table></div></section>
+      <section class="definition-card">
+        <h2>What each number means</h2>
+        <div class="table-wrap"><table><thead><tr><th>Tracker</th><th>Meaning</th><th>Persistence</th></tr></thead><tbody>
+          <tr><td>Activities mastered</td><td>Unique quiz activities completed successfully.</td><td>Retained until quiz progress is reset.</td></tr>
+          <tr><td>Review list</td><td>Activities answered incorrectly, rated Almost or marked Review.</td><td>Clears after a successful retry or reset.</td></tr>
+          <tr><td>Cards remembered</td><td>Cards whose latest rating is Remembered.</td><td>Changes with the next rating or a flashcard reset.</td></tr>
+          <tr><td>Cards learning</td><td>Cards whose latest rating is Again or Learning.</td><td>Changes with the next rating or a flashcard reset.</td></tr>
+        </tbody></table></div>
+        <p class="progress-position-note"><strong>Quiz position is separate.</strong> The active quiz shows your current question (for example, “Question 3 of 12”) above the activity. Its chapter card shows where to resume. It is not included in the four totals above.</p>
+      </section>
       <section class="chapter-progress" id="chapterProgress"></section>
       <section class="danger-zone"><div><h2>Reset local progress</h2><p>Resetting affects only this browser. Export a backup first if you may want the record later.</p></div><div class="button-row"><button class="secondary-button" id="resetActivities" type="button">Reset quizzes</button><button class="secondary-button" id="resetCards" type="button">Reset flashcards</button><button class="danger-button" id="resetAll" type="button">Reset everything</button></div></section>
     </section>
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="revision-data.js?v=2026.10.04-r54"></script>
-  <script src="app.js?v=2026.10.04-r54"></script>
+  <script src="revision-data.js?v=2026.10.04-r55"></script>
+  <script src="app.js?v=2026.10.04-r55"></script>
 </body>
 </html>

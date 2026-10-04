@@ -96,7 +96,7 @@
       const session = state.activitySessions[`chapter-${entry.number}`];
       const currentIds = items.map((item) => item.id);
       const sessionMatches = session && Array.isArray(session.ids) && session.ids.join("|") === currentIds.join("|");
-      const status = sessionMatches && session.position < session.ids.length ? `Resume ${session.position + 1} / ${session.ids.length}` : `${mastered} / ${items.length} mastered`;
+      const status = sessionMatches && session.position < session.ids.length ? `Resume at question ${session.position + 1} of ${session.ids.length}` : `${mastered} / ${items.length} mastered`;
       return `<button class="chapter-card" type="button" data-activity-chapter="${entry.number}">
         <span class="chapter-number">Chapter ${entry.number}</span><h2>${escapeHtml(entry.title)}</h2><p>${escapeHtml(entry.summary)}</p>
         <span class="chapter-meta"><span>${items.length} activities</span><span>${escapeHtml(status)}</span></span>
@@ -175,7 +175,7 @@
     }
     const item = activityItem();
     currentOrder = item.type === "order" ? [...item.options] : [];
-    $("activityPosition").textContent = `${session.position + 1} / ${session.ids.length}`;
+    $("activityPosition").textContent = `Question ${session.position + 1} of ${session.ids.length}`;
     $("activityProgressBar").style.width = `${Math.round((session.position / session.ids.length) * 100)}%`;
     let control = "";
     if (item.type === "single") control = choiceMarkup(item, false);

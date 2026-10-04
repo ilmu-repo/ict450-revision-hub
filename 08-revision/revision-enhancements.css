@@ -110,3 +110,7 @@
     transition: none;
   }
 }
+.progress-position-note {
+  margin: 16px 0 0;
+  color: var(--muted);
+}
